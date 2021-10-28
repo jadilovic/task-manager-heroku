@@ -1,0 +1,17 @@
+{
+	"name": "task-manager-mern",
+	"version": "1.0.0",
+	"description": "",
+	"dependencies": {
+		"concurrently": "^6.3.0",
+		"nodemon": "^2.0.14"
+	},
+	"devDependencies": {},
+	"scripts": {
+		"dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm start\" ",
+		"start": "node backend/server.js"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC"
+}
