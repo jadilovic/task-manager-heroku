@@ -54,11 +54,6 @@ const Signup = () => {
 			password: data.get('password'),
 		};
 		submitData(newUserData);
-		/*
-		login();
-		console.log('loggedInUser:' + isAuthenticated());
-		history.push('/home');
-		*/
 	};
 
 	const submitData = async (userData) => {
@@ -75,10 +70,10 @@ const Signup = () => {
 				headers: new Headers({ 'Content-Type': 'application/json' }),
 			}).then((res) => {
 				login(res.data.token, res.data.user.email);
-				console.log(res.data.token, res.data.user.email);
 				history.push('/home');
 			});
 		} catch (err) {
+			console.log(err.response);
 			setError(err.response.data.msg);
 		}
 	};

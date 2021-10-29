@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
 import {
 	BrowserRouter as Router,
 	Route,
@@ -6,12 +8,11 @@ import {
 	Link,
 	useHistory,
 } from 'react-router-dom';
-import Avatar from '@mui/material/Avatar';
+import { Box, Alert, Avatar } from '@mui/material';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
@@ -39,18 +40,38 @@ const theme = createTheme();
 
 const Login = () => {
 	const history = useHistory();
+	const serverURL = 'http://localhost:5000';
+	const [error, setError] = useState(null);
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
 		const data = new FormData(event.currentTarget);
 		// eslint-disable-next-line no-console
-		console.log({
+		const userData = {
 			email: data.get('email'),
 			password: data.get('password'),
-		});
-		login();
-		console.log('loggedInUser:' + isAuthenticated());
-		history.push('/home');
+		};
+		submitData(userData);
+	};
+
+	const submitData = async (userData) => {
+		try {
+			await axios({
+				method: 'POST',
+				url: `${serverURL}/api/v1/auth/login`,
+				data: {
+					email: userData.email,
+					password: userData.password,
+				},
+				headers: new Headers({ 'Content-Type': 'application/json' }),
+			}).then((res) => {
+				login(res.data.token, res.data.user.email);
+				history.push('/home');
+			});
+		} catch (err) {
+			console.log(err.response);
+			setError(err.response.data.msg);
+		}
 	};
 
 	return (
@@ -77,6 +98,17 @@ const Login = () => {
 						noValidate
 						sx={{ mt: 1 }}
 					>
+						{error && (
+							<Box
+								sx={{
+									paddingTop: 2,
+									paddingBottom: 2,
+									bgcolor: 'background.paper',
+								}}
+							>
+								<Alert severity="error">{error}</Alert>
+							</Box>
+						)}
 						<TextField
 							margin="normal"
 							required

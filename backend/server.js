@@ -36,7 +36,7 @@ app.use(xss());
 
 // routes
 app.use('/api/v1/auth', authRouter);
-// app.use('/api/v1/jobs', authenticateUser, jobsRouter);
+// app.use('/api/v1/tasks', authenticateUser, tasksRouter);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
