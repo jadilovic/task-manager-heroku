@@ -7,6 +7,7 @@ import {
 	Link,
 	useHistory,
 } from 'react-router-dom';
+import Navbar from '../components/Navbar';
 import { login, isAuthenticated } from '../auth/Authentication';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -80,6 +81,8 @@ const Signup = () => {
 
 	return (
 		<ThemeProvider theme={theme}>
+			<Navbar isAuthenticated={isAuthenticated()} />
+
 			<Container component="main" maxWidth="xs">
 				<CssBaseline />
 				<Box

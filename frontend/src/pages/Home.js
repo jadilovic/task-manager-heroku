@@ -18,6 +18,7 @@ import {
 	Alert,
 } from '@mui/material';
 import TaskCard from '../components/TaskCard';
+import Navbar from '../components/Navbar';
 
 const Item = styled(Paper)(({ theme }) => ({
 	...theme.typography.body2,
@@ -40,7 +41,7 @@ const Home = () => {
 	const [tasksList, setTasksList] = useState([]);
 	const [taskName, setTaskName] = useState('');
 	const [errorMessage, setErrorMessage] = useState('');
-	const [userToken, setUserToken] = useState(getUserToken());
+	const [userToken, setUserToken] = useState({});
 	const history = useHistory();
 
 	const handleLogout = () => {
@@ -97,25 +98,10 @@ const Home = () => {
 	}, [tasksList]);
 
 	return (
-		<Container maxWidth="sm">
-			<Box sx={{ flexGrow: 1 }}>
-				<Grid
-					style={{ textAlign: 'center' }}
-					container
-					alignItems="center"
-					justify="center"
-					spacing={2}
-				>
-					<Grid color="black" item xs={12}>
-						<Typography
-							bgcolor="yellow"
-							gutterBottom
-							variant="h6"
-							component="div"
-						>
-							{`${userToken.userEmail} Task Manager`}
-						</Typography>
-					</Grid>
+		<>
+			<Navbar isAuthenticated={isAuthenticated()} />
+			<Container maxWidth="sm">
+				<Box sx={{ flexGrow: 1 }}>
 					<Grid justifyItems="center" item xs={12}>
 						<Item>
 							<Card>
@@ -155,9 +141,6 @@ const Home = () => {
 											create task
 										</Button>
 									</CardActions>
-									<CardActions>
-										<button onClick={() => handleLogout()}>Logout</button>
-									</CardActions>
 								</form>
 							</Card>
 						</Item>
@@ -171,9 +154,9 @@ const Home = () => {
 							);
 						})}
 					</Grid>
-				</Grid>
-			</Box>
-		</Container>
+				</Box>
+			</Container>
+		</>
 	);
 };
 

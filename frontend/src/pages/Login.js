@@ -18,6 +18,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { login, isAuthenticated } from '../auth/Authentication';
+import Navbar from '../components/Navbar';
 
 function Copyright(props) {
 	return (
@@ -76,6 +77,7 @@ const Login = () => {
 
 	return (
 		<ThemeProvider theme={theme}>
+			<Navbar isAuthenticated={isAuthenticated()} />
 			<Container component="main" maxWidth="xs">
 				<CssBaseline />
 				<Box
