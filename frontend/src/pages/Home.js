@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { logout, isAuthenticated, getUserToken } from '../auth/Authentication';
+import axios from 'axios';
+import { isAuthenticated, getUserToken } from '../auth/Authentication';
 // import useLocalStorageHook from '../utils/useLocalStorageHook';
 import { useHistory } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
@@ -27,27 +28,14 @@ const Item = styled(Paper)(({ theme }) => ({
 	color: theme.palette.text.secondary,
 }));
 
-const getAvatarColor = () => {
-	var letters = '0123456789ABCDEF';
-	var color = '#';
-	for (var i = 0; i < 6; i++) {
-		color += letters[Math.floor(Math.random() * 16)];
-	}
-	return color;
-};
-
 const Home = () => {
 	// const data = useLocalStorageHook();
 	const [tasksList, setTasksList] = useState([]);
 	const [taskName, setTaskName] = useState('');
-	const [errorMessage, setErrorMessage] = useState('');
+	const [error, setError] = useState('');
 	const [userToken, setUserToken] = useState({});
 	const history = useHistory();
-
-	const handleLogout = () => {
-		logout();
-		history.push('/');
-	};
+	const serverURL = 'http://localhost:5000';
 
 	useEffect(() => {
 		//	setTasksList([...data.getAllTasks()]);
@@ -59,47 +47,50 @@ const Home = () => {
 		setTaskName(e.target.value);
 	};
 
-	const checkIfTaskExists = (enteredTaskName) => {
-		//	const tasksList = data.getAllTasks();
-		return tasksList.find((task) => task.name === enteredTaskName);
+	const saveTaskObject = (enteredTaskName) => {
+		const newTask = {
+			name: enteredTaskName,
+		};
+		submitData(newTask);
 	};
 
-	const saveTaskObject = (enteredTaskName) => {
-		const existingTask = checkIfTaskExists(enteredTaskName);
-		if (existingTask) {
-			setErrorMessage('Task name -' + enteredTaskName + '- aleready exists.');
-		} else {
-			const newTask = {
-				// ON TOP OF THE LIST AND THEN CAN GO TO EDIT
-				name: enteredTaskName,
-				dateCreated: new Date().toDateString(),
-				currentStatus: { id: 1, message: 'Idle task', severity: 'error' },
-				description: '',
-				avatarColor: getAvatarColor(),
-			};
-			//	data.addNewTaskObjectToArrayAndSave(newTask);
+	const submitData = async (newTask) => {
+		try {
+			await axios({
+				method: 'POST',
+				url: `${serverURL}/api/v1/tasks`,
+				data: {
+					name: newTask.name,
+				},
+				headers: {
+					authorization: `Bearer ${getUserToken().userToken}`,
+				},
+			}).then((res) => {
+				console.log('task created: ', res.data);
+				setTaskName('');
+				history.push('/home');
+			});
+		} catch (err) {
+			console.log(err.response);
+			setError(err.response.data.msg);
 		}
 	};
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		setErrorMessage('');
+		setError('');
 		const firstThreeCharacters = taskName.substring(0, 4);
 		if (!firstThreeCharacters.match(/^[a-z0-9]+$/i) || taskName.length < 3) {
-			setErrorMessage('You must enter task name to create new task');
+			setError('You must enter task name to create new task');
 		} else {
 			saveTaskObject(taskName);
 			//	setTasksList([...data.getAllTasks()]);
 		}
 	};
 
-	useEffect(() => {
-		setTaskName('');
-	}, [tasksList]);
-
 	return (
 		<>
-			<Navbar isAuthenticated={isAuthenticated()} />
+			<Navbar isAuthenticated={isAuthenticated()} />;
 			<Container maxWidth="sm">
 				<Box sx={{ flexGrow: 1 }}>
 					<Grid justifyItems="center" item xs={12}>
@@ -113,7 +104,7 @@ const Home = () => {
 												maxWidth: '100%',
 											}}
 										>
-											{errorMessage && (
+											{error && (
 												<Box
 													sx={{
 														paddingTop: 2,
@@ -121,7 +112,7 @@ const Home = () => {
 														bgcolor: 'background.paper',
 													}}
 												>
-													<Alert severity="error">{errorMessage}</Alert>
+													<Alert severity="error">{error}</Alert>
 												</Box>
 											)}
 											<TextField
@@ -132,7 +123,7 @@ const Home = () => {
 												onChange={handleChange}
 												variant="outlined"
 												color="primary"
-												error={!!errorMessage}
+												error={!!error}
 											/>
 										</Box>
 									</CardContent>

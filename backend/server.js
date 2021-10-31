@@ -14,7 +14,7 @@ const connectDB = require('./db/connect');
 
 // routes
 const authRouter = require('./routes/auth');
-// const tasksRouter = require('./routes/tasks');
+const tasksRouter = require('./routes/tasks');
 
 // error handler
 const notFoundMiddleware = require('./middleware/not-found');
@@ -36,7 +36,7 @@ app.use(xss());
 
 // routes
 app.use('/api/v1/auth', authRouter);
-// app.use('/api/v1/tasks', authenticateUser, tasksRouter);
+app.use('/api/v1/tasks', authenticateUser, tasksRouter);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);

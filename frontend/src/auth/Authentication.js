@@ -11,7 +11,6 @@ export const logout = () => {
 
 export const getUserToken = () => {
 	const jsonUserToken = localStorage.getItem(TOKEN_KEY);
-	console.log(JSON.parse(jsonUserToken));
 	return JSON.parse(jsonUserToken);
 };
 

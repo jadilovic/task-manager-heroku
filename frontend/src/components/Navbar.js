@@ -11,13 +11,11 @@ import Button from '@mui/material/Button';
 const Navbar = (props) => {
 	const history = useHistory();
 	const { isAuthenticated } = props;
+
 	const handleLogout = () => {
 		logout();
 		history.push('/');
 	};
-
-	// console.log('email ', getUserToken().userEmail);
-	console.log('email ', isAuthenticated);
 
 	return (
 		<Box sx={{ flexGrow: 1 }} padding={2}>
@@ -44,7 +42,7 @@ const Navbar = (props) => {
 						</>
 					) : (
 						<Typography variant="h6" component="div">
-							User Email
+							User
 						</Typography>
 					)}
 				</Toolbar>
