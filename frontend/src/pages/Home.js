@@ -45,10 +45,9 @@ const Home = () => {
 					authorization: `Bearer ${getUserToken().userToken}`,
 				},
 			}).then((res) => {
-				const dbTasks = res.data.tasks.reverse();
+				const dbTasks = res.data.tasks;
 				setTasksList(dbTasks);
 				setTaskName('');
-				history.push('/home');
 			});
 		} catch (err) {
 			console.log(err.response);
@@ -66,21 +65,13 @@ const Home = () => {
 		setTaskName(e.target.value);
 	};
 
-	const saveTaskObject = (enteredTaskName) => {
-		const newTask = {
-			name: enteredTaskName,
-		};
-		submitData(newTask);
-	};
-
-	// go directly to submitData from handle submit
 	const submitData = async (newTask) => {
 		try {
 			await axios({
 				method: 'POST',
 				url: `${serverURL}/api/v1/tasks`,
 				data: {
-					name: newTask.name,
+					name: newTask,
 				},
 				headers: {
 					authorization: `Bearer ${getUserToken().userToken}`,
@@ -99,13 +90,13 @@ const Home = () => {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		setError('');
-		const firstThreeCharacters = taskName.substring(0, 4);
-		// use trim for space
-		if (!firstThreeCharacters.match(/^[a-z0-9]+$/i) || taskName.length < 3) {
-			setError('You must enter task name to create new task');
+		const trimedTaskName = taskName.trim();
+		if (trimedTaskName.length < 3) {
+			setError(
+				'You must enter task name with minimum three letters to create new task'
+			);
 		} else {
-			saveTaskObject(taskName);
-			//	setTasksList([...data.getAllTasks()]);
+			submitData(trimedTaskName);
 		}
 	};
 

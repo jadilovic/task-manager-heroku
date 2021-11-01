@@ -46,12 +46,12 @@ const TaskCard = (props) => {
 		_id,
 		updatedAt,
 	} = task;
-	// better format to find
-	dateCreated = new Date(Date.parse(dateCreated)).toDateString();
+	dateCreated = new Date(dateCreated).toDateString();
 	// model task status to use on backend
 	currentStatus = taskStatusObjects.find(
 		(statusObject) => statusObject.id === currentStatus
 	);
+	updatedAt = new Date(updatedAt).toUTCString();
 
 	const handleExpandClick = () => {
 		setExpanded(!expanded);

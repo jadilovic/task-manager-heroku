@@ -18,7 +18,7 @@ const Navbar = () => {
 			console.log(window.location.pathname);
 			setAuthenticated(isAuthenticated());
 		});
-	}, [history]);
+	}, []);
 
 	const handleLogout = () => {
 		logout();
@@ -50,7 +50,7 @@ const Navbar = () => {
 						</>
 					) : (
 						<Typography variant="h6" component="div">
-							User
+							{''}
 						</Typography>
 					)}
 				</Toolbar>

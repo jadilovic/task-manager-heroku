@@ -7,7 +7,6 @@ const TaskSchema = mongoose.Schema(
 			required: [true, 'Please enter task name'],
 			minlength: 3,
 			maxlength: 50,
-			unique: true,
 		},
 		dateCreated: {
 			type: Date,

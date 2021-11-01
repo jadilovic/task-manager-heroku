@@ -3,12 +3,31 @@ const { StatusCodes } = require('http-status-codes');
 const { BadRequestError, NotFoundError } = require('../errors');
 
 const getAllTasks = async (req, res) => {
-	const tasks = await Task.find({ createdBy: req.user.userId });
-	// explore mongo sort reverse mongoose
+	const tasks = await Task.find({ createdBy: req.user.userId }).sort({
+		createdAt: -1,
+	});
 	res.status(StatusCodes.OK).json({ tasks, length: tasks.length });
 };
 
+const taskNameExists = async (enteredTaskName, userId) => {
+	const userTaskNames = await Task.find({ createdBy: userId });
+	const existingTask = userTaskNames.find(
+		(task) => task.name === enteredTaskName
+	);
+	if (existingTask) {
+		return true;
+	} else {
+		return false;
+	}
+};
+
 const createTask = async (req, res) => {
+	const existingTask = await taskNameExists(req.body.name, req.user.userId);
+	if (existingTask) {
+		throw new BadRequestError(
+			'Entered task name already exists. Please enter different task name.'
+		);
+	}
 	req.body.createdBy = req.user.userId;
 	const task = await Task.create(req.body);
 	res.status(StatusCodes.CREATED).json({ task });
@@ -21,7 +40,7 @@ const updateTask = async (req, res) => {
 		params: { id: taskId },
 	} = req;
 	if (name === '') {
-		throw BadRequestError('Must provide task name value');
+		throw new BadRequestError('Must provide task name value');
 	}
 	const task = await Task.findByIdAndUpdate(
 		{ _id: taskId, createdBy: userId },
@@ -29,7 +48,7 @@ const updateTask = async (req, res) => {
 		{ new: true, runValidators: true }
 	);
 	if (!task) {
-		throw NotFoundError(`Task with id ${taskId} was not found`);
+		throw new NotFoundError(`Task with id ${taskId} was not found`);
 	}
 	res.status(StatusCodes.OK).json({ task });
 };
