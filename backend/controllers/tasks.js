@@ -4,6 +4,7 @@ const { BadRequestError, NotFoundError } = require('../errors');
 
 const getAllTasks = async (req, res) => {
 	const tasks = await Task.find({ createdBy: req.user.userId });
+	// explore mongo sort reverse mongoose
 	res.status(StatusCodes.OK).json({ tasks, length: tasks.length });
 };
 
@@ -15,46 +16,46 @@ const createTask = async (req, res) => {
 
 const updateTask = async (req, res) => {
 	const {
-		body: { company, position },
+		body: { name, currentStatus, description },
 		user: { userId },
-		params: { id: jobId },
+		params: { id: taskId },
 	} = req;
-	if (company === '' || position === '') {
-		throw BadRequestError('Must provide company and position value');
+	if (name === '') {
+		throw BadRequestError('Must provide task name value');
 	}
-	const job = await Job.findByIdAndUpdate(
-		{ _id: jobId, createdBy: userId },
+	const task = await Task.findByIdAndUpdate(
+		{ _id: taskId, createdBy: userId },
 		req.body,
 		{ new: true, runValidators: true }
 	);
-	if (!job) {
-		throw NotFoundError(`Job with id ${jobId} was not found`);
+	if (!task) {
+		throw NotFoundError(`Task with id ${taskId} was not found`);
 	}
-	res.status(StatusCodes.OK).json({ job });
+	res.status(StatusCodes.OK).json({ task });
 };
 
 const getTask = async (req, res) => {
 	const {
 		user: { userId },
-		params: { id: jobId },
+		params: { id: taskId },
 	} = req;
-	const job = await Job.findOne({ _id: jobId, createdBy: userId });
-	if (!job) {
-		throw new NotFoundError(`No job found with id ${jobId}`);
+	const task = await Task.findOne({ _id: taskId, createdBy: userId });
+	if (!task) {
+		throw new NotFoundError(`No task found with id ${taskId}`);
 	}
-	res.status(StatusCodes.OK).json({ job });
+	res.status(StatusCodes.OK).json({ task });
 };
 
 const deleteTask = async (req, res) => {
 	const {
 		user: { userId },
-		params: { id: jobId },
+		params: { id: taskId },
 	} = req;
-	const job = await Job.findByIdAndRemove({ _id: jobId, createdBy: userId });
-	if (!job) {
-		throw new NotFoundError(`No job found with id ${jobId}`);
+	const task = await Task.findByIdAndRemove({ _id: taskId, createdBy: userId });
+	if (!task) {
+		throw new NotFoundError(`No task found with id ${taskId}`);
 	}
-	res.status(StatusCodes.OK).json({ job });
+	res.status(StatusCodes.OK).json({ task });
 };
 
 module.exports = { getAllTasks, createTask, updateTask, getTask, deleteTask };

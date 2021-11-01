@@ -1,14 +1,5 @@
 const mongoose = require('mongoose');
 
-const getAvatarColor = () => {
-	var letters = '0123456789ABCDEF';
-	var color = '#';
-	for (var i = 0; i < 6; i++) {
-		color += letters[Math.floor(Math.random() * 16)];
-	}
-	return color;
-};
-
 const TaskSchema = mongoose.Schema(
 	{
 		name: {
@@ -33,7 +24,7 @@ const TaskSchema = mongoose.Schema(
 		},
 		avatarColor: {
 			type: String,
-			default: getAvatarColor(),
+			default: '#00FF00',
 		},
 		createdBy: {
 			type: mongoose.Types.ObjectId,
@@ -43,5 +34,15 @@ const TaskSchema = mongoose.Schema(
 	},
 	{ timestamps: true }
 );
+
+TaskSchema.pre('save', function (next) {
+	let letters = '0123456789ABCDEF';
+	let color = '#';
+	for (var i = 0; i < 6; i++) {
+		color += letters[Math.floor(Math.random() * 16)];
+	}
+	this.avatarColor = color;
+	next();
+});
 
 module.exports = mongoose.model('Task', TaskSchema);

@@ -1,14 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import {
-	BrowserRouter as Router,
-	Route,
-	Switch,
-	Link,
-	useHistory,
-} from 'react-router-dom';
-import Navbar from '../components/Navbar';
-import { login, isAuthenticated } from '../auth/Authentication';
+import { BrowserRouter as Router, Link, useHistory } from 'react-router-dom';
+import { login } from '../auth/Authentication';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -81,8 +74,6 @@ const Signup = () => {
 
 	return (
 		<ThemeProvider theme={theme}>
-			<Navbar isAuthenticated={isAuthenticated()} />
-
 			<Container component="main" maxWidth="xs">
 				<CssBaseline />
 				<Box

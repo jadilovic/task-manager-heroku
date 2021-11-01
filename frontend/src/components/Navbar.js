@@ -1,4 +1,5 @@
-import { logout, getUserToken } from '../auth/Authentication';
+import React, { useEffect, useState } from 'react';
+import { logout, getUserToken, isAuthenticated } from '../auth/Authentication';
 // import useLocalStorageHook from '../utils/useLocalStorageHook';
 import { useHistory } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
@@ -8,9 +9,16 @@ import Typography from '@mui/material/Typography';
 import AddTaskIcon from '@mui/icons-material/AddTask';
 import Button from '@mui/material/Button';
 
-const Navbar = (props) => {
+const Navbar = () => {
 	const history = useHistory();
-	const { isAuthenticated } = props;
+	const [authenticated, setAuthenticated] = useState(false);
+
+	useEffect(() => {
+		history.listen(() => {
+			console.log(window.location.pathname);
+			setAuthenticated(isAuthenticated());
+		});
+	}, [history]);
 
 	const handleLogout = () => {
 		logout();
@@ -27,7 +35,7 @@ const Navbar = (props) => {
 					<Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
 						MERN Task Manager
 					</Typography>
-					{isAuthenticated ? (
+					{authenticated ? (
 						<>
 							<Typography variant="h6" component="div" paddingRight={2}>
 								{`${getUserToken().userEmail}`}

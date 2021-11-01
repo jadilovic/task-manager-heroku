@@ -6,8 +6,6 @@ const app = express();
 // additional security
 const rateLimiter = require('express-rate-limit');
 const cors = require('cors');
-const xss = require('xss-clean');
-const helmet = require('helmet');
 
 // connect DB
 const connectDB = require('./db/connect');
@@ -22,7 +20,7 @@ const errorHandlerMiddleware = require('./middleware/error-handler');
 const authenticateUser = require('./middleware/authentication');
 
 // extra packages
-app.set('trust proxy', 1);
+app.set('trust proxy', 1); // learn why needed
 app.use(
 	rateLimiter({
 		windowMs: 15 * 60 * 1000, // 15 minutes
@@ -30,9 +28,7 @@ app.use(
 	})
 );
 app.use(express.json());
-app.use(cors());
-app.use(helmet());
-app.use(xss());
+app.use(cors()); // learn about it
 
 // routes
 app.use('/api/v1/auth', authRouter);

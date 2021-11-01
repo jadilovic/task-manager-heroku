@@ -1,13 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 
-import {
-	BrowserRouter as Router,
-	Route,
-	Switch,
-	Link,
-	useHistory,
-} from 'react-router-dom';
+import { BrowserRouter as Router, Link, useHistory } from 'react-router-dom';
 import { Box, Alert, Avatar } from '@mui/material';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -17,8 +11,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { login, isAuthenticated } from '../auth/Authentication';
-import Navbar from '../components/Navbar';
+import { login } from '../auth/Authentication';
 
 function Copyright(props) {
 	return (
@@ -41,7 +34,7 @@ const theme = createTheme();
 
 const Login = () => {
 	const history = useHistory();
-	const serverURL = 'http://localhost:5000';
+	const serverURL = 'http://localhost:5000'; // .env prod and dev
 	const [error, setError] = useState(null);
 
 	const handleSubmit = (event) => {
@@ -77,7 +70,6 @@ const Login = () => {
 
 	return (
 		<ThemeProvider theme={theme}>
-			<Navbar isAuthenticated={isAuthenticated()} />
 			<Container component="main" maxWidth="xs">
 				<CssBaseline />
 				<Box

@@ -9,6 +9,7 @@ const signup = async (req, res) => {
 	res.status(StatusCodes.CREATED).json({ user: { email: user.email }, token });
 };
 
+// move to new controller
 const getAllUsers = async (req, res) => {
 	const users = await User.find({});
 	res.status(StatusCodes.OK).json({ users, length: users.length });

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { isAuthenticated, getUserToken } from '../auth/Authentication';
+import { getUserToken } from '../auth/Authentication';
 // import useLocalStorageHook from '../utils/useLocalStorageHook';
 import { useHistory } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
@@ -19,7 +19,6 @@ import {
 	Alert,
 } from '@mui/material';
 import TaskCard from '../components/TaskCard';
-import Navbar from '../components/Navbar';
 
 const Item = styled(Paper)(({ theme }) => ({
 	...theme.typography.body2,
@@ -37,8 +36,28 @@ const Home = () => {
 	const history = useHistory();
 	const serverURL = 'http://localhost:5000';
 
+	const getAllTasks = async () => {
+		try {
+			await axios({
+				method: 'GET',
+				url: `${serverURL}/api/v1/tasks`,
+				headers: {
+					authorization: `Bearer ${getUserToken().userToken}`,
+				},
+			}).then((res) => {
+				const dbTasks = res.data.tasks.reverse();
+				setTasksList(dbTasks);
+				setTaskName('');
+				history.push('/home');
+			});
+		} catch (err) {
+			console.log(err.response);
+			setError(err.response.data.msg);
+		}
+	};
+
 	useEffect(() => {
-		//	setTasksList([...data.getAllTasks()]);
+		getAllTasks();
 		setUserToken(getUserToken());
 	}, []);
 
@@ -54,6 +73,7 @@ const Home = () => {
 		submitData(newTask);
 	};
 
+	// go directly to submitData from handle submit
 	const submitData = async (newTask) => {
 		try {
 			await axios({
@@ -68,7 +88,7 @@ const Home = () => {
 			}).then((res) => {
 				console.log('task created: ', res.data);
 				setTaskName('');
-				history.push('/home');
+				getAllTasks();
 			});
 		} catch (err) {
 			console.log(err.response);
@@ -80,6 +100,7 @@ const Home = () => {
 		e.preventDefault();
 		setError('');
 		const firstThreeCharacters = taskName.substring(0, 4);
+		// use trim for space
 		if (!firstThreeCharacters.match(/^[a-z0-9]+$/i) || taskName.length < 3) {
 			setError('You must enter task name to create new task');
 		} else {
@@ -90,7 +111,6 @@ const Home = () => {
 
 	return (
 		<>
-			<Navbar isAuthenticated={isAuthenticated()} />;
 			<Container maxWidth="sm">
 				<Box sx={{ flexGrow: 1 }}>
 					<Grid justifyItems="center" item xs={12}>
@@ -137,10 +157,10 @@ const Home = () => {
 						</Item>
 					</Grid>
 					<Grid item xs={12}>
-						{tasksList.map((task) => {
+						{tasksList.map((task, index) => {
 							return (
-								<Item>
-									<TaskCard task={task} setTasksList={setTasksList} />
+								<Item key={index}>
+									<TaskCard task={task} refreshTasks={getAllTasks} />
 								</Item>
 							);
 						})}
