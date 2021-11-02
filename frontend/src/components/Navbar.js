@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { logout, getUserToken, isAuthenticated } from '../auth/Authentication';
+import { isAuthenticated } from '../auth/Authentication';
 // import useLocalStorageHook from '../utils/useLocalStorageHook';
 import { useHistory } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
@@ -7,11 +7,15 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import AddTaskIcon from '@mui/icons-material/AddTask';
-import Button from '@mui/material/Button';
+import UserMenu from './UserMenu';
 
 const Navbar = () => {
 	const history = useHistory();
-	const [authenticated, setAuthenticated] = useState(false);
+	const [authenticated, setAuthenticated] = useState(null);
+
+	if (authenticated === null) {
+		setAuthenticated(isAuthenticated());
+	}
 
 	useEffect(() => {
 		history.listen(() => {
@@ -19,11 +23,6 @@ const Navbar = () => {
 			setAuthenticated(isAuthenticated());
 		});
 	}, []);
-
-	const handleLogout = () => {
-		logout();
-		history.push('/');
-	};
 
 	return (
 		<Box sx={{ flexGrow: 1 }} padding={2}>
@@ -35,19 +34,9 @@ const Navbar = () => {
 					<Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
 						MERN Task Manager
 					</Typography>
+
 					{authenticated ? (
-						<>
-							<Typography variant="h6" component="div" paddingRight={2}>
-								{`${getUserToken().userEmail}`}
-							</Typography>
-							<Button
-								variant="contained"
-								color="warning"
-								onClick={() => handleLogout()}
-							>
-								Logout
-							</Button>
-						</>
+						<UserMenu />
 					) : (
 						<Typography variant="h6" component="div">
 							{''}

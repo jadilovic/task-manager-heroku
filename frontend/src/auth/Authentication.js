@@ -1,7 +1,13 @@
 const TOKEN_KEY = 'jwt';
 
-export const login = (token, email) => {
-	const userToken = { userToken: token, userEmail: email };
+export const login = (token, user) => {
+	console.log('user: ', user);
+	const userToken = {
+		userToken: token,
+		userEmail: user.email,
+		userFirstName: user.firstName,
+		userLastName: user.lastName,
+	};
 	localStorage.setItem(TOKEN_KEY, JSON.stringify(userToken));
 };
 

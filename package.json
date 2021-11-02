@@ -4,6 +4,7 @@
 	"description": "",
 	"dependencies": {
 		"concurrently": "^6.3.0",
+		"moment": "^2.29.1",
 		"nodemon": "^2.0.14"
 	},
 	"devDependencies": {},

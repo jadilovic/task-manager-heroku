@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import axios from 'axios';
+import moment from 'moment';
 import useLocalStorageHook from '../utils/useLocalStorageHook';
 import taskStatusObjects from '../utils/taskStatusObjects';
 import Card from '@mui/material/Card';
@@ -51,7 +52,9 @@ const TaskCard = (props) => {
 	currentStatus = taskStatusObjects.find(
 		(statusObject) => statusObject.id === currentStatus
 	);
-	updatedAt = new Date(updatedAt).toUTCString();
+	const startTime = moment(new Date(updatedAt));
+	const endTime = moment(new Date());
+	const elapsedTime = moment.duration(endTime.diff(startTime));
 
 	const handleExpandClick = () => {
 		setExpanded(!expanded);
@@ -129,7 +132,9 @@ const TaskCard = (props) => {
 					<Typography paragraph>
 						{description ? description : 'No description'}
 					</Typography>
-					<Typography paragraph>{`Updated at: ${updatedAt}`}</Typography>
+					<Typography
+						paragraph
+					>{`Last updated since ${elapsedTime.days()} days, ${elapsedTime.hours()} hours, ${elapsedTime.minutes()} minutes`}</Typography>
 				</CardContent>
 			</Collapse>
 		</Card>

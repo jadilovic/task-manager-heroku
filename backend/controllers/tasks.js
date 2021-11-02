@@ -4,13 +4,14 @@ const { BadRequestError, NotFoundError } = require('../errors');
 
 const getAllTasks = async (req, res) => {
 	const tasks = await Task.find({ createdBy: req.user.userId }).sort({
-		createdAt: -1,
+		updatedAt: -1,
 	});
 	res.status(StatusCodes.OK).json({ tasks, length: tasks.length });
 };
 
 const taskNameExists = async (enteredTaskName, userId) => {
 	const userTaskNames = await Task.find({ createdBy: userId });
+	// do it in mongoDB
 	const existingTask = userTaskNames.find(
 		(task) => task.name === enteredTaskName
 	);

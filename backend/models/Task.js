@@ -5,8 +5,8 @@ const TaskSchema = mongoose.Schema(
 		name: {
 			type: String,
 			required: [true, 'Please enter task name'],
-			minlength: 3,
-			maxlength: 50,
+			minlength: [3, 'Task name must be minimum 3 characters long'],
+			maxlength: [50, 'Task name can be maximum 50 characters long'],
 		},
 		dateCreated: {
 			type: Date,
@@ -19,7 +19,7 @@ const TaskSchema = mongoose.Schema(
 		description: {
 			type: String,
 			default: '',
-			maxlength: 200,
+			maxlength: [200, 'Description can be maximum 200 characters long'],
 		},
 		avatarColor: {
 			type: String,
