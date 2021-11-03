@@ -18,6 +18,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { getUserToken } from '../auth/Authentication';
+import ConfirmDialog from './ConfirmDialog';
 
 const ExpandMore = styled((props) => {
 	const { expand, ...other } = props;
@@ -33,6 +34,7 @@ const ExpandMore = styled((props) => {
 const TaskCard = (props) => {
 	const history = useHistory();
 	const data = useLocalStorageHook();
+	const [confirmOpen, setConfirmOpen] = useState(false);
 
 	const { task, refreshTasks } = props;
 	const [expanded, setExpanded] = useState(false);
@@ -108,13 +110,23 @@ const TaskCard = (props) => {
 			/>
 			<CardActions disableSpacing>
 				<IconButton
-					onClick={() => deleteTask(_id)}
+					onClick={() => setConfirmOpen(true)}
 					size="large"
 					color="error"
 					aria-label="delete"
 				>
 					<DeleteIcon />
 				</IconButton>
+				<ConfirmDialog
+					title="Delete Task?"
+					open={confirmOpen}
+					setOpen={setConfirmOpen}
+					onConfirm={() => deleteTask(_id)}
+				>
+					<Typography paragraph>
+						Are you sure you want to delete this task?
+					</Typography>
+				</ConfirmDialog>
 				<Alert sx={{ flexGrow: 1 }} severity={currentStatus.severity}>
 					{currentStatus.message}
 				</Alert>

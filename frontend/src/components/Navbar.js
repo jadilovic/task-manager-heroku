@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { isAuthenticated } from '../auth/Authentication';
-// import useLocalStorageHook from '../utils/useLocalStorageHook';
 import { useHistory } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -12,16 +11,18 @@ import UserMenu from './UserMenu';
 const Navbar = () => {
 	const history = useHistory();
 	const [authenticated, setAuthenticated] = useState(null);
+	console.log('authenticated ', authenticated);
 
 	if (authenticated === null) {
 		setAuthenticated(isAuthenticated());
 	}
 
 	useEffect(() => {
-		history.listen(() => {
+		const unlisten = history.listen(() => {
 			console.log(window.location.pathname);
 			setAuthenticated(isAuthenticated());
 		});
+		return unlisten();
 	}, []);
 
 	return (

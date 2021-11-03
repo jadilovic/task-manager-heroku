@@ -3,9 +3,12 @@ const { StatusCodes } = require('http-status-codes');
 const { BadRequestError, UnauthenticatedError } = require('../errors');
 
 const signup = async (req, res) => {
-	const user = await User.create({ ...req.body });
+	await User.create({ ...req.body });
+	const user = await User.findOne(
+		{ email: req.body.email },
+		{ _id: 1, email: 1, firstName: 1, lastName: 1 }
+	);
 	const token = user.createJWT();
-	//	res.status(StatusCodes.CREATED).json({ user: { email: user.email }, token });
 	res.status(StatusCodes.CREATED).json({ user, token });
 };
 
@@ -31,7 +34,7 @@ const login = async (req, res) => {
 		throw new UnauthenticatedError('Invalid credetials');
 	}
 	const token = user.createJWT();
-	//	res.status(StatusCodes.OK).json({ user: { email: user.email }, token });
+	user.password = undefined;
 	res.status(StatusCodes.CREATED).json({ user, token });
 };
 

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { getUserToken } from '../auth/Authentication';
-// import useLocalStorageHook from '../utils/useLocalStorageHook';
 import { useHistory } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import {
@@ -9,8 +8,6 @@ import {
 	Paper,
 	Grid,
 	Container,
-	Typography,
-	CardMedia,
 	Card,
 	CardContent,
 	TextField,
@@ -28,21 +25,20 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 const Home = () => {
-	// const data = useLocalStorageHook();
 	const [tasksList, setTasksList] = useState([]);
 	const [taskName, setTaskName] = useState('');
 	const [error, setError] = useState('');
 	const [userToken, setUserToken] = useState({});
-	const history = useHistory();
 	const serverURL = 'http://localhost:5000';
 
 	const getAllTasks = async () => {
+		console.log('get all tasks: ', userToken);
 		try {
 			await axios({
 				method: 'GET',
 				url: `${serverURL}/api/v1/tasks`,
 				headers: {
-					authorization: `Bearer ${getUserToken().userToken}`,
+					authorization: `Bearer ${getUserToken().token}`,
 				},
 			}).then((res) => {
 				const dbTasks = res.data.tasks;
@@ -74,7 +70,7 @@ const Home = () => {
 					name: newTask,
 				},
 				headers: {
-					authorization: `Bearer ${getUserToken().userToken}`,
+					authorization: `Bearer ${userToken.token}`,
 				},
 			}).then((res) => {
 				console.log('task created: ', res.data);

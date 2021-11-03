@@ -63,7 +63,7 @@ const Signup = () => {
 				},
 				headers: new Headers({ 'Content-Type': 'application/json' }),
 			}).then((res) => {
-				login(res.data.token, res.data.user.email);
+				login(res.data.token, res.data.user);
 				history.push('/home');
 			});
 		} catch (err) {
