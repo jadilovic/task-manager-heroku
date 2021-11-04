@@ -6,11 +6,12 @@ import IconButton from '@mui/material/IconButton';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
-import Menu from '@mui/material/Menu';
+import { Menu } from '@mui/material';
 
 const UserMenu = () => {
 	const [anchorEl, setAnchorEl] = useState(null);
 	const history = useHistory();
+
 	const handleMenu = (event) => {
 		setAnchorEl(event.currentTarget);
 	};
@@ -51,17 +52,17 @@ const UserMenu = () => {
 				open={Boolean(anchorEl)}
 				onClose={handleClose}
 			>
-				<MenuItem onClick={handleClose}>
+				<MenuItem style={{ pointerEvents: 'none' }}>
 					<Typography component="div" paddingRight={2}>
 						{`${getUserData()?.firstName} ${getUserData()?.lastName}`}
 					</Typography>
 				</MenuItem>
-				<MenuItem onClick={handleClose}>
+				<MenuItem style={{ pointerEvents: 'none' }}>
 					<Typography component="div" paddingRight={2}>
 						{`${getUserData()?.email}`}
 					</Typography>
 				</MenuItem>
-				<MenuItem>
+				<Typography align="center">
 					<Button
 						variant="contained"
 						color="warning"
@@ -69,7 +70,7 @@ const UserMenu = () => {
 					>
 						Logout
 					</Button>
-				</MenuItem>
+				</Typography>
 			</Menu>
 		</div>
 	);

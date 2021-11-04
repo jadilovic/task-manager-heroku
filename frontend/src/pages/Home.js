@@ -32,7 +32,6 @@ const Home = () => {
 	const serverURL = 'http://localhost:5000';
 
 	const getAllTasks = async () => {
-		console.log('get all tasks: ', userToken);
 		try {
 			await axios({
 				method: 'GET',

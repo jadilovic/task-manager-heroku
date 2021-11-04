@@ -2,9 +2,10 @@ const TOKEN_KEY = 'jwt';
 const USER_KEY = 'user';
 
 export const login = (token, user) => {
+	// to reproduce error
+	// fix bug loged in while having an error
 	const userToken = {
 		token,
-		email: user.email,
 	};
 	const userData = {
 		email: user.email,

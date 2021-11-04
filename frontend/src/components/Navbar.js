@@ -11,22 +11,20 @@ import UserMenu from './UserMenu';
 const Navbar = () => {
 	const history = useHistory();
 	const [authenticated, setAuthenticated] = useState(null);
-	console.log('authenticated ', authenticated);
 
 	if (authenticated === null) {
 		setAuthenticated(isAuthenticated());
 	}
 
 	useEffect(() => {
-		const unlisten = history.listen(() => {
+		history.listen(() => {
 			console.log(window.location.pathname);
 			setAuthenticated(isAuthenticated());
 		});
-		return unlisten();
 	}, []);
 
 	return (
-		<Box sx={{ flexGrow: 1 }} padding={2}>
+		<Box sx={{ flexGrow: 1 }}>
 			<AppBar position="static">
 				<Toolbar>
 					<Typography variant="h6" component="div" paddingRight={2}>

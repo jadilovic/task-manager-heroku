@@ -28,7 +28,7 @@ app.use(
 	})
 );
 app.use(express.json());
-app.use(cors()); // learn about it
+app.use(cors());
 
 // routes
 app.use('/api/v1/auth', authRouter);

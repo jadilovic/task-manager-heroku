@@ -19,6 +19,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { getUserToken } from '../auth/Authentication';
 import ConfirmDialog from './ConfirmDialog';
+import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
 
 const ExpandMore = styled((props) => {
 	const { expand, ...other } = props;
@@ -54,18 +55,15 @@ const TaskCard = (props) => {
 	currentStatus = taskStatusObjects.find(
 		(statusObject) => statusObject.id === currentStatus
 	);
-	const startTime = moment(new Date(updatedAt));
-	const endTime = moment(new Date());
-	const elapsedTime = moment.duration(endTime.diff(startTime));
+	const lastUpdate = moment(new Date(updatedAt));
 
 	const handleExpandClick = () => {
 		setExpanded(!expanded);
 	};
 
-	// confirmation modal
 	const deleteTask = async (taskId) => {
 		const headers = {
-			Authorization: `Bearer ${getUserToken().userToken}`,
+			Authorization: `Bearer ${getUserToken().token}`,
 		};
 		try {
 			await axios
@@ -127,8 +125,14 @@ const TaskCard = (props) => {
 						Are you sure you want to delete this task?
 					</Typography>
 				</ConfirmDialog>
-				<Alert sx={{ flexGrow: 1 }} severity={currentStatus.severity}>
-					{currentStatus.message}
+				<Alert
+					icon={false}
+					sx={{ flexGrow: 1 }}
+					severity={currentStatus.severity}
+				>
+					<Typography alignContent="center">
+						<HourglassEmptyIcon /> {currentStatus.message}
+					</Typography>
 				</Alert>
 				<ExpandMore
 					expand={expanded}
@@ -146,7 +150,7 @@ const TaskCard = (props) => {
 					</Typography>
 					<Typography
 						paragraph
-					>{`Last updated since ${elapsedTime.days()} days, ${elapsedTime.hours()} hours, ${elapsedTime.minutes()} minutes`}</Typography>
+					>{`Task last updated ${lastUpdate.fromNow()}`}</Typography>
 				</CardContent>
 			</Collapse>
 		</Card>
