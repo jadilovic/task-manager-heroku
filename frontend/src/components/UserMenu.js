@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { logout, getUserToken, getUserData } from '../auth/Authentication';
+import { logout, getUserData } from '../auth/Authentication';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import AccountCircle from '@mui/icons-material/AccountCircle';
@@ -26,7 +26,7 @@ const UserMenu = () => {
 	};
 
 	return (
-		<div>
+		<div style={{ margin: 0 }}>
 			<IconButton
 				size="large"
 				aria-label="account of current user"

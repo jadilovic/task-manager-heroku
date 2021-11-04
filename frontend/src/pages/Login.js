@@ -63,7 +63,7 @@ const Login = () => {
 				history.push('/home');
 			});
 		} catch (err) {
-			console.log(err);
+			console.log(err.response);
 			setError(err.response.data.msg);
 		}
 	};

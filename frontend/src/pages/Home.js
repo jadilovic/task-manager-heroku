@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { getUserToken } from '../auth/Authentication';
-import { useHistory } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import {
 	Box,
@@ -28,7 +27,7 @@ const Home = () => {
 	const [tasksList, setTasksList] = useState([]);
 	const [taskName, setTaskName] = useState('');
 	const [error, setError] = useState('');
-	const [userToken, setUserToken] = useState({});
+	const [userToken, setUserToken] = useState('');
 	const serverURL = 'http://localhost:5000';
 
 	const getAllTasks = async () => {
@@ -37,7 +36,7 @@ const Home = () => {
 				method: 'GET',
 				url: `${serverURL}/api/v1/tasks`,
 				headers: {
-					authorization: `Bearer ${getUserToken().token}`,
+					authorization: `Bearer ${getUserToken()}`,
 				},
 			}).then((res) => {
 				const dbTasks = res.data.tasks;
@@ -69,7 +68,7 @@ const Home = () => {
 					name: newTask,
 				},
 				headers: {
-					authorization: `Bearer ${userToken.token}`,
+					authorization: `Bearer ${userToken}`,
 				},
 			}).then((res) => {
 				console.log('task created: ', res.data);
@@ -96,64 +95,62 @@ const Home = () => {
 	};
 
 	return (
-		<>
-			<Container maxWidth="sm">
-				<Box sx={{ flexGrow: 1 }}>
-					<Grid justifyItems="center" item xs={12}>
-						<Item>
-							<Card>
-								<form noValidate autoComplete="off" onSubmit={handleSubmit}>
-									<CardContent>
-										<Box
-											sx={{
-												width: 500,
-												maxWidth: '100%',
-											}}
-										>
-											{error && (
-												<Box
-													sx={{
-														paddingTop: 2,
-														paddingBottom: 2,
-														bgcolor: 'background.paper',
-													}}
-												>
-													<Alert severity="error">{error}</Alert>
-												</Box>
-											)}
-											<TextField
-												value={taskName}
-												fullWidth
-												label="New task"
-												id="fullWidth"
-												onChange={handleChange}
-												variant="outlined"
-												color="primary"
-												error={!!error}
-											/>
-										</Box>
-									</CardContent>
-									<CardActions style={{ justifyContent: 'center' }}>
-										<Button variant="contained" color="primary" type="submit">
-											create task
-										</Button>
-									</CardActions>
-								</form>
-							</Card>
-						</Item>
-					</Grid>
-					<Grid item xs={12}>
-						{tasksList.map((task, index) => {
-							return (
-								<Item key={index}>
-									<TaskCard task={task} refreshTasks={getAllTasks} />
-								</Item>
-							);
-						})}
-					</Grid>
-				</Box>
-			</Container>
-		</>
+		<Container maxWidth="sm" component="main">
+			<Box sx={{ flexGrow: 1 }} padding={2}>
+				<Grid justifyItems="center" item xs={12}>
+					<Item>
+						<Card>
+							<form noValidate autoComplete="off" onSubmit={handleSubmit}>
+								<CardContent>
+									<Box
+										sx={{
+											width: 500,
+											maxWidth: '100%',
+										}}
+									>
+										{error && (
+											<Box
+												sx={{
+													paddingTop: 2,
+													paddingBottom: 2,
+													bgcolor: 'background.paper',
+												}}
+											>
+												<Alert severity="error">{error}</Alert>
+											</Box>
+										)}
+										<TextField
+											value={taskName}
+											fullWidth
+											label="New task"
+											id="fullWidth"
+											onChange={handleChange}
+											variant="outlined"
+											color="primary"
+											error={!!error}
+										/>
+									</Box>
+								</CardContent>
+								<CardActions style={{ justifyContent: 'center' }}>
+									<Button variant="contained" color="primary" type="submit">
+										create task
+									</Button>
+								</CardActions>
+							</form>
+						</Card>
+					</Item>
+				</Grid>
+				<Grid item xs={12}>
+					{tasksList.map((task, index) => {
+						return (
+							<Item key={index}>
+								<TaskCard task={task} refreshTasks={getAllTasks} />
+							</Item>
+						);
+					})}
+				</Grid>
+			</Box>
+		</Container>
 	);
 };
 

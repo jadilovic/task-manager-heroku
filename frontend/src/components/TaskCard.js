@@ -63,7 +63,7 @@ const TaskCard = (props) => {
 
 	const deleteTask = async (taskId) => {
 		const headers = {
-			Authorization: `Bearer ${getUserToken().token}`,
+			Authorization: `Bearer ${getUserToken()}`,
 		};
 		try {
 			await axios

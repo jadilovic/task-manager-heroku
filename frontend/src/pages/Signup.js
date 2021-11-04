@@ -36,6 +36,7 @@ const Signup = () => {
 	const history = useHistory();
 	const serverURL = 'http://localhost:5000';
 	const [error, setError] = useState(null);
+	const [fieldErrors, setFieldErrors] = useState({});
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
@@ -48,6 +49,26 @@ const Signup = () => {
 			password: data.get('password'),
 		};
 		submitData(newUserData);
+	};
+
+	const handleErrors = (errors) => {
+		const initialErrors = {
+			firstName: { error: false, msg: '' },
+			lastName: { error: false, msg: '' },
+			email: { error: false, msg: '' },
+			password: { error: false, msg: '' },
+		};
+		let errorsList = errors.replace('ValidationError: ', '');
+		errorsList = errorsList.split(', ');
+		errorsList.map((item) => {
+			const errorItem = item.split('-');
+			return (initialErrors[errorItem[0]] = {
+				error: true,
+				msg: errorItem[1],
+			});
+		});
+		setFieldErrors(initialErrors);
+		setError('');
 	};
 
 	const submitData = async (userData) => {
@@ -68,9 +89,16 @@ const Signup = () => {
 			});
 		} catch (err) {
 			console.log(err.response);
-			setError(err.response.data.msg);
+			if (err.response.data.msg.startsWith('ValidationError: ')) {
+				handleErrors(err.response.data.msg);
+			} else {
+				setFieldErrors({});
+				setError(err.response.data.msg);
+			}
 		}
 	};
+
+	console.log(fieldErrors);
 
 	return (
 		<ThemeProvider theme={theme}>
@@ -110,6 +138,8 @@ const Signup = () => {
 						<Grid container spacing={2}>
 							<Grid item xs={12} sm={6}>
 								<TextField
+									error={fieldErrors?.firstName?.error ? true : false}
+									helperText={fieldErrors?.firstName?.msg}
 									autoComplete="given-name"
 									name="firstName"
 									required
@@ -121,6 +151,8 @@ const Signup = () => {
 							</Grid>
 							<Grid item xs={12} sm={6}>
 								<TextField
+									error={fieldErrors?.lastName?.error ? true : false}
+									helperText={fieldErrors?.lastName?.msg}
 									required
 									fullWidth
 									id="lastName"
@@ -131,6 +163,8 @@ const Signup = () => {
 							</Grid>
 							<Grid item xs={12}>
 								<TextField
+									error={fieldErrors?.email?.error ? true : false}
+									helperText={fieldErrors?.email?.msg}
 									required
 									fullWidth
 									id="email"
@@ -141,6 +175,8 @@ const Signup = () => {
 							</Grid>
 							<Grid item xs={12}>
 								<TextField
+									error={fieldErrors?.password?.error ? true : false}
+									helperText={fieldErrors?.password?.msg}
 									required
 									fullWidth
 									name="password"

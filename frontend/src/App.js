@@ -7,10 +7,12 @@ import Edit from './pages/Edit';
 import Error from './pages/Error';
 import PrivateRoute from './components/PrivateRoute';
 import Navbar from './components/Navbar';
+import CssBaseline from '@mui/material/CssBaseline';
 
 const App = () => {
 	return (
 		<Router>
+			<CssBaseline />
 			<Navbar />
 			<Switch>
 				<Route component={Login} path="/" exact />
