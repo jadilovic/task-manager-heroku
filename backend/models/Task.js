@@ -16,6 +16,11 @@ const TaskSchema = mongoose.Schema(
 			type: Number,
 			default: 1,
 		},
+		// currentStatus: {
+		// 	type: mongoose.Types.ObjectId,
+		// 	ref: 'TaskStatus',
+		// 	required: [true, 'Please enter task status'],
+		// },
 		description: {
 			type: String,
 			default: '',

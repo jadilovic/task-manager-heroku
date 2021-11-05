@@ -51,8 +51,8 @@ const Signup = () => {
 		submitData(newUserData);
 	};
 
-	const handleErrors = (errors) => {
-		const initialErrors = {
+	const settingErrors = (errors) => {
+		let initialErrors = {
 			firstName: { error: false, msg: '' },
 			lastName: { error: false, msg: '' },
 			email: { error: false, msg: '' },
@@ -68,6 +68,7 @@ const Signup = () => {
 			});
 		});
 		setFieldErrors(initialErrors);
+		initialErrors = {};
 		setError('');
 	};
 
@@ -88,12 +89,18 @@ const Signup = () => {
 				history.push('/home');
 			});
 		} catch (err) {
-			console.log(err.response);
-			if (err.response.data.msg.startsWith('ValidationError: ')) {
-				handleErrors(err.response.data.msg);
-			} else {
+			console.log(err);
+			try {
+				if (err.response.data.msg.startsWith('ValidationError: ')) {
+					settingErrors(err.response.data.msg);
+				} else {
+					setFieldErrors({});
+					setError(err.response.data.msg);
+				}
+			} catch (error) {
+				console.log('ERROR : ', error);
 				setFieldErrors({});
-				setError(err.response.data.msg);
+				setError('Network error. Try again later.');
 			}
 		}
 	};

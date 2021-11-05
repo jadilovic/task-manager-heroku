@@ -64,7 +64,11 @@ const Login = () => {
 			});
 		} catch (err) {
 			console.log(err.response);
-			setError(err.response.data.msg);
+			if (err.response) {
+				setError(err.response.data.msg);
+			} else {
+				setError('Network error. Try again later');
+			}
 		}
 	};
 

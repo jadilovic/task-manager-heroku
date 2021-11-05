@@ -30,6 +30,7 @@ const createTask = async (req, res) => {
 		);
 	}
 	req.body.createdBy = req.user.userId;
+	// req.body.currentStatus = 'Mongoose ObjectId of TaskStatus'
 	const task = await Task.create(req.body);
 	res.status(StatusCodes.CREATED).json({ task });
 };

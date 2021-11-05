@@ -130,6 +130,22 @@ const Home = () => {
 											error={!!error}
 										/>
 									</Box>
+									<FormControl style={{ minWidth: 300 }}>
+										<InputLabel>Select current status</InputLabel>
+										<Select
+											value={formValues?.currentStatus?.id}
+											label="Task current status"
+											onChange={handleTaskStatusChange}
+										>
+											{taskStatusObjects.map((taskStatus) => {
+												return (
+													<MenuItem value={taskStatus.id}>
+														{taskStatus.message}
+													</MenuItem>
+												);
+											})}
+										</Select>
+									</FormControl>
 								</CardContent>
 								<CardActions style={{ justifyContent: 'center' }}>
 									<Button variant="contained" color="primary" type="submit">
