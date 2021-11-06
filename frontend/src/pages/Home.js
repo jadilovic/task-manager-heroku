@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { getUserToken } from '../auth/Authentication';
 import { styled } from '@mui/material/styles';
+import useAxiosRequest from '../utils/useAxiosRequest';
 import {
 	Box,
 	Paper,
@@ -13,6 +12,11 @@ import {
 	Button,
 	CardActions,
 	Alert,
+	FormControl,
+	InputLabel,
+	Select,
+	MenuItem,
+	Typography,
 } from '@mui/material';
 import TaskCard from '../components/TaskCard';
 
@@ -24,57 +28,61 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 const Home = () => {
+	const mongoDB = useAxiosRequest();
 	const [tasksList, setTasksList] = useState([]);
-	const [taskName, setTaskName] = useState('');
+	const [taskStatusList, setTaskStatusList] = useState([]);
+	const [taskStatus, setTaskStatus] = useState({
+		colorNotification: '',
+		message: '',
+		_id: '',
+	});
+	const [newTask, setNewTask] = useState({ name: '', statusId: '' });
 	const [error, setError] = useState('');
-	const [userToken, setUserToken] = useState('');
-	const serverURL = 'http://localhost:5000';
 
-	const getAllTasks = async () => {
+	const displayTasks = async () => {
 		try {
-			await axios({
-				method: 'GET',
-				url: `${serverURL}/api/v1/tasks`,
-				headers: {
-					authorization: `Bearer ${getUserToken()}`,
-				},
-			}).then((res) => {
-				const dbTasks = res.data.tasks;
-				setTasksList(dbTasks);
-				setTaskName('');
-			});
+			const dbTasks = await mongoDB.getAllTasks();
+			setTasksList(dbTasks);
 		} catch (err) {
 			console.log(err.response);
 			setError(err.response.data.msg);
 		}
 	};
 
+	const getTaskStatuses = async () => {
+		const statuses = await mongoDB.getTaskStatuses();
+		setTaskStatusList(statuses);
+		setTaskStatus(statuses[0]);
+		setNewTask({ ...newTask, statusId: statuses[0]._id });
+	};
+
 	useEffect(() => {
-		getAllTasks();
-		setUserToken(getUserToken());
+		displayTasks();
+		getTaskStatuses();
 	}, []);
 
 	const handleChange = (e) => {
 		e.preventDefault();
-		setTaskName(e.target.value);
+		setNewTask({ ...newTask, name: e.target.value });
+	};
+
+	const handleTaskStatusChange = (event) => {
+		setNewTask({
+			...newTask,
+			statusId: event.target.value,
+		});
+		const statusIndex = taskStatusList.findIndex(
+			(status) => status._id === event.target.value
+		);
+		setTaskStatus(taskStatusList[statusIndex]);
 	};
 
 	const submitData = async (newTask) => {
 		try {
-			await axios({
-				method: 'POST',
-				url: `${serverURL}/api/v1/tasks`,
-				data: {
-					name: newTask,
-				},
-				headers: {
-					authorization: `Bearer ${userToken}`,
-				},
-			}).then((res) => {
-				console.log('task created: ', res.data);
-				setTaskName('');
-				getAllTasks();
-			});
+			await mongoDB.createTask(newTask);
+			setNewTask({ name: '', statusId: taskStatusList[0]._id });
+			setTaskStatus(taskStatusList[0]);
+			displayTasks();
 		} catch (err) {
 			console.log(err.response);
 			setError(err.response.data.msg);
@@ -84,13 +92,14 @@ const Home = () => {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		setError('');
-		const trimedTaskName = taskName.trim();
+		const trimedTaskName = newTask.name.trim();
 		if (trimedTaskName.length < 3) {
 			setError(
 				'You must enter task name with minimum three letters to create new task'
 			);
 		} else {
-			submitData(trimedTaskName);
+			newTask.name = trimedTaskName;
+			submitData(newTask);
 		}
 	};
 
@@ -120,7 +129,7 @@ const Home = () => {
 											</Box>
 										)}
 										<TextField
-											value={taskName}
+											value={newTask.name}
 											fullWidth
 											label="New task"
 											id="fullWidth"
@@ -130,22 +139,31 @@ const Home = () => {
 											error={!!error}
 										/>
 									</Box>
-									<FormControl style={{ minWidth: 300 }}>
-										<InputLabel>Select current status</InputLabel>
-										<Select
-											value={formValues?.currentStatus?.id}
-											label="Task current status"
-											onChange={handleTaskStatusChange}
-										>
-											{taskStatusObjects.map((taskStatus) => {
-												return (
-													<MenuItem value={taskStatus.id}>
-														{taskStatus.message}
-													</MenuItem>
-												);
-											})}
-										</Select>
-									</FormControl>
+									<Box
+										sx={{
+											width: 500,
+											maxWidth: '100%',
+											paddingTop: 2,
+											bgcolor: 'background.paper',
+										}}
+									>
+										<FormControl fullWidth style={{ minWidth: 300 }}>
+											<InputLabel>Select task status</InputLabel>
+											<Select
+												value={taskStatus._id}
+												label="Task current status"
+												onChange={handleTaskStatusChange}
+											>
+												{taskStatusList.map((taskStatus, index) => {
+													return (
+														<MenuItem key={index} value={taskStatus._id}>
+															{taskStatus.message}
+														</MenuItem>
+													);
+												})}
+											</Select>
+										</FormControl>
+									</Box>
 								</CardContent>
 								<CardActions style={{ justifyContent: 'center' }}>
 									<Button variant="contained" color="primary" type="submit">
@@ -156,15 +174,25 @@ const Home = () => {
 						</Card>
 					</Item>
 				</Grid>
-				<Grid item xs={12}>
-					{tasksList.map((task, index) => {
-						return (
-							<Item key={index}>
-								<TaskCard task={task} refreshTasks={getAllTasks} />
-							</Item>
-						);
-					})}
-				</Grid>
+				{taskStatusList.length > 0 ? (
+					<Grid item xs={12}>
+						{tasksList.map((task, index) => {
+							return (
+								<Item key={index}>
+									<TaskCard
+										task={task}
+										taskStatusObjects={taskStatusList}
+										refreshTasks={displayTasks}
+									/>
+								</Item>
+							);
+						})}
+					</Grid>
+				) : (
+					<Grid item xs={12}>
+						<Typography>No tasks created</Typography>
+					</Grid>
+				)}
 			</Box>
 		</Container>
 	);

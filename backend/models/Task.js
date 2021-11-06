@@ -13,14 +13,10 @@ const TaskSchema = mongoose.Schema(
 			default: Date.now(),
 		},
 		currentStatus: {
-			type: Number,
-			default: 1,
+			type: mongoose.Types.ObjectId,
+			ref: 'TaskStatus',
+			required: [true, 'Please enter task status'],
 		},
-		// currentStatus: {
-		// 	type: mongoose.Types.ObjectId,
-		// 	ref: 'TaskStatus',
-		// 	required: [true, 'Please enter task status'],
-		// },
 		description: {
 			type: String,
 			default: '',

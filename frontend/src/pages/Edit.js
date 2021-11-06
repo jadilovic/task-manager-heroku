@@ -15,7 +15,6 @@ import {
 	InputLabel,
 	Typography,
 } from '@mui/material';
-import taskStatusObjects from '../utils/taskStatusObjects';
 // const data = useLocalStorageHook();
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -29,7 +28,7 @@ const Edit = () => {
 	const history = useHistory();
 	const data = useLocalStorageHook();
 	const [formValues, setFormValues] = useState({
-		// currentStatus: { id: '', message: '', severity: '' },
+		currentStatus: { id: '', message: '', severity: '' },
 	});
 
 	useEffect(() => {
@@ -58,7 +57,7 @@ const Edit = () => {
 	const handleTaskStatusChange = (event) => {
 		setFormValues({
 			...formValues,
-			currentStatus: taskStatusObjects[event.target.value - 1],
+			//	currentStatus: taskStatusObjects[event.target.value - 1],
 		});
 	};
 
@@ -113,22 +112,22 @@ const Edit = () => {
 									/>
 								</Grid>
 								<Grid item xs={12}>
-									<FormControl style={{ minWidth: 300 }}>
+									{/* <FormControl style={{ minWidth: 300 }}>
 										<InputLabel>Select current status</InputLabel>
 										<Select
 											value={formValues?.currentStatus?.id}
 											label="Task current status"
 											onChange={handleTaskStatusChange}
-										>
-											{taskStatusObjects.map((taskStatus) => {
-												return (
-													<MenuItem value={taskStatus.id}>
-														{taskStatus.message}
-													</MenuItem>
-												);
-											})}
+										// >
+										// 	{taskStatusObjects.map((taskStatus) => {
+										// 		return (
+										// 			<MenuItem value={taskStatus.id}>
+										// 				{taskStatus.message}
+										// 			</MenuItem>
+										// 		);
+										// 	})}
 										</Select>
-									</FormControl>
+									</FormControl> */}
 								</Grid>
 								<Grid item xs={12}>
 									<TextField

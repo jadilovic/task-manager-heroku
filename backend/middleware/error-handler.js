@@ -8,7 +8,7 @@ const errorHandlerMiddleware = (err, req, res, next) => {
 		statusCode: err.statusCode || StatusCodes.INTERNAL_SERVER_ERROR,
 		msg: err.message || 'Something went wrong try again later',
 	};
-	console.log('ERRROOOORRR', err);
+	// console.log('ERRROOOORRR', err);
 
 	if (err.code && err.code === 11000) {
 		customError.statusCode = 400;

@@ -1,6 +1,7 @@
 const Task = require('../models/Task');
 const { StatusCodes } = require('http-status-codes');
 const { BadRequestError, NotFoundError } = require('../errors');
+const TaskStatus = require('../models/TaskStatus');
 
 const getAllTasks = async (req, res) => {
 	const tasks = await Task.find({ createdBy: req.user.userId }).sort({
@@ -10,12 +11,10 @@ const getAllTasks = async (req, res) => {
 };
 
 const taskNameExists = async (enteredTaskName, userId) => {
-	const userTaskNames = await Task.find({ createdBy: userId });
-	// do it in mongoDB
-	const existingTask = userTaskNames.find(
-		(task) => task.name === enteredTaskName
-	);
-	if (existingTask) {
+	const userTaskNames = await Task.find({ createdBy: userId }).findOne({
+		name: enteredTaskName,
+	});
+	if (userTaskNames) {
 		return true;
 	} else {
 		return false;
@@ -23,15 +22,18 @@ const taskNameExists = async (enteredTaskName, userId) => {
 };
 
 const createTask = async (req, res) => {
-	const existingTask = await taskNameExists(req.body.name, req.user.userId);
+	const existingTask = await taskNameExists(
+		req.body.newTask.name,
+		req.user.userId
+	);
 	if (existingTask) {
 		throw new BadRequestError(
 			'Entered task name already exists. Please enter different task name.'
 		);
 	}
-	req.body.createdBy = req.user.userId;
-	// req.body.currentStatus = 'Mongoose ObjectId of TaskStatus'
-	const task = await Task.create(req.body);
+	req.body.newTask.createdBy = req.user.userId;
+	req.body.newTask.currentStatus = req.body.newTask.statusId;
+	const task = await Task.create(req.body.newTask);
 	res.status(StatusCodes.CREATED).json({ task });
 };
 
@@ -79,4 +81,22 @@ const deleteTask = async (req, res) => {
 	res.status(StatusCodes.OK).json({ task });
 };
 
-module.exports = { getAllTasks, createTask, updateTask, getTask, deleteTask };
+const createTaskStatus = async (req, res) => {
+	const taskStatus = await TaskStatus.create(req.body);
+	res.status(StatusCodes.CREATED).json({ taskStatus });
+};
+
+const getAllStatuses = async (req, res) => {
+	const statuses = await TaskStatus.find({});
+	res.status(StatusCodes.OK).json({ statuses, length: statuses.length });
+};
+
+module.exports = {
+	getAllTasks,
+	createTask,
+	updateTask,
+	getTask,
+	deleteTask,
+	createTaskStatus,
+	getAllStatuses,
+};

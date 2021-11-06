@@ -1,12 +1,9 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
-import axios from 'axios';
 import moment from 'moment';
 import useLocalStorageHook from '../utils/useLocalStorageHook';
-import taskStatusObjects from '../utils/taskStatusObjects';
 import Card from '@mui/material/Card';
-import Alert from '@mui/material/Alert';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
@@ -17,9 +14,9 @@ import Typography from '@mui/material/Typography';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { getUserToken } from '../auth/Authentication';
 import ConfirmDialog from './ConfirmDialog';
-import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
+import TaskStatus from './TaskStatus';
+import useAxiosRequest from '../utils/useAxiosRequest';
 
 const ExpandMore = styled((props) => {
 	const { expand, ...other } = props;
@@ -33,13 +30,13 @@ const ExpandMore = styled((props) => {
 }));
 
 const TaskCard = (props) => {
+	const mongoDB = useAxiosRequest();
 	const history = useHistory();
 	const data = useLocalStorageHook();
 	const [confirmOpen, setConfirmOpen] = useState(false);
 
-	const { task, refreshTasks } = props;
+	const { task, taskStatusObjects, refreshTasks } = props;
 	const [expanded, setExpanded] = useState(false);
-	const serverURL = 'http://localhost:5000';
 
 	let {
 		name,
@@ -51,9 +48,8 @@ const TaskCard = (props) => {
 		updatedAt,
 	} = task;
 	dateCreated = new Date(dateCreated).toDateString();
-	// model task status to use on backend
 	currentStatus = taskStatusObjects.find(
-		(statusObject) => statusObject.id === currentStatus
+		(statusObject) => statusObject._id === currentStatus
 	);
 	const lastUpdate = moment(new Date(updatedAt));
 
@@ -61,22 +57,9 @@ const TaskCard = (props) => {
 		setExpanded(!expanded);
 	};
 
-	const deleteTask = async (taskId) => {
-		const headers = {
-			Authorization: `Bearer ${getUserToken()}`,
-		};
-		try {
-			await axios
-				.delete(`${serverURL}/api/v1/tasks/${taskId}`, {
-					headers,
-				})
-				.then((res) => {
-					console.log('task deleted: ', res.data);
-					refreshTasks();
-				});
-		} catch (err) {
-			console.log(err.response);
-		}
+	const handleDeleteTask = async (taskId) => {
+		await mongoDB.deleteTask(taskId);
+		refreshTasks();
 	};
 
 	// change to handeto Edit
@@ -86,7 +69,7 @@ const TaskCard = (props) => {
 	};
 
 	return (
-		<Card sx={{ maxWidth: 645 }}>
+		<Card style={{ backgroundColor: 'lightgray' }} sx={{ maxWidth: 645 }}>
 			<CardHeader
 				avatar={
 					<Avatar sx={{ bgcolor: avatarColor }} aria-label="recipe">
@@ -119,21 +102,13 @@ const TaskCard = (props) => {
 					title="Delete Task?"
 					open={confirmOpen}
 					setOpen={setConfirmOpen}
-					onConfirm={() => deleteTask(_id)}
+					onConfirm={() => handleDeleteTask(_id)}
 				>
 					<Typography paragraph>
 						Are you sure you want to delete this task?
 					</Typography>
 				</ConfirmDialog>
-				<Alert
-					icon={false}
-					sx={{ flexGrow: 1 }}
-					severity={currentStatus.severity}
-				>
-					<Typography alignContent="center">
-						<HourglassEmptyIcon /> {currentStatus.message}
-					</Typography>
-				</Alert>
+				<TaskStatus taskStatus={currentStatus} />
 				<ExpandMore
 					expand={expanded}
 					onClick={handleExpandClick}
