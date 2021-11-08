@@ -15,7 +15,11 @@ import {
 	Paper,
 	InputLabel,
 	Typography,
+	Stack,
+	Chip,
+	Alert,
 } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
 
 const Item = styled(Paper)(({ theme }) => ({
 	...theme.typography.body2,
@@ -28,54 +32,68 @@ const Edit = () => {
 	const history = useHistory();
 	const data = useLocalStorageHook();
 	const mongoDB = useAxiosRequest();
-	const [formValues, setFormValues] = useState({
-		currentStatus: { id: '', message: '', severity: '' },
+	const [taskValues, setTaskValues] = useState({
+		currentStatus: '',
 	});
+	const [statuses, setStatuses] = useState([]);
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState('');
 
-	const getTaskObject = async (taskName) => {
+	const getTaskObject = async (taskId) => {
 		try {
-			const taskObject = await mongoDB.getTask(taskName);
-		} catch (error) {}
+			const editingTaskObject = await mongoDB.getTask(taskId);
+			setTaskValues(editingTaskObject.task);
+		} catch (error) {
+			console.log('get task object error: ', error);
+		}
+	};
+
+	const getTaskStatuses = async () => {
+		const statuses = await mongoDB.getTaskStatuses();
+		setStatuses(statuses);
+		setLoading(false);
 	};
 
 	useEffect(() => {
-		const taskName = localStorage.getItem('currentTaskName');
-		getTaskObject(taskName);
-		const editingTaskObject = data.getCurrentTaskObject(taskName);
-		setFormValues({
-			...editingTaskObject,
-		});
+		const taskId = localStorage.getItem('currentTaskId');
+		getTaskObject(taskId);
+		getTaskStatuses();
 	}, []);
 
 	const handleInputChange = (e) => {
 		const { name, value } = e.target;
-		setFormValues({
-			...formValues,
+		setTaskValues({
+			...taskValues,
 			[name]: value,
 		});
 	};
 
-	const handleSubmit = (event) => {
+	const handleSubmit = async (event) => {
 		event.preventDefault();
-		data.addUpdatedCurrentTaskToArrayAndSave(formValues);
-		console.log(formValues);
-		history.push('/');
+		try {
+			console.log('new task values : ', taskValues);
+			const editedTask = await mongoDB.updateTask(taskValues);
+			console.log('edited task values : ', editedTask);
+			history.push('/home');
+		} catch (error) {
+			console.log(error);
+			setError(error.response.data.msg);
+		}
 	};
 
 	const handleTaskStatusChange = (event) => {
-		setFormValues({
-			...formValues,
-			//	currentStatus: taskStatusObjects[event.target.value - 1],
+		setTaskValues({
+			...taskValues,
+			currentStatus: event.target.value,
 		});
 	};
 
-	console.log('form values name', formValues.name);
-	console.log('form values dateCreated', formValues.dateCreated);
-	console.log('form values status', formValues.currentStatus);
-
+	if (loading) {
+		return <Typography>Loading...</Typography>;
+	}
 	return (
-		<Container maxWidth="sm">
-			<Box sx={{ flexGrow: 1 }}>
+		<Container style={{ backgroundColor: 'lightgray' }} maxWidth="sm">
+			<Box sx={{ flexGrow: 1 }} padding={2}>
 				<Grid item xs={12}>
 					<Item>
 						<form onSubmit={handleSubmit}>
@@ -87,55 +105,62 @@ const Edit = () => {
 								spacing={4}
 							>
 								<Grid color="green" item xs={12}>
-									<Typography
-										bgcolor="yellow"
-										gutterBottom
-										variant="h6"
-										component="div"
+									<Stack spacing={1} alignItems="center">
+										<Chip
+											style={{ minWidth: 300, minHeight: 40, fontSize: 19 }}
+											size="medium"
+											icon={<EditIcon />}
+											label="Edit Selected Task"
+											color="default"
+										/>
+									</Stack>
+								</Grid>
+								<Grid item xs={12}>
+									<Box
+										sx={{
+											width: 300,
+											maxWidth: '100%',
+										}}
 									>
-										Edit task
-									</Typography>
+										{error && (
+											<Box
+												sx={{
+													paddingTop: 2,
+													paddingBottom: 2,
+													bgcolor: 'background.paper',
+												}}
+											>
+												<Alert severity="error">{error}</Alert>
+											</Box>
+										)}
+										<TextField
+											style={{ minWidth: 300 }}
+											id="name-input"
+											name="name"
+											label="Name"
+											type="text"
+											value={taskValues.name}
+											onChange={handleInputChange}
+										/>
+									</Box>
 								</Grid>
 								<Grid item xs={12}>
-									<TextField
-										style={{ minWidth: 300 }}
-										id="name-input"
-										name="name"
-										label="Name"
-										type="text"
-										value={formValues.name}
-										onChange={handleInputChange}
-									/>
-								</Grid>
-								<Grid item xs={12}>
-									<TextField
-										style={{ minWidth: 300 }}
-										id="dateCreatedt"
-										name="dateCreated"
-										label="Date Created"
-										type="string"
-										value={formValues.dateCreated}
-										onChange={handleInputChange}
-										disabled
-									/>
-								</Grid>
-								<Grid item xs={12}>
-									{/* <FormControl style={{ minWidth: 300 }}>
+									<FormControl style={{ minWidth: 300 }}>
 										<InputLabel>Select current status</InputLabel>
 										<Select
-											value={formValues?.currentStatus?.id}
+											value={taskValues?.currentStatus}
 											label="Task current status"
 											onChange={handleTaskStatusChange}
-										// >
-										// 	{taskStatusObjects.map((taskStatus) => {
-										// 		return (
-										// 			<MenuItem value={taskStatus.id}>
-										// 				{taskStatus.message}
-										// 			</MenuItem>
-										// 		);
-										// 	})}
+										>
+											{statuses.map((taskStatus, index) => {
+												return (
+													<MenuItem key={index} value={taskStatus._id}>
+														{taskStatus.message}
+													</MenuItem>
+												);
+											})}
 										</Select>
-									</FormControl> */}
+									</FormControl>
 								</Grid>
 								<Grid item xs={12}>
 									<TextField
@@ -147,9 +172,15 @@ const Edit = () => {
 										name="description"
 										label="Description"
 										type="text"
-										value={formValues.description}
+										value={taskValues.description}
 										onChange={handleInputChange}
 									/>
+								</Grid>
+								<Grid item xs={12}>
+									<Typography>
+										Task created on{' '}
+										{new Date(taskValues.dateCreated).toDateString()}
+									</Typography>
 								</Grid>
 								<Grid item xs={12}>
 									<Button
@@ -160,6 +191,16 @@ const Edit = () => {
 										size="large"
 									>
 										Submit
+									</Button>
+								</Grid>
+								<Grid item xs={12}>
+									<Button
+										onClick={() => history.push('/home')}
+										variant="contained"
+										color="warning"
+										size="large"
+									>
+										Back to home page
 									</Button>
 								</Grid>
 							</Grid>

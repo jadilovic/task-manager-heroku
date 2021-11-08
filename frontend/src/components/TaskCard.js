@@ -63,8 +63,8 @@ const TaskCard = (props) => {
 	};
 
 	// change to handeto Edit
-	const handleOnClick = (taskName) => {
-		data.saveCurrentTaskName(taskName);
+	const handleOnClick = (taskId) => {
+		data.saveCurrentTaskId(taskId);
 		history.push('/edit');
 	};
 
@@ -78,7 +78,7 @@ const TaskCard = (props) => {
 				}
 				action={
 					<IconButton
-						onClick={() => handleOnClick(name)}
+						onClick={() => handleOnClick(_id)}
 						size="large"
 						color="primary"
 						aria-label="edit"

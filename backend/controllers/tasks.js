@@ -10,12 +10,12 @@ const getAllTasks = async (req, res) => {
 	res.status(StatusCodes.OK).json({ tasks, length: tasks.length });
 };
 
-const taskNameExists = async (enteredTaskName, userId) => {
-	const userTaskNames = await Task.find({ createdBy: userId }).findOne({
+const taskNameExists = async (enteredTaskName, userId, taskId) => {
+	const taskObject = await Task.find({ createdBy: userId }).findOne({
 		name: enteredTaskName,
 	});
-	if (userTaskNames) {
-		return true;
+	if (taskObject) {
+		return taskObject._id.toString() === taskId ? false : true;
 	} else {
 		return false;
 	}
@@ -46,6 +46,13 @@ const updateTask = async (req, res) => {
 	if (name === '') {
 		throw new BadRequestError('Must provide task name value');
 	}
+	const existingTask = await taskNameExists(name, userId, taskId);
+	console.log('existing task : : ', existingTask);
+	if (existingTask) {
+		throw new BadRequestError(
+			'Entered task name already exists. Please enter different task name.'
+		);
+	}
 	const task = await Task.findByIdAndUpdate(
 		{ _id: taskId, createdBy: userId },
 		req.body,
@@ -62,7 +69,10 @@ const getTask = async (req, res) => {
 		user: { userId },
 		params: { id: taskId },
 	} = req;
-	const task = await Task.findOne({ _id: taskId, createdBy: userId });
+	const task = await Task.findOne(
+		{ _id: taskId, createdBy: userId },
+		{ currentStatus: 1, name: 1, description: 1 }
+	);
 	if (!task) {
 		throw new NotFoundError(`No task found with id ${taskId}`);
 	}

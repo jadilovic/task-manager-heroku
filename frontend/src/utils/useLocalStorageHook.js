@@ -5,8 +5,8 @@ const useLocalStorageHook = () => {
 		return JSON.parse(localStorage.getItem('tasks') || '[]');
 	};
 
-	const saveCurrentTaskName = (taskName) => {
-		localStorage.setItem('currentTaskName', taskName);
+	const saveCurrentTaskId = (taskId) => {
+		localStorage.setItem('currentTaskId', taskId);
 	};
 
 	const saveCurrentTaskObject = (player) => {
@@ -92,7 +92,7 @@ const useLocalStorageHook = () => {
 		getAllTasks,
 		addNewTaskObjectToArrayAndSave,
 		deleteTaskAndUpdateTasksList,
-		saveCurrentTaskName,
+		saveCurrentTaskId,
 		getCurrentTaskObject,
 		saveCurrentTaskObject,
 	};

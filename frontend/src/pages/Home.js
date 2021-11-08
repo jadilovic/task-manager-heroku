@@ -19,6 +19,7 @@ import {
 	Typography,
 } from '@mui/material';
 import TaskCard from '../components/TaskCard';
+import { Event } from '@mui/icons-material';
 
 const Item = styled(Paper)(({ theme }) => ({
 	...theme.typography.body2,
@@ -29,20 +30,15 @@ const Item = styled(Paper)(({ theme }) => ({
 
 const Home = () => {
 	const mongoDB = useAxiosRequest();
-	const [tasksList, setTasksList] = useState([]);
-	const [taskStatusList, setTaskStatusList] = useState([]);
-	const [taskStatus, setTaskStatus] = useState({
-		colorNotification: '',
-		message: '',
-		_id: '',
-	});
+	const [tasks, setTasks] = useState([]);
+	const [statuses, setStatuses] = useState([]);
 	const [newTask, setNewTask] = useState({ name: '', statusId: '' });
 	const [error, setError] = useState('');
 
 	const displayTasks = async () => {
 		try {
 			const dbTasks = await mongoDB.getAllTasks();
-			setTasksList(dbTasks);
+			setTasks(dbTasks);
 		} catch (err) {
 			console.log(err.response);
 			setError(err.response.data.msg);
@@ -51,8 +47,7 @@ const Home = () => {
 
 	const getTaskStatuses = async () => {
 		const statuses = await mongoDB.getTaskStatuses();
-		setTaskStatusList(statuses);
-		setTaskStatus(statuses[0]);
+		setStatuses(statuses);
 		setNewTask({ ...newTask, statusId: statuses[0]._id });
 	};
 
@@ -61,9 +56,9 @@ const Home = () => {
 		getTaskStatuses();
 	}, []);
 
-	const handleChange = (e) => {
-		e.preventDefault();
-		setNewTask({ ...newTask, name: e.target.value });
+	const handleTaskNameChange = (event) => {
+		event.preventDefault();
+		setNewTask({ ...newTask, name: event.target.value });
 	};
 
 	const handleTaskStatusChange = (event) => {
@@ -71,17 +66,12 @@ const Home = () => {
 			...newTask,
 			statusId: event.target.value,
 		});
-		const statusIndex = taskStatusList.findIndex(
-			(status) => status._id === event.target.value
-		);
-		setTaskStatus(taskStatusList[statusIndex]);
 	};
 
 	const submitData = async (newTask) => {
 		try {
 			await mongoDB.createTask(newTask);
-			setNewTask({ name: '', statusId: taskStatusList[0]._id });
-			setTaskStatus(taskStatusList[0]);
+			setNewTask({ name: '', statusId: statuses[0]._id });
 			displayTasks();
 		} catch (err) {
 			console.log(err.response);
@@ -104,7 +94,11 @@ const Home = () => {
 	};
 
 	return (
-		<Container maxWidth="sm" component="main">
+		<Container
+			style={{ backgroundColor: 'lightgray' }}
+			maxWidth="sm"
+			component="main"
+		>
 			<Box sx={{ flexGrow: 1 }} padding={2}>
 				<Grid justifyItems="center" item xs={12}>
 					<Item>
@@ -133,7 +127,7 @@ const Home = () => {
 											fullWidth
 											label="New task"
 											id="fullWidth"
-											onChange={handleChange}
+											onChange={handleTaskNameChange}
 											variant="outlined"
 											color="primary"
 											error={!!error}
@@ -150,11 +144,11 @@ const Home = () => {
 										<FormControl fullWidth style={{ minWidth: 300 }}>
 											<InputLabel>Select task status</InputLabel>
 											<Select
-												value={taskStatus._id}
+												value={newTask.statusId}
 												label="Task current status"
 												onChange={handleTaskStatusChange}
 											>
-												{taskStatusList.map((taskStatus, index) => {
+												{statuses.map((taskStatus, index) => {
 													return (
 														<MenuItem key={index} value={taskStatus._id}>
 															{taskStatus.message}
@@ -174,14 +168,14 @@ const Home = () => {
 						</Card>
 					</Item>
 				</Grid>
-				{taskStatusList.length > 0 ? (
+				{statuses.length > 0 ? (
 					<Grid item xs={12}>
-						{tasksList.map((task, index) => {
+						{tasks.map((task, index) => {
 							return (
 								<Item key={index}>
 									<TaskCard
 										task={task}
-										taskStatusObjects={taskStatusList}
+										taskStatusObjects={statuses}
 										refreshTasks={displayTasks}
 									/>
 								</Item>

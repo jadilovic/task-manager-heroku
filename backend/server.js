@@ -20,7 +20,7 @@ const errorHandlerMiddleware = require('./middleware/error-handler');
 const authenticateUser = require('./middleware/authentication');
 
 // extra packages
-app.set('trust proxy', 1); // learn why needed
+app.set('trust proxy', 1);
 app.use(
 	rateLimiter({
 		windowMs: 15 * 60 * 1000, // 15 minutes
