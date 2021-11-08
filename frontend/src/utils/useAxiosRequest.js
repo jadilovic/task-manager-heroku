@@ -1,12 +1,45 @@
 import axios from 'axios';
 import { getUserToken } from '../auth/Authentication';
-const serverURL = 'http://localhost:5000';
+
+console.log('env ', process.env.REACT_APP_SERVER_URL);
+
+const createUser = async (userCredentials) => {
+	let userData = await axios({
+		method: 'POST',
+		url: `${process.env.REACT_APP_SERVER_URL}/api/v1/auth/signup`,
+		data: {
+			firstName: userCredentials.firstName,
+			lastName: userCredentials.lastName,
+			email: userCredentials.email,
+			password: userCredentials.password,
+		},
+		headers: new Headers({ 'Content-Type': 'application/json' }),
+	}).then((res) => {
+		return res.data;
+	});
+	return userData;
+};
+
+const userLogin = async (userCredentials) => {
+	let userData = await axios({
+		method: 'POST',
+		url: `${process.env.REACT_APP_SERVER_URL}/api/v1/auth/login`,
+		data: {
+			email: userCredentials.email,
+			password: userCredentials.password,
+		},
+		headers: new Headers({ 'Content-Type': 'application/json' }),
+	}).then((res) => {
+		return res.data;
+	});
+	return userData;
+};
 
 const useAxiosRequest = () => {
 	const getAllTasks = async () => {
 		const tasks = await axios({
 			method: 'GET',
-			url: `${serverURL}/api/v1/tasks`,
+			url: `${process.env.REACT_APP_SERVER_URL}/api/v1/tasks`,
 			headers: {
 				authorization: `Bearer ${getUserToken()}`,
 			},
@@ -19,7 +52,7 @@ const useAxiosRequest = () => {
 	const createTask = async (newTask) => {
 		await axios({
 			method: 'POST',
-			url: `${serverURL}/api/v1/tasks`,
+			url: `${process.env.REACT_APP_SERVER_URL}/api/v1/tasks`,
 			data: {
 				newTask,
 			},
@@ -31,12 +64,15 @@ const useAxiosRequest = () => {
 		});
 	};
 
+	// TO DO
+	const getTask = async (taskName) => {};
+
 	const getTaskStatuses = async () => {
 		let taskStatuses = [];
 		try {
 			await axios({
 				method: 'GET',
-				url: `${serverURL}/api/v1/tasks/status`,
+				url: `${process.env.REACT_APP_SERVER_URL}/api/v1/tasks/status`,
 				headers: {
 					authorization: `Bearer ${getUserToken()}`,
 				},
@@ -57,7 +93,7 @@ const useAxiosRequest = () => {
 		};
 		try {
 			await axios
-				.delete(`${serverURL}/api/v1/tasks/${taskId}`, {
+				.delete(`${process.env.REACT_APP_SERVER_URL}/api/v1/tasks/${taskId}`, {
 					headers,
 				})
 				.then((res) => {
@@ -68,7 +104,15 @@ const useAxiosRequest = () => {
 		}
 	};
 
-	return { getTaskStatuses, deleteTask, getAllTasks, createTask };
+	return {
+		getTaskStatuses,
+		deleteTask,
+		getAllTasks,
+		createTask,
+		getTask,
+		createUser,
+		userLogin,
+	};
 };
 
 export default useAxiosRequest;

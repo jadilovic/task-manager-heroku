@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import useLocalStorageHook from '../utils/useLocalStorageHook';
+import useAxiosRequest from '../utils/useAxiosRequest';
 import { styled } from '@mui/material/styles';
 import {
 	Grid,
@@ -15,7 +16,6 @@ import {
 	InputLabel,
 	Typography,
 } from '@mui/material';
-// const data = useLocalStorageHook();
 
 const Item = styled(Paper)(({ theme }) => ({
 	...theme.typography.body2,
@@ -27,12 +27,20 @@ const Item = styled(Paper)(({ theme }) => ({
 const Edit = () => {
 	const history = useHistory();
 	const data = useLocalStorageHook();
+	const mongoDB = useAxiosRequest();
 	const [formValues, setFormValues] = useState({
 		currentStatus: { id: '', message: '', severity: '' },
 	});
 
+	const getTaskObject = async (taskName) => {
+		try {
+			const taskObject = await mongoDB.getTask(taskName);
+		} catch (error) {}
+	};
+
 	useEffect(() => {
 		const taskName = localStorage.getItem('currentTaskName');
+		getTaskObject(taskName);
 		const editingTaskObject = data.getCurrentTaskObject(taskName);
 		setFormValues({
 			...editingTaskObject,

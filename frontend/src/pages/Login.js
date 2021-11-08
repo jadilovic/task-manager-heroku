@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-
+import useAxiosRequest from '../utils/useAxiosRequest';
 import { BrowserRouter as Router, Link, useHistory } from 'react-router-dom';
 import { Box, Alert, Avatar } from '@mui/material';
 import Button from '@mui/material/Button';
@@ -34,7 +33,7 @@ const theme = createTheme();
 
 const Login = () => {
 	const history = useHistory();
-	const serverURL = 'http://localhost:5000'; // .env prod and dev
+	const mongoDB = useAxiosRequest();
 	const [error, setError] = useState(null);
 
 	const handleSubmit = (event) => {
@@ -50,18 +49,9 @@ const Login = () => {
 
 	const submitData = async (userData) => {
 		try {
-			await axios({
-				method: 'POST',
-				url: `${serverURL}/api/v1/auth/login`,
-				data: {
-					email: userData.email,
-					password: userData.password,
-				},
-				headers: new Headers({ 'Content-Type': 'application/json' }),
-			}).then((res) => {
-				login(res.data.token, res.data.user);
-				history.push('/home');
-			});
+			const loggedIn = await mongoDB.userLogin(userData);
+			login(loggedIn.token, loggedIn.user);
+			history.push('/home');
 		} catch (err) {
 			console.log(err.response);
 			if (err.response) {

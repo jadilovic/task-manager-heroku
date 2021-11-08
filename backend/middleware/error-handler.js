@@ -12,9 +12,9 @@ const errorHandlerMiddleware = (err, req, res, next) => {
 
 	if (err.code && err.code === 11000) {
 		customError.statusCode = 400;
-		customError.msg = `Entered ${Object.keys(
+		customError.msg = `ValidationError: email-Entered ${Object.keys(
 			err.keyValue
-		)} already exists, please enter new email address`;
+		)} already exists please enter new email address!`;
 	}
 
 	if (err.name === 'CastError') {

@@ -5,6 +5,18 @@ const useLocalStorageHook = () => {
 		return JSON.parse(localStorage.getItem('tasks') || '[]');
 	};
 
+	const saveCurrentTaskName = (taskName) => {
+		localStorage.setItem('currentTaskName', taskName);
+	};
+
+	const saveCurrentTaskObject = (player) => {
+		localStorage.setItem('currentTask', JSON.stringify(player));
+	};
+
+	const getCurrentTaskObject = () => {
+		return JSON.parse(localStorage.getItem('currentTask'));
+	};
+
 	/*
   const getCurrentPlayer = () => {
     return JSON.parse(localStorage.getItem('currentPlayer'));
@@ -20,10 +32,6 @@ const useLocalStorageHook = () => {
 		let tasksList = getAllTasks();
 		tasksList = tasksList.filter((task) => task.name !== taskName);
 		localStorage.setItem('tasks', JSON.stringify(tasksList));
-	};
-
-	const saveCurrentTaskName = (taskName) => {
-		localStorage.setItem('currentTaskName', taskName);
 	};
 
 	/*
@@ -50,7 +58,7 @@ const useLocalStorageHook = () => {
     players[currentPlayerIndex].score = scoreCount;
     localStorage.setItem('players', JSON.stringify(players));
   };
-*/
+
 	const addUpdatedCurrentTaskToArrayAndSave = (currentTask) => {
 		const tasks = getAllTasks();
 		const currentTaskIndex = tasks.findIndex(
@@ -66,7 +74,7 @@ const useLocalStorageHook = () => {
 		return tasks[currentTaskIndex];
 	};
 
-	/*
+	
   const restartCurrentPlayerLevelAndScoreAndUpdateDatabase = (
     currentPlayer
   ) => {
@@ -83,10 +91,10 @@ const useLocalStorageHook = () => {
 	return {
 		getAllTasks,
 		addNewTaskObjectToArrayAndSave,
-		addUpdatedCurrentTaskToArrayAndSave,
 		deleteTaskAndUpdateTasksList,
 		saveCurrentTaskName,
 		getCurrentTaskObject,
+		saveCurrentTaskObject,
 	};
 };
 
