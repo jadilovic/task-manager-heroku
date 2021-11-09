@@ -19,7 +19,6 @@ import {
 	Typography,
 } from '@mui/material';
 import TaskCard from '../components/TaskCard';
-import { Event } from '@mui/icons-material';
 
 const Item = styled(Paper)(({ theme }) => ({
 	...theme.typography.body2,

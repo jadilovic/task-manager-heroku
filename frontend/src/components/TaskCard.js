@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, forwardRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import moment from 'moment';
@@ -17,6 +17,13 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ConfirmDialog from './ConfirmDialog';
 import TaskStatus from './TaskStatus';
 import useAxiosRequest from '../utils/useAxiosRequest';
+import Stack from '@mui/material/Stack';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+
+const Alert = forwardRef(function Alert(props, ref) {
+	return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 const ExpandMore = styled((props) => {
 	const { expand, ...other } = props;
@@ -34,7 +41,7 @@ const TaskCard = (props) => {
 	const history = useHistory();
 	const data = useLocalStorageHook();
 	const [confirmOpen, setConfirmOpen] = useState(false);
-
+	const [openSnackbar, setOpenSnackbar] = useState(false);
 	const { task, taskStatusObjects, refreshTasks } = props;
 	const [expanded, setExpanded] = useState(false);
 
@@ -59,13 +66,20 @@ const TaskCard = (props) => {
 
 	const handleDeleteTask = async (taskId) => {
 		await mongoDB.deleteTask(taskId);
+		setOpenSnackbar(true);
 		refreshTasks();
 	};
 
-	// change to handeto Edit
 	const handleOnClick = (taskId) => {
 		data.saveCurrentTaskId(taskId);
 		history.push('/edit');
+	};
+
+	const handleClose = (event, reason) => {
+		if (reason === 'clickaway') {
+			return;
+		}
+		setOpenSnackbar(false);
 	};
 
 	return (
@@ -128,6 +142,17 @@ const TaskCard = (props) => {
 					>{`Task last updated ${lastUpdate.fromNow()}`}</Typography>
 				</CardContent>
 			</Collapse>
+			<Stack spacing={2} sx={{ width: '100%' }}>
+				<Snackbar
+					open={openSnackbar}
+					autoHideDuration={3000}
+					onClose={handleClose}
+				>
+					<Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+						{`Task with name "${name}" was deleted!"`}
+					</Alert>
+				</Snackbar>
+			</Stack>
 		</Card>
 	);
 };
