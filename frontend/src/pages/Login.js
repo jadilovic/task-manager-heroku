@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import useAxiosRequest from '../utils/useAxiosRequest';
-import { BrowserRouter as Router, Link, useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Box, Alert, Avatar } from '@mui/material';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';

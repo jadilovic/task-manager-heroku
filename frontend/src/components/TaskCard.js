@@ -148,7 +148,11 @@ const TaskCard = (props) => {
 					autoHideDuration={3000}
 					onClose={handleClose}
 				>
-					<Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+					<Alert
+						onClose={handleClose}
+						severity="success"
+						sx={{ width: '100%' }}
+					>
 						{`Task with name "${name}" was deleted!"`}
 					</Alert>
 				</Snackbar>
