@@ -21,7 +21,7 @@ const Navbar = () => {
 			console.log(window.location.pathname);
 			setAuthenticated(isAuthenticated());
 		});
-	}, []);
+	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 	return (
 		<Box sx={{ flexGrow: 1 }}>

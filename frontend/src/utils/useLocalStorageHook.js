@@ -1,5 +1,3 @@
-import React from 'react';
-
 const useLocalStorageHook = () => {
 	const getAllTasks = () => {
 		return JSON.parse(localStorage.getItem('tasks') || '[]');

@@ -2,6 +2,7 @@ require('dotenv').config();
 require('express-async-errors');
 const express = require('express');
 const app = express();
+// path needed for heroku
 const path = require('path');
 
 // additional security

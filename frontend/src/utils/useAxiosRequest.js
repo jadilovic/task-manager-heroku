@@ -1,13 +1,13 @@
 import axios from 'axios';
 import { getUserToken } from '../auth/Authentication';
 
-// console.log('env ', REACT_APP_SERVER_URL);
-const REACT_APP_SERVER_URL = 'https://task-manager-aki.herokuapp.com';
+console.log('env ', process.env.REACT_APP_SERVER_URL);
+// const herokuURL = 'https://task-manager-aki.herokuapp.com';
 const useAxiosRequest = () => {
 	const createUser = async (userCredentials) => {
 		return axios({
 			method: 'POST',
-			url: `${REACT_APP_SERVER_URL}/api/v1/auth/signup`,
+			url: `${process.env.REACT_APP_SERVER_URL}/api/v1/auth/signup`,
 			data: {
 				firstName: userCredentials.firstName,
 				lastName: userCredentials.lastName,
@@ -23,7 +23,7 @@ const useAxiosRequest = () => {
 	const userLogin = async (userCredentials) => {
 		return axios({
 			method: 'POST',
-			url: `${REACT_APP_SERVER_URL}/api/v1/auth/login`,
+			url: `${process.env.REACT_APP_SERVER_URL}/api/v1/auth/login`,
 			data: {
 				email: userCredentials.email,
 				password: userCredentials.password,
@@ -37,7 +37,7 @@ const useAxiosRequest = () => {
 	const getAllTasks = async () => {
 		return axios({
 			method: 'GET',
-			url: `${REACT_APP_SERVER_URL}/api/v1/tasks`,
+			url: `${process.env.REACT_APP_SERVER_URL}/api/v1/tasks`,
 			headers: {
 				authorization: `Bearer ${getUserToken()}`,
 			},
@@ -49,7 +49,7 @@ const useAxiosRequest = () => {
 	const createTask = async (newTask) => {
 		await axios({
 			method: 'POST',
-			url: `${REACT_APP_SERVER_URL}/api/v1/tasks`,
+			url: `${process.env.REACT_APP_SERVER_URL}/api/v1/tasks`,
 			data: {
 				newTask,
 			},
@@ -66,7 +66,7 @@ const useAxiosRequest = () => {
 			Authorization: `Bearer ${getUserToken()}`,
 		};
 		return axios
-			.get(`${REACT_APP_SERVER_URL}/api/v1/tasks/${taskId}`, {
+			.get(`${process.env.REACT_APP_SERVER_URL}/api/v1/tasks/${taskId}`, {
 				headers,
 			})
 			.then((res) => {
@@ -82,7 +82,7 @@ const useAxiosRequest = () => {
 		};
 		return axios
 			.patch(
-				`${REACT_APP_SERVER_URL}/api/v1/tasks/${_id}`,
+				`${process.env.REACT_APP_SERVER_URL}/api/v1/tasks/${_id}`,
 				{ name, currentStatus, description },
 				{
 					headers,
@@ -98,7 +98,7 @@ const useAxiosRequest = () => {
 		try {
 			return axios({
 				method: 'GET',
-				url: `${REACT_APP_SERVER_URL}/api/v1/tasks/status`,
+				url: `${process.env.REACT_APP_SERVER_URL}/api/v1/tasks/status`,
 				headers: {
 					authorization: `Bearer ${getUserToken()}`,
 				},
@@ -118,7 +118,7 @@ const useAxiosRequest = () => {
 		};
 		try {
 			await axios
-				.delete(`${REACT_APP_SERVER_URL}/api/v1/tasks/${taskId}`, {
+				.delete(`${process.env.REACT_APP_SERVER_URL}/api/v1/tasks/${taskId}`, {
 					headers,
 				})
 				.then((res) => {

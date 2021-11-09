@@ -53,7 +53,7 @@ const Home = () => {
 	useEffect(() => {
 		displayTasks();
 		getTaskStatuses();
-	}, []);
+	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 	const handleTaskNameChange = (event) => {
 		event.preventDefault();

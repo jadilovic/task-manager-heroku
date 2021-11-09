@@ -153,7 +153,7 @@ const TaskCard = (props) => {
 						severity="success"
 						sx={{ width: '100%' }}
 					>
-						{`Task with name "${name}" was deleted!"`}
+						Task was deleted!
 					</Alert>
 				</Snackbar>
 			</Stack>

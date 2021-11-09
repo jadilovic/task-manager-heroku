@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import useLocalStorageHook from '../utils/useLocalStorageHook';
 import useAxiosRequest from '../utils/useAxiosRequest';
 import { styled } from '@mui/material/styles';
 import {
@@ -30,7 +29,6 @@ const Item = styled(Paper)(({ theme }) => ({
 
 const Edit = () => {
 	const history = useHistory();
-	const data = useLocalStorageHook();
 	const mongoDB = useAxiosRequest();
 	const [taskValues, setTaskValues] = useState({
 		currentStatus: '',
@@ -58,7 +56,7 @@ const Edit = () => {
 		const taskId = localStorage.getItem('currentTaskId');
 		getTaskObject(taskId);
 		getTaskStatuses();
-	}, []);
+	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 	const handleInputChange = (e) => {
 		const { name, value } = e.target;
