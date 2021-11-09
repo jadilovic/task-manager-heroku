@@ -1,17 +1,40 @@
 {
-	"name": "task-manager-mern",
+	"name": "backend",
 	"version": "1.0.0",
 	"description": "",
+	"main": "index.js",
 	"dependencies": {
+		"body-parser": "^1.19.0",
+		"cors": "^2.8.5",
+		"express": "^4.17.1",
+		"mongoose": "^6.0.12",
+		"bcryptjs": "^2.4.3",
+		"dotenv": "^10.0.0",
+		"express-async-errors": "^3.1.1",
+		"express-rate-limit": "^5.3.0",
+		"helmet": "^4.6.0",
+		"http-status-codes": "^2.1.4",
+		"joi": "^17.4.0",
+		"jsonwebtoken": "^8.5.1",
+		"rate-limiter": "^0.2.0",
+		"swagger-ui-express": "^4.1.6",
+		"xss-clean": "^0.1.1",
+		"yamljs": "^0.3.0",
 		"@mui/styles": "^5.0.2",
 		"concurrently": "^6.3.0",
 		"moment": "^2.29.1",
 		"nodemon": "^2.0.14"
 	},
-	"devDependencies": {},
+	"devDependencies": {
+		"nodemon": "^2.0.14"
+	},
 	"scripts": {
-		"dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm start\" ",
-		"start": "node backend/server.js"
+		"start": "node server.js",
+		"dev": "nodemon server.js",
+		"heroku-postbuild": "cd client && npm install --only=dev && npm install && npm run build"
+	},
+	"engines": {
+		"node": "14.x"
 	},
 	"keywords": [],
 	"author": "",

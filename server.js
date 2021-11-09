@@ -2,6 +2,7 @@ require('dotenv').config();
 require('express-async-errors');
 const express = require('express');
 const app = express();
+const path = require('path');
 
 // additional security
 const rateLimiter = require('express-rate-limit');
@@ -18,6 +19,9 @@ const tasksRouter = require('./routes/tasks');
 const notFoundMiddleware = require('./middleware/not-found');
 const errorHandlerMiddleware = require('./middleware/error-handler');
 const authenticateUser = require('./middleware/authentication');
+
+// added for heroku - check if it is client instead of frontend
+app.use(express.static(path.join(__dirname, 'frontend', 'build')));
 
 // extra packages
 app.set('trust proxy', 1);
@@ -38,6 +42,11 @@ app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
 
 const port = process.env.PORT || 5000;
+
+// added for heroku
+app.get('*', (req, res) => {
+	res.sendFile(path.join(__dirname, 'frontend', 'build', 'index.html'));
+});
 
 const start = async () => {
 	try {
