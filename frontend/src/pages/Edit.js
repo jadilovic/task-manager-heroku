@@ -178,8 +178,8 @@ const Edit = () => {
 								</Grid>
 								<Grid item xs={12}>
 									<Typography>
-										Task created on{' '}
-										{new Date(taskValues.dateCreated).toDateString()}
+										Last updated on{' '}
+										{new Date(taskValues.updatedAt).toDateString()}
 									</Typography>
 								</Grid>
 								<Grid item xs={12}>

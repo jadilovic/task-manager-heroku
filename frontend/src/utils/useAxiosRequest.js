@@ -5,7 +5,7 @@ console.log('env ', process.env.REACT_APP_SERVER_URL);
 
 const useAxiosRequest = () => {
 	const createUser = async (userCredentials) => {
-		let userData = await axios({
+		return axios({
 			method: 'POST',
 			url: `${process.env.REACT_APP_SERVER_URL}/api/v1/auth/signup`,
 			data: {
@@ -18,11 +18,10 @@ const useAxiosRequest = () => {
 		}).then((res) => {
 			return res.data;
 		});
-		return userData;
 	};
 
 	const userLogin = async (userCredentials) => {
-		let userData = await axios({
+		return axios({
 			method: 'POST',
 			url: `${process.env.REACT_APP_SERVER_URL}/api/v1/auth/login`,
 			data: {
@@ -33,7 +32,6 @@ const useAxiosRequest = () => {
 		}).then((res) => {
 			return res.data;
 		});
-		return userData;
 	};
 
 	const getAllTasks = async () => {
@@ -46,7 +44,6 @@ const useAxiosRequest = () => {
 		}).then((res) => {
 			return res.data.tasks;
 		});
-		//	return tasks;
 	};
 
 	const createTask = async (newTask) => {
@@ -68,7 +65,7 @@ const useAxiosRequest = () => {
 		const headers = {
 			Authorization: `Bearer ${getUserToken()}`,
 		};
-		const taskData = await axios
+		return axios
 			.get(`${process.env.REACT_APP_SERVER_URL}/api/v1/tasks/${taskId}`, {
 				headers,
 			})
@@ -76,7 +73,6 @@ const useAxiosRequest = () => {
 				console.log('get task: ', res.data);
 				return res.data;
 			});
-		return taskData;
 	};
 
 	const updateTask = async (editedTask) => {
@@ -84,7 +80,7 @@ const useAxiosRequest = () => {
 		const headers = {
 			Authorization: `Bearer ${getUserToken()}`,
 		};
-		const taskData = await axios
+		return axios
 			.patch(
 				`${process.env.REACT_APP_SERVER_URL}/api/v1/tasks/${_id}`,
 				{ name, currentStatus, description },
@@ -96,11 +92,9 @@ const useAxiosRequest = () => {
 				console.log('update task: ', res.data);
 				return res.data;
 			});
-		return taskData;
 	};
 
 	const getTaskStatuses = async () => {
-		//	let taskStatuses = [];
 		try {
 			return axios({
 				method: 'GET',
@@ -116,7 +110,6 @@ const useAxiosRequest = () => {
 			console.log(err.response);
 			return err.response.data.msg;
 		}
-		//	return taskStatuses;
 	};
 
 	const deleteTask = async (taskId) => {

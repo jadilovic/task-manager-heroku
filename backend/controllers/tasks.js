@@ -47,7 +47,6 @@ const updateTask = async (req, res) => {
 		throw new BadRequestError('Must provide task name value');
 	}
 	const existingTask = await taskNameExists(name, userId, taskId);
-	console.log('existing task : : ', existingTask);
 	if (existingTask) {
 		throw new BadRequestError(
 			'Entered task name already exists. Please enter different task name.'
@@ -71,7 +70,7 @@ const getTask = async (req, res) => {
 	} = req;
 	const task = await Task.findOne(
 		{ _id: taskId, createdBy: userId },
-		{ currentStatus: 1, name: 1, description: 1 }
+		{ currentStatus: 1, name: 1, description: 1, updatedAt: 1 }
 	);
 	if (!task) {
 		throw new NotFoundError(`No task found with id ${taskId}`);
