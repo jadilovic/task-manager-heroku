@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, createContext, useContext } from 'react';
 import { isAuthenticated } from '../auth/Authentication';
 import { useHistory } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
@@ -7,8 +7,14 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import AddTaskIcon from '@mui/icons-material/AddTask';
 import UserMenu from './UserMenu';
+import { useTheme, ThemeProvider, createTheme } from '@mui/material/styles';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
+import IconButton from '@mui/material/IconButton';
 
-const Navbar = () => {
+const Navbar = (props) => {
+	const { setDarkMode, darkMode } = props;
+	const theme = useTheme();
 	const history = useHistory();
 	const [authenticated, setAuthenticated] = useState(null);
 
@@ -23,6 +29,14 @@ const Navbar = () => {
 		});
 	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+	const toggleTheme = () => {
+		if (darkMode) {
+			setDarkMode(false);
+		} else {
+			setDarkMode(true);
+		}
+	};
+
 	return (
 		<Box sx={{ flexGrow: 1 }}>
 			<AppBar position="static">
@@ -33,7 +47,15 @@ const Navbar = () => {
 					<Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
 						MERN Task Manager
 					</Typography>
-
+					<Typography>
+						<IconButton
+							sx={{ ml: 1 }}
+							onClick={() => toggleTheme()}
+							color="inherit"
+						>
+							{darkMode ? <Brightness7Icon /> : <Brightness4Icon />}
+						</IconButton>
+					</Typography>
 					{authenticated ? (
 						<UserMenu />
 					) : (

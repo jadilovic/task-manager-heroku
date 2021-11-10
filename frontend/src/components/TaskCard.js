@@ -1,6 +1,6 @@
 import React, { useState, forwardRef } from 'react';
 import { useHistory } from 'react-router-dom';
-import { styled } from '@mui/material/styles';
+import { styled, alpha } from '@mui/material/styles';
 import moment from 'moment';
 import useLocalStorageHook from '../utils/useLocalStorageHook';
 import Card from '@mui/material/Card';

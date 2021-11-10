@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo, useState, createContext } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
@@ -8,20 +8,25 @@ import Error from './pages/Error';
 import PrivateRoute from './components/PrivateRoute';
 import Navbar from './components/Navbar';
 import CssBaseline from '@mui/material/CssBaseline';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-
-const theme = createTheme({
-	palette: {
-		mode: 'dark',
-	},
-});
+import { createTheme, ThemeProvider, createStyles } from '@mui/material/styles';
+import ScrollToTop from './utils/ScrollToTop';
+import GlobalStyles from './theme/GlobalStyles';
 
 const App = () => {
+	const [darkMode, setDarkMode] = useState(true);
+	const theme = createTheme({
+		palette: {
+			mode: `${darkMode ? 'dark' : 'light'}`,
+		},
+	});
+
 	return (
 		<ThemeProvider theme={theme}>
 			<Router>
 				<CssBaseline />
-				<Navbar />
+				<ScrollToTop />
+				<GlobalStyles />
+				<Navbar setDarkMode={setDarkMode} darkMode={darkMode} />
 				<Switch>
 					<Route component={Login} path="/" exact />
 					<Route component={Signup} path="/signup" exact />

@@ -21,7 +21,7 @@ const notFoundMiddleware = require('./middleware/not-found');
 const errorHandlerMiddleware = require('./middleware/error-handler');
 const authenticateUser = require('./middleware/authentication');
 
-// added for heroku - check if it is client instead of frontend
+// added for heroku
 app.use(express.static(path.join(__dirname, 'frontend', 'build')));
 
 // extra packages
