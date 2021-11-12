@@ -19,7 +19,7 @@ export default function TaskStatus(props) {
 		<Grid justifyItems="center" item xs={12}>
 			<Stack spacing={1} alignItems="center">
 				<Chip
-					style={{ minWidth: 300 }}
+					style={{ minWidth: 250 }}
 					size="medium"
 					icon={chipIcon}
 					label={message}

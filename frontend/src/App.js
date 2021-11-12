@@ -8,7 +8,7 @@ import Error from './pages/Error';
 import PrivateRoute from './components/PrivateRoute';
 import Navbar from './components/Navbar';
 import CssBaseline from '@mui/material/CssBaseline';
-import { createTheme, ThemeProvider, createStyles } from '@mui/material/styles';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import ScrollToTop from './utils/ScrollToTop';
 import GlobalStyles from './theme/GlobalStyles';
 
@@ -17,6 +17,12 @@ const App = () => {
 	const theme = createTheme({
 		palette: {
 			mode: `${darkMode ? 'dark' : 'light'}`,
+			// primary: {
+			// 	main: `${darkMode ? '#648381' : '#FFBF46'}`,
+			// },
+			secondary: {
+				main: `${darkMode ? '#575761' : '#648381'}`,
+			},
 		},
 	});
 

@@ -36,6 +36,16 @@ const ExpandMore = styled((props) => {
 	}),
 }));
 
+const ContentStyle = styled(Card)(({ theme }) => ({
+	maxWidth: 480,
+	margin: 'auto',
+	display: 'flex',
+	flexDirection: 'column',
+	justifyContent: 'center',
+	padding: theme.spacing(3, 0),
+	backgroundColor: theme.palette.secondary.main,
+}));
+
 const TaskCard = (props) => {
 	const mongoDB = useAxiosRequest();
 	const history = useHistory();
@@ -83,7 +93,7 @@ const TaskCard = (props) => {
 	};
 
 	return (
-		<Card style={{ backgroundColor: 'lightgray' }} sx={{ maxWidth: 645 }}>
+		<ContentStyle>
 			<CardHeader
 				avatar={
 					<Avatar sx={{ bgcolor: avatarColor }} aria-label="recipe">
@@ -94,7 +104,6 @@ const TaskCard = (props) => {
 					<IconButton
 						onClick={() => handleOnClick(_id)}
 						size="large"
-						color="primary"
 						aria-label="edit"
 					>
 						<EditIcon />
@@ -107,7 +116,7 @@ const TaskCard = (props) => {
 				<IconButton
 					onClick={() => setConfirmOpen(true)}
 					size="large"
-					color="error"
+					color="inherit"
 					aria-label="delete"
 				>
 					<DeleteIcon />
@@ -157,7 +166,7 @@ const TaskCard = (props) => {
 					</Alert>
 				</Snackbar>
 			</Stack>
-		</Card>
+		</ContentStyle>
 	);
 };
 

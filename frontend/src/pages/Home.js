@@ -1,54 +1,34 @@
 import React, { useState, useEffect } from 'react';
-import { styled } from '@mui/material/styles';
 import useAxiosRequest from '../utils/useAxiosRequest';
 import Page from '../components/Page';
-import {
-	Box,
-	Paper,
-	Grid,
-	Container,
-	Card,
-	CardContent,
-	TextField,
-	Button,
-	CardActions,
-	Alert,
-	FormControl,
-	InputLabel,
-	Select,
-	MenuItem,
-	Typography,
-} from '@mui/material';
+import { Box, Grid, Container, Typography } from '@mui/material';
 import TaskCard from '../components/TaskCard';
-
-const Item = styled(Paper)(({ theme }) => ({
-	...theme.typography.body2,
-	padding: theme.spacing(1),
-	textAlign: 'center',
-	color: theme.palette.text.secondary,
-}));
+import CreateTask from '../components/CreateTask';
+import PieChartTasks from '../components/PieChartTasks';
+import SearchFilter from '../components/SearchFilter';
+import SearchTasks from '../components/SearchTasks';
 
 const Home = () => {
 	const mongoDB = useAxiosRequest();
 	const [tasks, setTasks] = useState([]);
+	const [filteredTasks, setFilteredTasks] = useState([]);
 	const [statuses, setStatuses] = useState([]);
-	const [newTask, setNewTask] = useState({ name: '', statusId: '' });
-	const [error, setError] = useState('');
+	const [loading, setLoading] = useState(true);
 
 	const displayTasks = async () => {
 		try {
 			const dbTasks = await mongoDB.getAllTasks();
 			setTasks(dbTasks);
+			setFilteredTasks(dbTasks);
 		} catch (err) {
 			console.log(err.response);
-			setError(err.response.data.msg);
 		}
 	};
 
 	const getTaskStatuses = async () => {
 		const statuses = await mongoDB.getTaskStatuses();
 		setStatuses(statuses);
-		setNewTask({ ...newTask, statusId: statuses[0]._id });
+		setLoading(false);
 	};
 
 	// to explore why is this happening
@@ -57,243 +37,45 @@ const Home = () => {
 		getTaskStatuses();
 	}, []);
 
-	const handleTaskNameChange = (event) => {
-		event.preventDefault();
-		setNewTask({ ...newTask, name: event.target.value });
-	};
-
-	const handleTaskStatusChange = (event) => {
-		setNewTask({
-			...newTask,
-			statusId: event.target.value,
-		});
-	};
-
-	const submitData = async (newTask) => {
-		try {
-			await mongoDB.createTask(newTask);
-			setNewTask({ name: '', statusId: statuses[0]._id });
-			displayTasks();
-		} catch (err) {
-			console.log(err.response);
-			setError(err.response.data.msg);
-		}
-	};
-
-	const handleSubmit = (e) => {
-		e.preventDefault();
-		setError('');
-		const trimedTaskName = newTask.name.trim();
-		if (trimedTaskName.length < 3) {
-			setError(
-				'You must enter task name with minimum three letters to create new task'
-			);
-		} else {
-			newTask.name = trimedTaskName;
-			submitData(newTask);
-		}
-	};
+	if (loading) {
+		return (
+			<Box sx={{ pb: 5 }}>
+				<Typography variant="h4">Loading...</Typography>
+			</Box>
+		);
+	}
 
 	return (
 		<Page title="Home | Task Manager">
 			<Container maxWidth="xl">
-				<Box sx={{ pb: 5 }}>
-					<Typography variant="h4">Hi, Welcome back</Typography>
-				</Box>
-				<Grid container spacing={3}>
+				<Grid container spacing={3} padding={2}>
 					<Grid item xs={12} md={8} lg={5}>
-						<Item>
-							<Card>
-								<form noValidate autoComplete="off" onSubmit={handleSubmit}>
-									<CardContent>
-										<Box
-											sx={{
-												width: 500,
-												maxWidth: '100%',
-											}}
-										>
-											{error && (
-												<Box
-													sx={{
-														paddingTop: 2,
-														paddingBottom: 2,
-														bgcolor: 'background.paper',
-													}}
-												>
-													<Alert severity="error">{error}</Alert>
-												</Box>
-											)}
-											<TextField
-												value={newTask.name}
-												fullWidth
-												label="New task"
-												id="fullWidth"
-												onChange={handleTaskNameChange}
-												variant="outlined"
-												color="primary"
-												error={!!error}
-											/>
-										</Box>
-										<Box
-											sx={{
-												width: 500,
-												maxWidth: '100%',
-												paddingTop: 2,
-												bgcolor: 'background.paper',
-											}}
-										>
-											<FormControl fullWidth style={{ minWidth: 300 }}>
-												<InputLabel>Select task status</InputLabel>
-												<Select
-													value={newTask.statusId}
-													label="Task current status"
-													onChange={handleTaskStatusChange}
-												>
-													{statuses.map((taskStatus, index) => {
-														return (
-															<MenuItem key={index} value={taskStatus._id}>
-																{taskStatus.message}
-															</MenuItem>
-														);
-													})}
-												</Select>
-											</FormControl>
-										</Box>
-									</CardContent>
-									<CardActions style={{ justifyContent: 'center' }}>
-										<Button variant="contained" color="primary" type="submit">
-											create task
-										</Button>
-									</CardActions>
-								</form>
-							</Card>
-						</Item>
+						<CreateTask statuses={statuses} refreshTasks={displayTasks} />
 					</Grid>
 
 					<Grid item xs={12} md={4} lg={4}>
-						Pie chart of statuses
-						{/* <AppCurrentVisits /> */}
+						<PieChartTasks />
 					</Grid>
 					<Grid item xs={12} md={4} lg={3}>
-						Filter by status
+						<SearchFilter tasks={tasks} />
 					</Grid>
 
-					<Grid item xs={12} sm={6} md={6}>
-						Search by name
-					</Grid>
-					<Grid item xs={12} sm={6} md={6}>
-						Search by description
+					<Grid item xs={12} sm={12} md={12}>
+						<SearchTasks tasks={tasks} setFilteredTasks={setFilteredTasks} />
 					</Grid>
 
-					{tasks.map((task, index) => {
+					{filteredTasks.map((task, index) => {
 						return (
-							<Grid item xs={12} sm={8} md={6} lg={4}>
-								<Item key={index}>
-									<TaskCard
-										task={task}
-										taskStatusObjects={statuses}
-										refreshTasks={displayTasks}
-									/>
-								</Item>
+							<Grid key={index} item xs={12} sm={8} md={6} lg={4}>
+								<TaskCard
+									task={task}
+									taskStatusObjects={statuses}
+									refreshTasks={displayTasks}
+								/>
 							</Grid>
 						);
 					})}
 				</Grid>
-			</Container>
-			<Container
-				style={{ backgroundColor: 'lightgray' }}
-				maxWidth="sm"
-				component="main"
-			>
-				<Box sx={{ flexGrow: 1 }} padding={2}>
-					<Grid justifyItems="center" item xs={12}>
-						<Item>
-							<Card>
-								<form noValidate autoComplete="off" onSubmit={handleSubmit}>
-									<CardContent>
-										<Box
-											sx={{
-												width: 500,
-												maxWidth: '100%',
-											}}
-										>
-											{error && (
-												<Box
-													sx={{
-														paddingTop: 2,
-														paddingBottom: 2,
-														bgcolor: 'background.paper',
-													}}
-												>
-													<Alert severity="error">{error}</Alert>
-												</Box>
-											)}
-											<TextField
-												value={newTask.name}
-												fullWidth
-												label="New task"
-												id="fullWidth"
-												onChange={handleTaskNameChange}
-												variant="outlined"
-												color="primary"
-												error={!!error}
-											/>
-										</Box>
-										<Box
-											sx={{
-												width: 500,
-												maxWidth: '100%',
-												paddingTop: 2,
-												bgcolor: 'background.paper',
-											}}
-										>
-											<FormControl fullWidth style={{ minWidth: 300 }}>
-												<InputLabel>Select task status</InputLabel>
-												<Select
-													value={newTask.statusId}
-													label="Task current status"
-													onChange={handleTaskStatusChange}
-												>
-													{statuses.map((taskStatus, index) => {
-														return (
-															<MenuItem key={index} value={taskStatus._id}>
-																{taskStatus.message}
-															</MenuItem>
-														);
-													})}
-												</Select>
-											</FormControl>
-										</Box>
-									</CardContent>
-									<CardActions style={{ justifyContent: 'center' }}>
-										<Button variant="contained" color="primary" type="submit">
-											create task
-										</Button>
-									</CardActions>
-								</form>
-							</Card>
-						</Item>
-					</Grid>
-					{statuses.length > 0 ? (
-						<Grid item xs={12}>
-							{tasks.map((task, index) => {
-								return (
-									<Item key={index}>
-										<TaskCard
-											task={task}
-											taskStatusObjects={statuses}
-											refreshTasks={displayTasks}
-										/>
-									</Item>
-								);
-							})}
-						</Grid>
-					) : (
-						<Grid item xs={12}>
-							<Typography>No tasks created</Typography>
-						</Grid>
-					)}
-				</Box>
 			</Container>
 		</Page>
 	);
