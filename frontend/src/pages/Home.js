@@ -5,7 +5,7 @@ import { Box, Grid, Container, Typography } from '@mui/material';
 import TaskCard from '../components/TaskCard';
 import CreateTask from '../components/CreateTask';
 import PieChartTasks from '../components/PieChartTasks';
-import SearchFilter from '../components/SearchFilter';
+import TasksTable from '../components/TasksTable';
 import SearchTasks from '../components/SearchTasks';
 
 const Home = () => {
@@ -49,18 +49,15 @@ const Home = () => {
 		<Page title="Home | Task Manager">
 			<Container maxWidth="xl">
 				<Grid container spacing={3} padding={2}>
-					<Grid item xs={12} md={8} lg={5}>
+					<Grid item xs={12} sm={12} md={6} lg={6}>
 						<CreateTask statuses={statuses} refreshTasks={displayTasks} />
 					</Grid>
 
-					<Grid item xs={12} md={4} lg={4}>
-						<PieChartTasks />
-					</Grid>
-					<Grid item xs={12} md={4} lg={3}>
-						<SearchFilter tasks={tasks} />
+					<Grid item xs={12} md={6} lg={6}>
+						<PieChartTasks tasks={tasks} />
 					</Grid>
 
-					<Grid item xs={12} sm={12} md={12}>
+					<Grid item xs={12} sm={12} md={6} lg={6}>
 						<SearchTasks tasks={tasks} setFilteredTasks={setFilteredTasks} />
 					</Grid>
 

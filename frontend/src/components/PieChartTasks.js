@@ -1,8 +1,9 @@
+import React, { useState, useEffect } from 'react';
 import { merge } from 'lodash';
 import ReactApexChart from 'react-apexcharts';
 // material
 import { useTheme, styled } from '@mui/material/styles';
-import { Card, CardHeader } from '@mui/material';
+import { Card } from '@mui/material';
 // utils
 import { fNumber } from '../utils/formatNumber';
 //
@@ -31,10 +32,30 @@ const ChartWrapperStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-const CHART_DATA = [2, 4, 6];
-
-export default function PieChartTasks() {
+export default function PieChartTasks(props) {
 	const theme = useTheme();
+	const { tasks } = props;
+	const [chartData, setChartData] = useState([]);
+
+	const calculateChartData = () => {
+		let idleCount = 0;
+		let ongoingCount = 0;
+		let completedCount = 0;
+		tasks.forEach((task) => {
+			if (task.currentStatus === '6186378bf0d3d3150277b8d3') {
+				idleCount++;
+			} else if (task.currentStatus === '618637ddf0d3d3150277b8d5') {
+				ongoingCount++;
+			} else {
+				completedCount++;
+			}
+		});
+		setChartData([idleCount, ongoingCount, completedCount]);
+	};
+
+	useEffect(() => {
+		calculateChartData();
+	}, [tasks]);
 
 	const chartOptions = merge(BaseOptionChart(), {
 		colors: [
@@ -62,11 +83,10 @@ export default function PieChartTasks() {
 
 	return (
 		<Card>
-			{/* <CardHeader title="Current Visits" /> */}
 			<ChartWrapperStyle dir="ltr">
 				<ReactApexChart
 					type="pie"
-					series={CHART_DATA}
+					series={chartData}
 					options={chartOptions}
 					height={220}
 				/>

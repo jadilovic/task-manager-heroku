@@ -1,4 +1,4 @@
-import React, { useMemo, useState, createContext } from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
@@ -17,11 +17,11 @@ const App = () => {
 	const theme = createTheme({
 		palette: {
 			mode: `${darkMode ? 'dark' : 'light'}`,
-			// primary: {
-			// 	main: `${darkMode ? '#648381' : '#FFBF46'}`,
-			// },
-			secondary: {
+			primary: {
 				main: `${darkMode ? '#575761' : '#648381'}`,
+			},
+			secondary: {
+				main: `${darkMode ? '#575761' : '#FFBF46'}`,
 			},
 		},
 	});

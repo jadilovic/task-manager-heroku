@@ -37,13 +37,12 @@ const ExpandMore = styled((props) => {
 }));
 
 const ContentStyle = styled(Card)(({ theme }) => ({
-	maxWidth: 480,
+	maxWidth: 580,
 	margin: 'auto',
 	display: 'flex',
 	flexDirection: 'column',
 	justifyContent: 'center',
 	padding: theme.spacing(3, 0),
-	backgroundColor: theme.palette.secondary.main,
 }));
 
 const TaskCard = (props) => {
@@ -64,10 +63,12 @@ const TaskCard = (props) => {
 		_id,
 		updatedAt,
 	} = task;
+	console.log('current status from task : ', currentStatus);
 	dateCreated = new Date(dateCreated).toDateString();
 	currentStatus = taskStatusObjects.find(
 		(statusObject) => statusObject._id === currentStatus
 	);
+	console.log('current status object : ', currentStatus);
 	const lastUpdate = moment(new Date(updatedAt));
 
 	const handleExpandClick = () => {
@@ -131,7 +132,7 @@ const TaskCard = (props) => {
 						Are you sure you want to delete this task?
 					</Typography>
 				</ConfirmDialog>
-				<TaskStatus taskStatus={currentStatus} />
+				{/* <TaskStatus taskStatus={currentStatus} /> */}
 				<ExpandMore
 					expand={expanded}
 					onClick={handleExpandClick}

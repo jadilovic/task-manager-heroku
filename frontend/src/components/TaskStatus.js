@@ -6,7 +6,10 @@ import { CheckCircleOutline, ArrowForward } from '@mui/icons-material';
 import { Grid } from '@mui/material';
 
 export default function TaskStatus(props) {
+	console.log('object task status : ', props.taskStatus);
 	const { colorNotification, message } = props.taskStatus;
+	console.log('object task status : ', props.taskStatus);
+	console.log('color notification : ', colorNotification);
 	let chipIcon = null;
 	if (colorNotification === 'warning') {
 		chipIcon = <HourglassEmpty />;
