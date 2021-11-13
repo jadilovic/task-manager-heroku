@@ -14,7 +14,6 @@ const Home = () => {
 	const [tasks, setTasks] = useState([]);
 	const [filteredTasks, setFilteredTasks] = useState([]);
 	const [statuses, setStatuses] = useState([]);
-	const [loading, setLoading] = useState(true);
 
 	const displayTasks = async () => {
 		try {
@@ -29,7 +28,6 @@ const Home = () => {
 	const getTaskStatuses = async () => {
 		const statuses = await mongoDB.getTaskStatuses();
 		setStatuses(statuses);
-		setLoading(false);
 	};
 
 	// to explore why is this happening
@@ -38,7 +36,7 @@ const Home = () => {
 		getTaskStatuses();
 	}, []);
 
-	if (loading) {
+	if (filteredTasks.length < 1 || statuses.length < 1) {
 		return (
 			<Box sx={{ pb: 5 }}>
 				<Typography variant="h4">Loading...</Typography>

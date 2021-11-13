@@ -42,16 +42,9 @@ const ContentStyle = styled('div')(({ theme }) => ({
 
 function Copyright(props) {
 	return (
-		<Typography
-			variant="body2"
-			color="text.secondary"
-			align="center"
-			{...props}
-		>
+		<Typography variant="body2" align="center" {...props}>
 			{'Copyright © '}
-			<a color="inherit" href="https://mui.com/">
-				Tika MERN Task Manager
-			</a>
+			<a href="https://mui.com/">Tika MERN Task Manager</a>
 			{` ${new Date().getFullYear()}.`}
 		</Typography>
 	);
@@ -168,7 +161,11 @@ const Login = () => {
 							</Button>
 							<Grid container>
 								<Grid item xs={12}>
-									<Link to="/signup" variant="body2">
+									<Link
+										style={{ color: '#648381' }}
+										to="/signup"
+										variant="body2"
+									>
 										{"Don't have an account? Sign Up"}
 									</Link>
 								</Grid>

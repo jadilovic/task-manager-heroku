@@ -71,7 +71,6 @@ const useAxiosRequest = () => {
 				headers,
 			})
 			.then((res) => {
-				console.log('get task: ', res.data);
 				return res.data;
 			});
 	};
@@ -90,7 +89,6 @@ const useAxiosRequest = () => {
 				}
 			)
 			.then((res) => {
-				console.log('update task: ', res.data);
 				return res.data;
 			});
 	};
@@ -104,7 +102,6 @@ const useAxiosRequest = () => {
 					authorization: `Bearer ${getUserToken()}`,
 				},
 			}).then((res) => {
-				console.log('task statuses axios', res.data.statuses);
 				return res.data.statuses;
 			});
 		} catch (err) {

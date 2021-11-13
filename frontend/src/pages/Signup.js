@@ -184,7 +184,7 @@ const Signup = () => {
 					</Button>
 					<Grid container justifyContent="flex-end">
 						<Grid item>
-							<Link to="/" variant="body2">
+							<Link style={{ color: '#648381' }} to="/" variant="body2">
 								Already have an account? Log in
 							</Link>
 						</Grid>

@@ -2,32 +2,42 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import useAxiosRequest from '../utils/useAxiosRequest';
 import { styled } from '@mui/material/styles';
+import EditIcon from '@mui/icons-material/Edit';
+// material
 import {
 	Grid,
+	Stack,
+	Box,
 	TextField,
-	FormControl,
-	Select,
-	MenuItem,
 	Container,
 	Button,
-	Box,
-	Paper,
-	InputLabel,
 	Typography,
-	Stack,
 	Chip,
+	Card,
+	FormControl,
+	InputLabel,
+	Select,
+	MenuItem,
 	Alert,
 } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
-
-const Item = styled(Paper)(({ theme }) => ({
-	...theme.typography.body2,
+// ----------------------------------------------------------------------
+const SectionStyle = styled(Card)(({ theme }) => ({
+	width: '100%',
+	display: 'flex',
+	flexDirection: 'column',
+	justifyContent: 'center',
 	padding: theme.spacing(1),
-	textAlign: 'center',
-	color: theme.palette.text.secondary,
 }));
 
-const Edit = () => {
+const ContentStyle = styled('div')(({ theme }) => ({
+	margin: 'auto',
+	display: 'flex',
+	flexDirection: 'column',
+	justifyContent: 'center',
+	padding: theme.spacing(2),
+}));
+
+export default function Edit() {
 	const history = useHistory();
 	const mongoDB = useAxiosRequest();
 	const [taskValues, setTaskValues] = useState({
@@ -69,7 +79,6 @@ const Edit = () => {
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		try {
-			console.log('new task values : ', taskValues);
 			const editedTask = await mongoDB.updateTask(taskValues);
 			console.log('edited task values : ', editedTask);
 			history.push('/home');
@@ -90,123 +99,104 @@ const Edit = () => {
 		return <Typography>Loading...</Typography>;
 	}
 	return (
-		<Container style={{ backgroundColor: 'lightgray' }} maxWidth="sm">
-			<Box sx={{ flexGrow: 1 }} padding={2}>
-				<Grid item xs={12}>
-					<Item>
-						<form onSubmit={handleSubmit}>
-							<Grid
-								container
-								alignItems="center"
-								justify="center"
-								direction="column"
-								spacing={4}
+		<Container maxWidth="sm">
+			<Grid padding={2} item xs={12}>
+				<SectionStyle>
+					<form autoComplete="off" noValidate onSubmit={handleSubmit}>
+						<Stack spacing={1} alignItems="center">
+							<Chip
+								style={{ minWidth: 300, minHeight: 40, fontSize: 19 }}
+								size="medium"
+								icon={<EditIcon />}
+								label="Edit Selected Task"
+								color="default"
+							/>
+						</Stack>
+						<ContentStyle>
+							{error && (
+								<Box
+									sx={{
+										paddingTop: 2,
+										paddingBottom: 2,
+										bgcolor: 'background.paper',
+									}}
+								>
+									<Alert severity="error">{error}</Alert>
+								</Box>
+							)}
+							<TextField
+								fullWidth
+								style={{ minWidth: 300 }}
+								id="name-input"
+								name="name"
+								label="Name"
+								type="text"
+								value={taskValues.name}
+								onChange={handleInputChange}
+							/>
+						</ContentStyle>
+						<ContentStyle>
+							<FormControl style={{ minWidth: 300 }}>
+								<InputLabel>Select current status</InputLabel>
+								<Select
+									value={taskValues?.currentStatus}
+									label="Task current status"
+									onChange={handleTaskStatusChange}
+								>
+									{statuses.map((taskStatus, index) => {
+										return (
+											<MenuItem key={index} value={taskStatus._id}>
+												{taskStatus.message}
+											</MenuItem>
+										);
+									})}
+								</Select>
+							</FormControl>
+						</ContentStyle>
+						<ContentStyle>
+							<TextField
+								fullWidth
+								multiline
+								minRows={4}
+								inputProps={{ maxLength: 120 }}
+								style={{ minWidth: 300 }}
+								id="description-input"
+								name="description"
+								label="Description"
+								type="text"
+								value={taskValues.description}
+								onChange={handleInputChange}
+							/>
+						</ContentStyle>
+						<ContentStyle>
+							<Typography>
+								Last updated on {new Date(taskValues.updatedAt).toDateString()}
+							</Typography>
+						</ContentStyle>
+						<ContentStyle>
+							<Button
+								style={{ minWidth: 300 }}
+								variant="contained"
+								color="primary"
+								type="submit"
+								size="large"
 							>
-								<Grid color="green" item xs={12}>
-									<Stack spacing={1} alignItems="center">
-										<Chip
-											style={{ minWidth: 300, minHeight: 40, fontSize: 19 }}
-											size="medium"
-											icon={<EditIcon />}
-											label="Edit Selected Task"
-											color="default"
-										/>
-									</Stack>
-								</Grid>
-								<Grid item xs={12}>
-									<Box
-										sx={{
-											width: 300,
-											maxWidth: '100%',
-										}}
-									>
-										{error && (
-											<Box
-												sx={{
-													paddingTop: 2,
-													paddingBottom: 2,
-													bgcolor: 'background.paper',
-												}}
-											>
-												<Alert severity="error">{error}</Alert>
-											</Box>
-										)}
-										<TextField
-											style={{ minWidth: 300 }}
-											id="name-input"
-											name="name"
-											label="Name"
-											type="text"
-											value={taskValues.name}
-											onChange={handleInputChange}
-										/>
-									</Box>
-								</Grid>
-								<Grid item xs={12}>
-									<FormControl style={{ minWidth: 300 }}>
-										<InputLabel>Select current status</InputLabel>
-										<Select
-											value={taskValues?.currentStatus}
-											label="Task current status"
-											onChange={handleTaskStatusChange}
-										>
-											{statuses.map((taskStatus, index) => {
-												return (
-													<MenuItem key={index} value={taskStatus._id}>
-														{taskStatus.message}
-													</MenuItem>
-												);
-											})}
-										</Select>
-									</FormControl>
-								</Grid>
-								<Grid item xs={12}>
-									<TextField
-										multiline
-										minRows={4}
-										inputProps={{ maxLength: 120 }}
-										style={{ minWidth: 300 }}
-										id="description-input"
-										name="description"
-										label="Description"
-										type="text"
-										value={taskValues.description}
-										onChange={handleInputChange}
-									/>
-								</Grid>
-								<Grid item xs={12}>
-									<Typography>
-										Last updated on{' '}
-										{new Date(taskValues.updatedAt).toDateString()}
-									</Typography>
-								</Grid>
-								<Grid item xs={12}>
-									<Button
-										style={{ minWidth: 300 }}
-										variant="contained"
-										color="primary"
-										type="submit"
-										size="large"
-									>
-										Submit
-									</Button>
-								</Grid>
-								<Grid item xs={12}>
-									<Button
-										onClick={() => history.push('/home')}
-										variant="contained"
-										color="warning"
-										size="large"
-									>
-										Back to home page
-									</Button>
-								</Grid>
-							</Grid>
-						</form>
-					</Item>
-				</Grid>
-			</Box>
+								Submit
+							</Button>
+						</ContentStyle>
+						<ContentStyle>
+							<Button
+								onClick={() => history.push('/home')}
+								variant="contained"
+								color="warning"
+								size="large"
+							>
+								Back to home page
+							</Button>
+						</ContentStyle>
+					</form>
+				</SectionStyle>
+			</Grid>
 		</Container>
 	);
-};
-export default Edit;
+}
