@@ -79,6 +79,7 @@ const Login = () => {
 			login(loggedIn.token, loggedIn.user);
 			history.push('/home');
 		} catch (err) {
+			console.log(err);
 			console.log(err.response);
 			if (err.response) {
 				setError(err.response.data.msg);

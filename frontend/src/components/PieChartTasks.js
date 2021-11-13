@@ -38,19 +38,19 @@ export default function PieChartTasks(props) {
 	const [chartData, setChartData] = useState([]);
 
 	const calculateChartData = () => {
-		let idleCount = 0;
+		let initiatedCount = 0;
 		let ongoingCount = 0;
 		let completedCount = 0;
 		tasks.forEach((task) => {
 			if (task.currentStatus === '6186378bf0d3d3150277b8d3') {
-				idleCount++;
+				initiatedCount++;
 			} else if (task.currentStatus === '618637ddf0d3d3150277b8d5') {
 				ongoingCount++;
 			} else {
 				completedCount++;
 			}
 		});
-		setChartData([idleCount, ongoingCount, completedCount]);
+		setChartData([initiatedCount, ongoingCount, completedCount]);
 	};
 
 	useEffect(() => {
@@ -63,7 +63,7 @@ export default function PieChartTasks(props) {
 			theme.palette.info.main,
 			theme.palette.success.main,
 		],
-		labels: ['Idle task', 'Ongoing task', 'Completed'],
+		labels: ['Initiated', 'Ongoing', 'Completed'],
 		stroke: { colors: [theme.palette.background.paper] },
 		legend: { floating: true, horizontalAlign: 'center' },
 		dataLabels: { enabled: true, dropShadow: { enabled: false } },

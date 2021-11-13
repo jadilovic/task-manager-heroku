@@ -1,58 +1,16 @@
-import { Icon } from '@iconify/react';
-import { useState } from 'react';
-import searchFill from '@iconify/icons-eva/search-fill';
-// material
-import { styled, alpha } from '@mui/material/styles';
-import {
-	Box,
-	Input,
-	Slide,
-	Button,
-	InputAdornment,
-	ClickAwayListener,
-	IconButton,
-} from '@mui/material';
+import React from 'react';
+import Paper from '@mui/material/Paper';
+import InputBase from '@mui/material/InputBase';
+import Divider from '@mui/material/Divider';
+import { Button } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
 
-// ----------------------------------------------------------------------
-
-const APPBAR_MOBILE = 64;
-const APPBAR_DESKTOP = 92;
-
-const SearchbarStyle = styled('div')(({ theme }) => ({
-	top: 0,
-	left: 0,
-	zIndex: 99,
-	width: '100%',
-	display: 'flex',
-	position: 'absolute',
-	alignItems: 'center',
-	height: APPBAR_MOBILE,
-	backdropFilter: 'blur(6px)',
-	WebkitBackdropFilter: 'blur(6px)', // Fix on Mobile
-	padding: theme.spacing(0, 3),
-	backgroundColor: `${alpha(theme.palette.background.default, 0.72)}`,
-	[theme.breakpoints.up('md')]: {
-		height: APPBAR_DESKTOP,
-		padding: theme.spacing(0, 5),
-	},
-}));
-
-// ----------------------------------------------------------------------
-
-export default function Searchbar(props) {
-	const [isOpen, setOpen] = useState(false);
+export default function CustomizedInputBase(props) {
 	const { tasks, setFilteredTasks } = props;
-
-	const handleOpen = () => {
-		setOpen((prev) => !prev);
-	};
-
-	const handleClose = () => {
-		setOpen(false);
-	};
 
 	const handleSearch = (event) => {
 		let value = event.target.value.toLowerCase();
+		console.log('value : ', value);
 		let result = [];
 		console.log(value);
 		result = tasks.filter((task) => {
@@ -63,40 +21,33 @@ export default function Searchbar(props) {
 		setFilteredTasks(result);
 	};
 
-	return (
-		<ClickAwayListener onClickAway={handleClose}>
-			<div>
-				{!isOpen && (
-					<IconButton onClick={handleOpen}>
-						<Icon icon={searchFill} width={20} height={20} />
-					</IconButton>
-				)}
+	const handleClear = () => {
+		document.getElementById('searchValue').value = '';
+		setFilteredTasks(tasks);
+	};
 
-				<Slide direction="down" in={isOpen} mountOnEnter unmountOnExit>
-					<SearchbarStyle>
-						<Input
-							autoFocus
-							fullWidth
-							disableUnderline
-							placeholder="Search…"
-							onChange={(event) => handleSearch(event)}
-							startAdornment={
-								<InputAdornment position="start">
-									<Box
-										component={Icon}
-										icon={searchFill}
-										sx={{ color: 'text.disabled', width: 20, height: 20 }}
-									/>
-								</InputAdornment>
-							}
-							sx={{ mr: 1, fontWeight: 'fontWeightBold' }}
-						/>
-						<Button variant="contained" onClick={handleClose}>
-							Close
-						</Button>
-					</SearchbarStyle>
-				</Slide>
-			</div>
-		</ClickAwayListener>
+	return (
+		<Paper
+			component="form"
+			sx={{
+				p: '2px 4px',
+				display: 'flex',
+				alignItems: 'center',
+				width: '100%',
+			}}
+		>
+			<SearchIcon />
+			<Divider sx={{ height: 40, m: 0.5 }} orientation="vertical" />
+			<InputBase
+				id="searchValue"
+				sx={{ ml: 1, flex: 1, height: 50 }}
+				placeholder="Search tasks by name and description"
+				onChange={(event) => handleSearch(event)}
+			/>
+			<Divider sx={{ height: 40, m: 0.5 }} orientation="vertical" />
+			<Button variant="contained" onClick={() => handleClear()}>
+				Clear search
+			</Button>
+		</Paper>
 	);
 }

@@ -17,14 +17,13 @@ import {
 
 const SectionStyle = styled(Card)(({ theme }) => ({
 	width: '100%',
-	maxWidth: 464,
+	//	maxWidth: 464,
 	display: 'flex',
 	flexDirection: 'column',
 	justifyContent: 'center',
 }));
 
 const ContentStyle = styled('div')(({ theme }) => ({
-	maxWidth: 480,
 	margin: 'auto',
 	display: 'flex',
 	flexDirection: 'column',

@@ -5,8 +5,9 @@ import { Box, Grid, Container, Typography } from '@mui/material';
 import TaskCard from '../components/TaskCard';
 import CreateTask from '../components/CreateTask';
 import PieChartTasks from '../components/PieChartTasks';
-import TasksTable from '../components/TasksTable';
 import SearchTasks from '../components/SearchTasks';
+import Filter from '../components/Filter';
+import Sort from '../components/Sort';
 
 const Home = () => {
 	const mongoDB = useAxiosRequest();
@@ -45,25 +46,34 @@ const Home = () => {
 		);
 	}
 
+	console.log('filtered tasks : ', filteredTasks);
+
 	return (
 		<Page title="Home | Task Manager">
 			<Container maxWidth="xl">
 				<Grid container spacing={3} padding={2}>
-					<Grid item xs={12} sm={12} md={6} lg={6}>
+					<Grid item xs={12} md={6}>
 						<CreateTask statuses={statuses} refreshTasks={displayTasks} />
 					</Grid>
 
-					<Grid item xs={12} md={6} lg={6}>
+					<Grid item xs={12} md={6}>
 						<PieChartTasks tasks={tasks} />
 					</Grid>
 
-					<Grid item xs={12} sm={12} md={6} lg={6}>
+					<Grid item xs={12} md={12} lg={6}>
 						<SearchTasks tasks={tasks} setFilteredTasks={setFilteredTasks} />
+					</Grid>
+
+					<Grid item xs={12} md={12} lg={3}>
+						<Filter tasks={tasks} setFilteredTasks={setFilteredTasks} />
+					</Grid>
+					<Grid item xs={12} md={12} lg={3}>
+						<Sort tasks={tasks} setFilteredTasks={setFilteredTasks} />
 					</Grid>
 
 					{filteredTasks.map((task, index) => {
 						return (
-							<Grid key={index} item xs={12} sm={8} md={6} lg={4}>
+							<Grid key={index} item xs={12} md={6} lg={4}>
 								<TaskCard
 									task={task}
 									taskStatusObjects={statuses}
