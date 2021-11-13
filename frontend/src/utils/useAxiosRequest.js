@@ -1,9 +1,6 @@
 import axios from 'axios';
 import { getUserToken } from '../auth/Authentication';
 
-console.log('env ', process.env.REACT_APP_SERVER_URL);
-// url use by env auto selection
-// const herokuURL = 'https://task-manager-aki.herokuapp.com';
 const useAxiosRequest = () => {
 	const createUser = async (userCredentials) => {
 		return axios({
