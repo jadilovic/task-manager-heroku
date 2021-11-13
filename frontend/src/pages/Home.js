@@ -41,7 +41,7 @@ const Home = () => {
 	if (loading) {
 		return (
 			<Box sx={{ pb: 5 }}>
-				<Typography variant="h4">Loading...</Typography>
+				<Typography variant="h6">Loading...</Typography>
 			</Box>
 		);
 	}

@@ -26,7 +26,7 @@ const SectionStyle = styled(Card)(({ theme }) => ({
 	display: 'flex',
 	flexDirection: 'column',
 	justifyContent: 'center',
-	padding: theme.spacing(1),
+	padding: theme.spacing(2),
 }));
 
 const ContentStyle = styled('div')(({ theme }) => ({
@@ -96,22 +96,28 @@ export default function Edit() {
 	};
 
 	if (loading) {
-		return <Typography>Loading...</Typography>;
+		return (
+			<Box sx={{ pb: 5 }}>
+				<Typography variant="h6">Loading...</Typography>
+			</Box>
+		);
 	}
 	return (
 		<Container maxWidth="sm">
 			<Grid padding={2} item xs={12}>
 				<SectionStyle>
 					<form autoComplete="off" noValidate onSubmit={handleSubmit}>
-						<Stack spacing={1} alignItems="center">
-							<Chip
-								style={{ minWidth: 300, minHeight: 40, fontSize: 19 }}
-								size="medium"
-								icon={<EditIcon />}
-								label="Edit Selected Task"
-								color="default"
-							/>
-						</Stack>
+						<ContentStyle>
+							<Stack spacing={1} alignItems="center">
+								<Chip
+									style={{ minWidth: 300, minHeight: 40, fontSize: 19 }}
+									size="medium"
+									icon={<EditIcon />}
+									label="Edit Selected Task"
+									color="default"
+								/>
+							</Stack>
+						</ContentStyle>
 						<ContentStyle>
 							{error && (
 								<Box
