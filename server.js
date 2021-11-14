@@ -12,8 +12,8 @@ const cors = require('cors');
 // connect DB
 const connectDB = require('./db/connect');
 
-// //added for heroku
-// app.use(express.static(path.join(__dirname, 'frontend', 'build')));
+//added for heroku
+app.use(express.static(path.join(__dirname, 'frontend', 'build')));
 
 // routes
 const authRouter = require('./routes/auth');
@@ -45,28 +45,19 @@ app.use(errorHandlerMiddleware);
 const port = process.env.PORT || 5000;
 
 // added for heroku
-// if (process.env.NODE_ENV === 'production') {
-// 	app.get('/*', function (req, res) {
-// 		res.sendFile(
-// 			path.join(
-// 				`${process.env.REACT_APP_SERVER_URL}`,
-// 				'./frontend/build/index.html'
-// 			)
-// 		);
-// 	});
+app.get('/*', function (req, res) {
+	res.sendFile(
+		path.join(
+			`${process.env.REACT_APP_SERVER_URL}`,
+			'./frontend/build/index.html'
+		)
+	);
+});
 // } else {
 // 	app.get('*', (req, res) => {
 // 		res.sendFile(path.join(__dirname, 'frontend', 'build', 'index.html'));
 // 	});
 // }
-if (process.env.NODE_ENV === 'production') {
-	// Serve any static files
-	app.use(express.static(path.join(__dirname, 'frontend/build')));
-	// Handle React routing, return all requests to React app
-	app.get('*', function (req, res) {
-		res.sendFile(path.join(__dirname, 'frontend/build', 'index.html'));
-	});
-}
 
 const start = async () => {
 	try {
