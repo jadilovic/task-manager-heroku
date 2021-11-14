@@ -21,9 +21,6 @@ const notFoundMiddleware = require('./middleware/not-found');
 const errorHandlerMiddleware = require('./middleware/error-handler');
 const authenticateUser = require('./middleware/authentication');
 
-// added for heroku
-app.use(express.static(path.join(__dirname, 'frontend', 'build')));
-
 // extra packages
 app.set('trust proxy', 1);
 app.use(
@@ -45,9 +42,18 @@ app.use(errorHandlerMiddleware);
 const port = process.env.PORT || 5000;
 
 // added for heroku
-app.get('*', (req, res) => {
-	res.sendFile(path.join(__dirname, 'frontend', 'build', 'index.html'));
-});
+if (process.env.NODE_ENV === 'production') {
+	app.use(express.static('frontend/build'));
+	app.get('/*', function (req, res) {
+		res.sendFile(path.join(__dirname, './frontend/build/index.html'));
+	});
+} else {
+	//added for heroku
+	app.use(express.static(path.join(__dirname, 'frontend', 'build')));
+	app.get('*', (req, res) => {
+		res.sendFile(path.join(__dirname, 'frontend', 'build', 'index.html'));
+	});
+}
 
 const start = async () => {
 	try {
