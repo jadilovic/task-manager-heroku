@@ -13,7 +13,7 @@ const cors = require('cors');
 const connectDB = require('./db/connect');
 
 //added for heroku
-app.use(express.static(path.join(__dirname, 'frontend/build')));
+app.use(express.static(path.join(__dirname, '../frontend/build')));
 
 // routes
 const authRouter = require('./routes/auth');
@@ -49,7 +49,7 @@ app.get('/*', function (req, res) {
 	res.sendFile(
 		path.join(
 			`${process.env.REACT_APP_SERVER_URL}`,
-			'./frontend/build/index.html'
+			'../frontend/build/index.html'
 		)
 	);
 });
