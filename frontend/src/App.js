@@ -29,7 +29,7 @@ const App = () => {
 
 	return (
 		<ThemeProvider theme={theme}>
-			<HashRouter>
+			<Router>
 				<CssBaseline />
 				<ScrollToTop />
 				<GlobalStyles />
@@ -41,7 +41,7 @@ const App = () => {
 					<PrivateRoute component={Edit} path="/edit" exact />
 					<Route component={Error} path="/*" />
 				</Switch>
-			</HashRouter>
+			</Router>
 		</ThemeProvider>
 	);
 };
