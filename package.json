@@ -3,11 +3,6 @@
 	"version": "1.0.0",
 	"description": "",
 	"main": "index.js",
-	"root": "build/",
-	"clean_urls": false,
-	"routes": {
-		"/**": "index.html"
-	},
 	"dependencies": {
 		"@mui/styles": "^5.0.2",
 		"bcryptjs": "^2.4.3",

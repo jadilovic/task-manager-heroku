@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
@@ -14,7 +14,6 @@ import ScrollToTop from './utils/ScrollToTop';
 import GlobalStyles from './theme/GlobalStyles';
 
 const App = () => {
-	const hashHistory = useHistory();
 	const [darkMode, setDarkMode] = useState(true);
 	const theme = createTheme({
 		palette: {
@@ -30,7 +29,7 @@ const App = () => {
 
 	return (
 		<ThemeProvider theme={theme}>
-			<Router history={hashHistory}>
+			<HashRouter>
 				<CssBaseline />
 				<ScrollToTop />
 				<GlobalStyles />
@@ -42,7 +41,7 @@ const App = () => {
 					<PrivateRoute component={Edit} path="/edit" exact />
 					<Route component={Error} path="/*" />
 				</Switch>
-			</Router>
+			</HashRouter>
 		</ThemeProvider>
 	);
 };
