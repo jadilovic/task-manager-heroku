@@ -29,9 +29,6 @@
 	"devDependencies": {
 		"nodemon": "^2.0.14"
 	},
-	"scripts": {
-		"start": "nodemon server.js"
-	},
 	"engines": {
 		"node": "14.x"
 	},

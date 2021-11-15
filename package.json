@@ -29,6 +29,7 @@
 		"nodemon": "^2.0.14"
 	},
 	"scripts": {
+		"start": "nodemon backend/server.js",
 		"dev": "concurrently \"cd backend && npm start\" \"cd frontend && npm start\" ",
 		"heroku-postbuild": "cd frontend && npm install --only=dev && npm install && npm run build"
 	},
