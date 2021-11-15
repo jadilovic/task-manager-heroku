@@ -55,7 +55,7 @@ export default function PieChartTasks(props) {
 
 	useEffect(() => {
 		calculateChartData();
-	}, [tasks]);
+	}, [tasks]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	const chartOptions = merge(BaseOptionChart(), {
 		colors: [

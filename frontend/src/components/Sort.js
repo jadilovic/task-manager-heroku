@@ -67,7 +67,6 @@ export default function Sort(props) {
 			typeof sortingSelection === 'string'
 		) {
 			const sortedTasks = tasks.slice(0).sort((a, b) => {
-				console.log(new Date(b.updatedAt));
 				return new Date(a.updatedAt) - new Date(b.updatedAt);
 			});
 			setFilteredTasks(sortedTasks);
@@ -115,12 +114,12 @@ export default function Sort(props) {
 			>
 				<MenuItem onClick={() => handleClose('ascending')} disableRipple>
 					<ArrowUpwardIcon />
-					Ascending
+					Oldest Update First
 				</MenuItem>
 				<Divider sx={{ my: 0.5 }} />
 				<MenuItem onClick={() => handleClose('descending')} disableRipple>
 					<ArrowDownward />
-					Descending
+					Newest Update First
 				</MenuItem>
 			</StyledMenu>
 		</Paper>

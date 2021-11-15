@@ -10,9 +10,7 @@ export default function CustomizedInputBase(props) {
 
 	const handleSearch = (event) => {
 		let value = event.target.value.toLowerCase();
-		console.log('value : ', value);
 		let result = [];
-		console.log(value);
 		result = tasks.filter((task) => {
 			return (
 				task.name.search(value) !== -1 || task.description.search(value) !== -1

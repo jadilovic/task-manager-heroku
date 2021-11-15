@@ -91,8 +91,6 @@ const Signup = () => {
 		}
 	};
 
-	console.log(fieldErrors);
-
 	return (
 		<Container component="main" maxWidth="xs">
 			<CssBaseline />
@@ -104,7 +102,7 @@ const Signup = () => {
 					alignItems: 'center',
 				}}
 			>
-				<Avatar sx={{ m: 1, bgcolor: 'green' }}>
+				<Avatar sx={{ m: 1, bgcolor: '#648381' }}>
 					<PersonAdd />
 				</Avatar>
 				<Typography component="h1" variant="h5">

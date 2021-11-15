@@ -58,7 +58,6 @@ const Login = () => {
 	const handleSubmit = (event) => {
 		event.preventDefault();
 		const data = new FormData(event.currentTarget);
-		// eslint-disable-next-line no-console
 		const userData = {
 			email: data.get('email'),
 			password: data.get('password'),
@@ -73,7 +72,7 @@ const Login = () => {
 			history.push('/home');
 		} catch (err) {
 			console.log(err);
-			console.log(err.response);
+			console.log(err);
 			if (err.response) {
 				setError(err.response.data.msg);
 			} else {
@@ -108,7 +107,7 @@ const Login = () => {
 							alignItems: 'center',
 						}}
 					>
-						<Avatar sx={{ m: 1, bgcolor: 'darkgray' }}>
+						<Avatar sx={{ m: 1, bgcolor: '#FFBF46' }}>
 							<LockOutlinedIcon />
 						</Avatar>
 						<Typography component="h1" variant="h5">

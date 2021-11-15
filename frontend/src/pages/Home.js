@@ -33,10 +33,9 @@ const Home = () => {
 		setLoading(false);
 	};
 
-	// to explore why is this happening
 	useEffect(() => {
 		displayTasks();
-	}, []);
+	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 	if (loading) {
 		return (
@@ -45,8 +44,6 @@ const Home = () => {
 			</Box>
 		);
 	}
-
-	console.log('filtered tasks : ', filteredTasks);
 
 	return (
 		<Page title="Home | Task Manager">

@@ -42,6 +42,10 @@ export default function Edit() {
 	const mongoDB = useAxiosRequest();
 	const [taskValues, setTaskValues] = useState({
 		currentStatus: '',
+		description: '',
+		name: '',
+		updatedAt: '',
+		_id: '',
 	});
 	const [statuses, setStatuses] = useState([]);
 	const [loading, setLoading] = useState(true);

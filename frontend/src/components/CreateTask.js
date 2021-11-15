@@ -40,7 +40,7 @@ const CreateTask = (props) => {
 	// to explore why is this happening
 	useEffect(() => {
 		setNewTask({ ...newTask, statusId: statuses[0]._id });
-	}, []);
+	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 	const handleTaskNameChange = (event) => {
 		event.preventDefault();
