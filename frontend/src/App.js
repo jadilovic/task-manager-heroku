@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
@@ -13,6 +14,7 @@ import ScrollToTop from './utils/ScrollToTop';
 import GlobalStyles from './theme/GlobalStyles';
 
 const App = () => {
+	const hashHistory = useHistory();
 	const [darkMode, setDarkMode] = useState(true);
 	const theme = createTheme({
 		palette: {
@@ -28,7 +30,7 @@ const App = () => {
 
 	return (
 		<ThemeProvider theme={theme}>
-			<Router>
+			<Router history={hashHistory}>
 				<CssBaseline />
 				<ScrollToTop />
 				<GlobalStyles />
