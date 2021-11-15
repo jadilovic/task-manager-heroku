@@ -13,9 +13,7 @@ const cors = require('cors');
 const connectDB = require('./db/connect');
 
 //added for heroku
-if (process.env.NODE_ENV === 'production') {
-	app.use(express.static(path.join(__dirname, 'frontend/build')));
-}
+app.use(express.static(path.join(__dirname, 'frontend/build')));
 
 // routes
 const authRouter = require('./routes/auth');
@@ -48,7 +46,6 @@ const port = process.env.PORT || 5000;
 
 // added for heroku
 app.get('/*', function (req, res) {
-	console.log('using get');
 	res.sendFile(
 		path.join(
 			`${process.env.REACT_APP_SERVER_URL}`,
