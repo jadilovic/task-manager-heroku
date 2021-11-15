@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { HashRouter } from 'react-router-dom';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as HashRouter, Switch, Route } from 'react-router-dom';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Home from './pages/Home';
@@ -29,7 +28,7 @@ const App = () => {
 
 	return (
 		<ThemeProvider theme={theme}>
-			<Router>
+			<HashRouter>
 				<CssBaseline />
 				<ScrollToTop />
 				<GlobalStyles />
@@ -41,7 +40,7 @@ const App = () => {
 					<PrivateRoute component={Edit} path="/edit" exact />
 					<Route component={Error} path="/*" />
 				</Switch>
-			</Router>
+			</HashRouter>
 		</ThemeProvider>
 	);
 };
