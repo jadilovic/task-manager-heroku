@@ -46,6 +46,7 @@ const port = process.env.PORT || 5000;
 
 // added for heroku
 app.get('/*', function (req, res) {
+	console.log('using get');
 	res.sendFile(
 		path.join(
 			`${process.env.REACT_APP_SERVER_URL}`,
