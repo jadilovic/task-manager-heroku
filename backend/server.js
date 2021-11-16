@@ -40,25 +40,23 @@ app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/tasks', authenticateUser, tasksRouter);
 
 // added for heroku
-app.get('/*', function (req, res) {
-	console.log('test test test');
-	res.sendFile(
-		path.join(
-			`${process.env.REACT_APP_SERVER_URL}`,
-			'../frontend/build/index.html'
-		)
-	);
+app.get('*', (req, res) => {
+	res.sendFile(path.join(__dirname, 'frontend', 'build', 'index.html'));
 });
+// app.get('/*', function (req, res) {
+// 	console.log('test test test');
+// 	res.sendFile(
+// 		path.join(
+// 			`${process.env.REACT_APP_SERVER_URL}`,
+// 			'../frontend/build/index.html'
+// 		)
+// 	);
+// });
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
 
 const port = process.env.PORT || 5000;
-
-// 	app.get('*', (req, res) => {
-// 		res.sendFile(path.join(__dirname, 'frontend', 'build', 'index.html'));
-// 	});
-// }
 
 const start = async () => {
 	try {
