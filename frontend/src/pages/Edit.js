@@ -99,6 +99,10 @@ export default function Edit() {
 		});
 	};
 
+	const getStatusColor = (statusId) => {
+		return statuses.find((status) => status._id === statusId);
+	};
+
 	if (loading) {
 		return (
 			<Box sx={{ pb: 5 }}>
@@ -149,13 +153,25 @@ export default function Edit() {
 							<FormControl style={{ minWidth: 300 }}>
 								<InputLabel>Select current status</InputLabel>
 								<Select
+									sx={{
+										backgroundColor: `${
+											getStatusColor(taskValues?.currentStatus)
+												?.colorNotification
+										}.main`,
+									}}
 									value={taskValues?.currentStatus}
 									label="Task current status"
 									onChange={handleTaskStatusChange}
 								>
 									{statuses.map((taskStatus, index) => {
 										return (
-											<MenuItem key={index} value={taskStatus._id}>
+											<MenuItem
+												sx={{
+													backgroundColor: `${taskStatus.colorNotification}.main`,
+												}}
+												key={index}
+												value={taskStatus._id}
+											>
 												{taskStatus.message}
 											</MenuItem>
 										);
