@@ -49,7 +49,7 @@ app.get('/*', function (req, res) {
 	res.sendFile(
 		path.join(
 			`${process.env.REACT_APP_SERVER_URL}`,
-			'../frontend/build/index.html'
+			'../app/frontend/build/index.html'
 		)
 	);
 });
