@@ -66,7 +66,10 @@ export default function PieChartTasks(props) {
 		labels: ['Initiated', 'Ongoing', 'Completed'],
 		stroke: { colors: [theme.palette.background.paper] },
 		legend: { floating: true, horizontalAlign: 'center' },
-		dataLabels: { enabled: true, dropShadow: { enabled: false } },
+		dataLabels: {
+			enabled: true,
+			dropShadow: { enabled: false },
+		},
 		tooltip: {
 			fillSeriesColor: false,
 			y: {

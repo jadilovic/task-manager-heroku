@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import useAxiosRequest from '../utils/useAxiosRequest';
 import Page from '../components/Page';
-import { Box, Grid, Container, Typography, Paper } from '@mui/material';
+import { Grid, Container, Typography, Paper } from '@mui/material';
 import TaskCard from '../components/TaskCard';
 import CreateTask from '../components/CreateTask';
 import PieChartTasks from '../components/PieChartTasks';
 import SearchTasks from '../components/SearchTasks';
 import Filter from '../components/Filter';
 import Sort from '../components/Sort';
+import LoadingPage from '../components/LoadingPage';
 
 const Home = () => {
 	const mongoDB = useAxiosRequest();
@@ -35,15 +36,10 @@ const Home = () => {
 
 	useEffect(() => {
 		displayTasks();
-	}, []);
-	// eslint-disable-line react-hooks/exhaustive-deps
+	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 	if (loading) {
-		return (
-			<Box sx={{ pb: 5 }}>
-				<Typography variant="h6">Loading...</Typography>
-			</Box>
-		);
+		return <LoadingPage />;
 	}
 
 	return (

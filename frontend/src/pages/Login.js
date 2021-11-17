@@ -15,6 +15,8 @@ import { styled } from '@mui/material/styles';
 import { Card, Stack } from '@mui/material';
 import MHidden from '../components/MHidden';
 import back from '../images/back.jpg';
+import { Icon } from '@mui/icons-material';
+import HomeIcon from '@mui/icons-material/Home';
 
 const RootStyle = styled(Page)(({ theme }) => ({
 	[theme.breakpoints.up('md')]: {
@@ -96,7 +98,7 @@ const Login = () => {
 				<ContentStyle>
 					<Stack sx={{ mb: 2 }}>
 						<Typography sx={{ color: 'text.secondary' }}>
-							Login to your task manager.
+							<HomeIcon />
 						</Typography>
 					</Stack>
 					<Box

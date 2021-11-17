@@ -114,12 +114,12 @@ export default function Sort(props) {
 			>
 				<MenuItem onClick={() => handleClose('ascending')} disableRipple>
 					<ArrowUpwardIcon />
-					Oldest Update First
+					Oldest First
 				</MenuItem>
 				<Divider sx={{ my: 0.5 }} />
 				<MenuItem onClick={() => handleClose('descending')} disableRipple>
 					<ArrowDownward />
-					Newest Update First
+					Newest First
 				</MenuItem>
 			</StyledMenu>
 		</Paper>

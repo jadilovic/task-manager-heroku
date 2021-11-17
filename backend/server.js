@@ -38,20 +38,11 @@ app.use(cors());
 // routes
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/tasks', authenticateUser, tasksRouter);
-console.log(__dirname);
+
 // added for heroku
 app.get('/*', (req, res) => {
 	res.sendFile(path.join(__dirname, '../frontend/build/index.html'));
 });
-// app.get('/*', function (req, res) {
-// 	console.log('test test test');
-// 	res.sendFile(
-// 		path.join(
-// 			`${process.env.REACT_APP_SERVER_URL}`,
-// 			'../frontend/build/index.html'
-// 		)
-// 	);
-// });
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);

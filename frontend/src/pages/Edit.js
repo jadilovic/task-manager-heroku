@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import useAxiosRequest from '../utils/useAxiosRequest';
 import { styled } from '@mui/material/styles';
+import { withStyles } from '@mui/styles';
 import EditIcon from '@mui/icons-material/Edit';
 // material
 import {
@@ -20,6 +21,8 @@ import {
 	MenuItem,
 	Alert,
 } from '@mui/material';
+import LoadingPage from '../components/LoadingPage';
+
 // ----------------------------------------------------------------------
 const SectionStyle = styled(Card)(({ theme }) => ({
 	width: '100%',
@@ -50,6 +53,7 @@ export default function Edit() {
 	const [statuses, setStatuses] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState('');
+	const [selectColor, setSelectColor] = useState('warning');
 
 	const getTaskObject = async (taskId) => {
 		try {
@@ -103,12 +107,27 @@ export default function Edit() {
 		return statuses.find((status) => status._id === statusId);
 	};
 
+	const getBackgroundColor = () => {
+		if (selectColor === 'warning') {
+			return '#ff9800';
+		} else if (selectColor === 'info') {
+			return '#03a9f4';
+		} else {
+			return '#4caf50';
+		}
+	};
+
+	const MyMenuItem = withStyles({
+		root: {
+			'&:hover': {
+				backgroundColor: `${getBackgroundColor()}`,
+				// color: 'black',
+			},
+		},
+	})(MenuItem);
+
 	if (loading) {
-		return (
-			<Box sx={{ pb: 5 }}>
-				<Typography variant="h6">Loading...</Typography>
-			</Box>
-		);
+		return <LoadingPage />;
 	}
 	return (
 		<Container maxWidth="sm">
@@ -165,15 +184,21 @@ export default function Edit() {
 								>
 									{statuses.map((taskStatus, index) => {
 										return (
-											<MenuItem
+											<MyMenuItem
+												onMouseOver={() =>
+													setSelectColor(
+														(selectColor) =>
+															(selectColor = `${taskStatus.colorNotification}`)
+													)
+												}
 												sx={{
-													backgroundColor: `${taskStatus.colorNotification}.main`,
+													backgroundColor: `${taskStatus.colorNotification}.dark`,
 												}}
 												key={index}
 												value={taskStatus._id}
 											>
 												{taskStatus.message}
-											</MenuItem>
+											</MyMenuItem>
 										);
 									})}
 								</Select>
