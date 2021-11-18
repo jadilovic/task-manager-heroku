@@ -100,9 +100,19 @@ const CreateTask = (props) => {
 		}
 	};
 
-	const getColor = () => {
+	const getAvatarColor = () => {
 		const color = colors.find((color) => color.name === newTask.avatarColor);
 		return `${color.hex}`;
+	};
+
+	const getStatusColor = () => {
+		if (newTask.statusId === '6186378bf0d3d3150277b8d3') {
+			return '#ff9800';
+		} else if (newTask.statusId === '618637ddf0d3d3150277b8d5') {
+			return '#03a9f4';
+		} else {
+			return '#4caf50';
+		}
 	};
 
 	if (loading) {
@@ -138,6 +148,9 @@ const CreateTask = (props) => {
 						<FormControl fullWidth style={{ minWidth: 300 }}>
 							<InputLabel>Select task status</InputLabel>
 							<Select
+								sx={{
+									backgroundColor: getStatusColor(),
+								}}
 								required
 								value={newTask.statusId}
 								name="statusId"
@@ -146,7 +159,13 @@ const CreateTask = (props) => {
 							>
 								{statuses.map((taskStatus, index) => {
 									return (
-										<MenuItem key={index} value={taskStatus._id}>
+										<MenuItem
+											sx={{
+												backgroundColor: `${taskStatus.colorNotification}.main`,
+											}}
+											key={index}
+											value={taskStatus._id}
+										>
 											{taskStatus.message}
 										</MenuItem>
 									);
@@ -187,7 +206,7 @@ const CreateTask = (props) => {
 						<FormControl fullWidth style={{ minWidth: 300 }}>
 							<InputLabel>Select avatar color</InputLabel>
 							<Select
-								sx={{ backgroundColor: getColor(), color: 'white' }}
+								sx={{ backgroundColor: getAvatarColor(), color: 'white' }}
 								required
 								value={newTask.avatarColor}
 								name="avatarColor"
