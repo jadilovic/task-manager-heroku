@@ -51,16 +51,15 @@ const Home = () => {
 					</Grid>
 					<Grid item xs={12} md={6}>
 						<PieChartTasks tasks={tasks} />
+						<Grid paddingTop={2} item xs={12} md={12} lg={12}>
+							<Filter tasks={tasks} setFilteredTasks={setFilteredTasks} />
+						</Grid>
+						<Grid paddingTop={2} item xs={12} md={12} lg={12}>
+							<Sort tasks={tasks} setFilteredTasks={setFilteredTasks} />
+						</Grid>
 					</Grid>
 
-					<Grid item xs={12} md={12} lg={3}>
-						<Filter tasks={tasks} setFilteredTasks={setFilteredTasks} />
-					</Grid>
-					<Grid item xs={12} md={12} lg={3}>
-						<Sort tasks={tasks} setFilteredTasks={setFilteredTasks} />
-					</Grid>
-
-					<Grid item xs={12} md={12} lg={6}>
+					<Grid item xs={12} md={12} lg={12}>
 						<SearchTasks tasks={tasks} setFilteredTasks={setFilteredTasks} />
 					</Grid>
 

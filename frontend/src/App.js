@@ -11,7 +11,6 @@ import Navbar from './components/Navbar';
 import CssBaseline from '@mui/material/CssBaseline';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import ScrollToTop from './utils/ScrollToTop';
-import GlobalStyles from './theme/GlobalStyles';
 
 const App = () => {
 	const [darkMode, setDarkMode] = useState(true);
@@ -29,11 +28,9 @@ const App = () => {
 
 	return (
 		<ThemeProvider theme={theme}>
-			{/* <HashRouter> */}
 			<Router>
 				<CssBaseline />
 				<ScrollToTop />
-				<GlobalStyles />
 				<Navbar setDarkMode={setDarkMode} darkMode={darkMode} />
 				<Switch>
 					<Route component={Login} path="/" exact />
@@ -43,7 +40,6 @@ const App = () => {
 					<Route component={Error} path="/*" />
 				</Switch>
 			</Router>
-			{/* </HashRouter> */}
 		</ThemeProvider>
 	);
 };

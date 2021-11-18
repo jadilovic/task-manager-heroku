@@ -24,7 +24,11 @@ const TaskSchema = mongoose.Schema(
 		},
 		avatarColor: {
 			type: String,
-			default: '#00FF00',
+			required: [true, 'Please enter avatar color'],
+		},
+		avatarIcon: {
+			type: String,
+			required: [true, 'Please enter avatar icon name'],
 		},
 		createdBy: {
 			type: mongoose.Types.ObjectId,
@@ -35,14 +39,14 @@ const TaskSchema = mongoose.Schema(
 	{ timestamps: true }
 );
 
-TaskSchema.pre('save', function (next) {
-	let letters = '0123456789ABCDEF';
-	let color = '#';
-	for (var i = 0; i < 6; i++) {
-		color += letters[Math.floor(Math.random() * 16)];
-	}
-	this.avatarColor = color;
-	next();
-});
+// TaskSchema.pre('save', function (next) {
+// 	let letters = '0123456789ABCDEF';
+// 	let color = '#';
+// 	for (var i = 0; i < 6; i++) {
+// 		color += letters[Math.floor(Math.random() * 16)];
+// 	}
+// 	this.avatarColor = color;
+// 	next();
+// });
 
 module.exports = mongoose.model('Task', TaskSchema);

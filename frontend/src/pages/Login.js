@@ -96,11 +96,6 @@ const Login = () => {
 			</MHidden>
 			<Container maxWidth="sm">
 				<ContentStyle>
-					<Stack sx={{ mb: 2 }}>
-						<Typography sx={{ color: 'text.secondary' }}>
-							<HomeIcon />
-						</Typography>
-					</Stack>
 					<Box
 						sx={{
 							marginTop: 2,

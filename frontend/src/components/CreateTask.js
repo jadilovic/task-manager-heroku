@@ -7,13 +7,16 @@ import {
 	CardContent,
 	TextField,
 	Button,
-	CardActions,
 	Alert,
 	FormControl,
 	InputLabel,
 	Select,
 	MenuItem,
+	Typography,
 } from '@mui/material';
+import colors from '../data/colors';
+import icons from '../data/icons';
+import LoadingPage from '../components/LoadingPage';
 
 const SectionStyle = styled(Card)(({ theme }) => ({
 	width: '100%',
@@ -21,25 +24,38 @@ const SectionStyle = styled(Card)(({ theme }) => ({
 	display: 'flex',
 	flexDirection: 'column',
 	justifyContent: 'center',
+	paddingTop: 3,
 }));
 
 const ContentStyle = styled('div')(({ theme }) => ({
 	margin: 'auto',
 	display: 'flex',
 	flexDirection: 'column',
-	justifyContent: 'center',
+	justifyItems: 'center',
 	padding: theme.spacing(2, 0),
 }));
 
 const CreateTask = (props) => {
 	const mongoDB = useAxiosRequest();
-	const [newTask, setNewTask] = useState({ name: '', statusId: '' });
+	const [newTask, setNewTask] = useState({
+		name: '',
+		statusId: '',
+		avatarIcon: '',
+		avatarColor: '',
+	});
 	const [error, setError] = useState('');
+	const [loading, setLoading] = useState(true);
 	const { statuses, refreshTasks } = props;
 
 	// to explore why is this happening
 	useEffect(() => {
-		setNewTask({ ...newTask, statusId: statuses[0]._id });
+		setNewTask({
+			...newTask,
+			statusId: statuses[0]._id,
+			avatarIcon: icons[0].name,
+			avatarColor: colors[4].name,
+		});
+		setLoading(false);
 	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 	const handleTaskNameChange = (event) => {
@@ -47,17 +63,22 @@ const CreateTask = (props) => {
 		setNewTask({ ...newTask, name: event.target.value });
 	};
 
-	const handleTaskStatusChange = (event) => {
+	const handleSelectChange = (event) => {
 		setNewTask({
 			...newTask,
-			statusId: event.target.value,
+			[event.target.name]: event.target.value,
 		});
 	};
 
 	const submitData = async (newTask) => {
 		try {
 			await mongoDB.createTask(newTask);
-			setNewTask({ name: '', statusId: statuses[0]._id });
+			setNewTask({
+				name: '',
+				statusId: statuses[0]._id,
+				avatarIcon: icons[0].name,
+				avatarColor: colors[4].name,
+			});
 			refreshTasks();
 		} catch (err) {
 			console.log(err.response);
@@ -78,6 +99,16 @@ const CreateTask = (props) => {
 			submitData(newTask);
 		}
 	};
+
+	const getColor = () => {
+		const color = colors.find((color) => color.name === newTask.avatarColor);
+		return `${color.hex}`;
+	};
+
+	if (loading) {
+		return <LoadingPage />;
+	}
+
 	return (
 		<SectionStyle>
 			<form noValidate autoComplete="off" onSubmit={handleSubmit}>
@@ -109,8 +140,9 @@ const CreateTask = (props) => {
 							<Select
 								required
 								value={newTask.statusId}
+								name="statusId"
 								label="Task current status"
-								onChange={handleTaskStatusChange}
+								onChange={handleSelectChange}
 							>
 								{statuses.map((taskStatus, index) => {
 									return (
@@ -122,12 +154,66 @@ const CreateTask = (props) => {
 							</Select>
 						</FormControl>
 					</ContentStyle>
+					<ContentStyle>
+						<FormControl fullWidth style={{ minWidth: 300 }}>
+							<InputLabel>Select avatar icon</InputLabel>
+							<Select
+								required
+								value={newTask.avatarIcon}
+								name="avatarIcon"
+								label="Avatar current icon"
+								onChange={handleSelectChange}
+							>
+								{icons.map((icon, index) => {
+									return (
+										<MenuItem key={index} value={icon.name}>
+											<div
+												style={{
+													display: 'flex',
+													alignItems: 'center',
+													flexWrap: 'wrap',
+												}}
+											>
+												{icon.icon}
+												<div style={{ marginLeft: 20 }}>{icon.name}</div>
+											</div>
+										</MenuItem>
+									);
+								})}
+							</Select>
+						</FormControl>
+					</ContentStyle>
+					<ContentStyle>
+						<FormControl fullWidth style={{ minWidth: 300 }}>
+							<InputLabel>Select avatar color</InputLabel>
+							<Select
+								sx={{ backgroundColor: getColor(), color: 'white' }}
+								required
+								value={newTask.avatarColor}
+								name="avatarColor"
+								label="Avatar current color"
+								onChange={handleSelectChange}
+							>
+								{colors.map((color, index) => {
+									return (
+										<MenuItem
+											style={{ backgroundColor: color.hex, color: 'white' }}
+											key={index}
+											value={color.name}
+										>
+											{color.name}
+										</MenuItem>
+									);
+								})}
+							</Select>
+						</FormControl>
+					</ContentStyle>
+					<SectionStyle>
+						<Button variant="contained" color="primary" type="submit">
+							create task
+						</Button>
+					</SectionStyle>
 				</CardContent>
-				<CardActions style={{ justifyContent: 'center' }}>
-					<Button variant="contained" color="primary" type="submit">
-						create task
-					</Button>
-				</CardActions>
 			</form>
 		</SectionStyle>
 	);

@@ -5,7 +5,7 @@ const TaskStatus = require('../models/TaskStatus');
 
 const getAllTasks = async (req, res) => {
 	const tasks = await Task.find({ createdBy: req.user.userId }).sort({
-		updatedAt: -1,
+		createdAt: -1,
 	});
 	res.status(StatusCodes.OK).json({ tasks, length: tasks.length });
 };

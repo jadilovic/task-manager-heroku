@@ -11,7 +11,7 @@ import BaseOptionChart from '../utils/BaseOptionChart';
 
 // ----------------------------------------------------------------------
 
-const CHART_HEIGHT = 253;
+const CHART_HEIGHT = 295;
 const LEGEND_HEIGHT = 50;
 
 const ChartWrapperStyle = styled('div')(({ theme }) => ({
@@ -67,6 +67,7 @@ export default function PieChartTasks(props) {
 		stroke: { colors: [theme.palette.background.paper] },
 		legend: { floating: true, horizontalAlign: 'center' },
 		dataLabels: {
+			position: 'bottom',
 			enabled: true,
 			dropShadow: { enabled: false },
 		},
@@ -91,7 +92,7 @@ export default function PieChartTasks(props) {
 					type="pie"
 					series={chartData}
 					options={chartOptions}
-					height={220}
+					height={260}
 				/>
 			</ChartWrapperStyle>
 		</Card>

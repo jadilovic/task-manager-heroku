@@ -107,6 +107,7 @@ export default function Edit() {
 		return statuses.find((status) => status._id === statusId);
 	};
 
+	// -----------------------------------------------
 	const getBackgroundColor = () => {
 		if (selectColor === 'warning') {
 			return '#ff9800';
@@ -125,6 +126,8 @@ export default function Edit() {
 			},
 		},
 	})(MenuItem);
+
+	// -------------------------------------------------
 
 	if (loading) {
 		return <LoadingPage />;
@@ -192,7 +195,7 @@ export default function Edit() {
 													)
 												}
 												sx={{
-													backgroundColor: `${taskStatus.colorNotification}.dark`,
+													backgroundColor: `${taskStatus.colorNotification}.main`,
 												}}
 												key={index}
 												value={taskStatus._id}

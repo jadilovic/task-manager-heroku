@@ -20,6 +20,8 @@ import useAxiosRequest from '../utils/useAxiosRequest';
 import Stack from '@mui/material/Stack';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import colors from '../data/colors';
+import icons from '../data/icons';
 
 const Alert = forwardRef(function Alert(props, ref) {
 	return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -60,6 +62,7 @@ const TaskCard = (props) => {
 		currentStatus,
 		description,
 		avatarColor,
+		avatarIcon,
 		_id,
 		updatedAt,
 	} = task;
@@ -91,12 +94,22 @@ const TaskCard = (props) => {
 		setOpenSnackbar(false);
 	};
 
+	const getColor = () => {
+		const color = colors.find((color) => color.name === avatarColor);
+		return `${color.hex}`;
+	};
+
+	const getIcon = () => {
+		const icon = icons.find((icon) => icon.name === avatarIcon);
+		return icon.icon;
+	};
+
 	return (
 		<ContentStyle>
 			<CardHeader
 				avatar={
-					<Avatar sx={{ bgcolor: avatarColor }} aria-label="recipe">
-						{name.substring(0, 3)}
+					<Avatar sx={{ bgcolor: getColor() }} aria-label="recipe">
+						{getIcon()}
 					</Avatar>
 				}
 				action={
