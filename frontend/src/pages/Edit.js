@@ -15,7 +15,6 @@ import {
 	Typography,
 	Chip,
 	Card,
-	InputLabel,
 	Select,
 	MenuItem,
 	Alert,
@@ -89,7 +88,6 @@ export default function Edit() {
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
-		console.log(taskValues);
 		try {
 			const editedTask = await mongoDB.updateTask(taskValues);
 			console.log('edited task values : ', editedTask);
@@ -101,7 +99,6 @@ export default function Edit() {
 	};
 
 	const handleSelectChange = (event) => {
-		console.log('event task', event.target);
 		setTaskValues({
 			...taskValues,
 			[event.target.name]: event.target.value,
@@ -172,7 +169,6 @@ export default function Edit() {
 							)}
 							<TextField
 								fullWidth
-								style={{ minWidth: 300 }}
 								id="name-input"
 								name="name"
 								label="Name"
@@ -220,7 +216,6 @@ export default function Edit() {
 								multiline
 								minRows={4}
 								inputProps={{ maxLength: 120 }}
-								style={{ minWidth: 300 }}
 								id="description-input"
 								name="description"
 								label="Description"

@@ -38,7 +38,6 @@ const createTask = async (req, res) => {
 };
 
 const updateTask = async (req, res) => {
-	console.log(req.body);
 	const {
 		body: { name },
 		user: { userId },

@@ -12,7 +12,6 @@ import {
 	InputLabel,
 	Select,
 	MenuItem,
-	Typography,
 } from '@mui/material';
 import colors from '../data/colors';
 import icons from '../data/icons';

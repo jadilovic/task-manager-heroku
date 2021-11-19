@@ -12,11 +12,9 @@ import Container from '@mui/material/Container';
 import { login } from '../auth/Authentication';
 import Page from '../components/Page';
 import { styled } from '@mui/material/styles';
-import { Card, Stack } from '@mui/material';
+import { Card } from '@mui/material';
 import MHidden from '../components/MHidden';
 import back from '../images/back.jpg';
-import { Icon } from '@mui/icons-material';
-import HomeIcon from '@mui/icons-material/Home';
 
 const RootStyle = styled(Page)(({ theme }) => ({
 	[theme.breakpoints.up('md')]: {
