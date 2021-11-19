@@ -15,13 +15,14 @@ import {
 	Typography,
 	Chip,
 	Card,
-	FormControl,
 	InputLabel,
 	Select,
 	MenuItem,
 	Alert,
 } from '@mui/material';
 import LoadingPage from '../components/LoadingPage';
+import colors from '../data/colors';
+import icons from '../data/icons';
 
 // ----------------------------------------------------------------------
 const SectionStyle = styled(Card)(({ theme }) => ({
@@ -49,6 +50,8 @@ export default function Edit() {
 		name: '',
 		updatedAt: '',
 		_id: '',
+		avatarIcon: '',
+		avatarColor: '',
 	});
 	const [statuses, setStatuses] = useState([]);
 	const [loading, setLoading] = useState(true);
@@ -59,6 +62,7 @@ export default function Edit() {
 		try {
 			const editingTaskObject = await mongoDB.getTask(taskId);
 			setTaskValues(editingTaskObject.task);
+			getTaskStatuses();
 		} catch (error) {
 			console.log('get task object error: ', error);
 		}
@@ -73,7 +77,6 @@ export default function Edit() {
 	useEffect(() => {
 		const taskId = localStorage.getItem('currentTaskId');
 		getTaskObject(taskId);
-		getTaskStatuses();
 	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 	const handleInputChange = (e) => {
@@ -86,6 +89,7 @@ export default function Edit() {
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
+		console.log(taskValues);
 		try {
 			const editedTask = await mongoDB.updateTask(taskValues);
 			console.log('edited task values : ', editedTask);
@@ -96,10 +100,11 @@ export default function Edit() {
 		}
 	};
 
-	const handleTaskStatusChange = (event) => {
+	const handleSelectChange = (event) => {
+		console.log('event task', event.target);
 		setTaskValues({
 			...taskValues,
-			currentStatus: event.target.value,
+			[event.target.name]: event.target.value,
 		});
 	};
 
@@ -128,6 +133,11 @@ export default function Edit() {
 	})(MenuItem);
 
 	// -------------------------------------------------
+
+	const getAvatarColor = () => {
+		const color = colors.find((color) => color.name === taskValues.avatarColor);
+		return `${color.hex}`;
+	};
 
 	if (loading) {
 		return <LoadingPage />;
@@ -172,40 +182,37 @@ export default function Edit() {
 							/>
 						</ContentStyle>
 						<ContentStyle>
-							<FormControl style={{ minWidth: 300 }}>
-								<InputLabel>Select current status</InputLabel>
-								<Select
-									sx={{
-										backgroundColor: `${
-											getStatusColor(taskValues?.currentStatus)
-												?.colorNotification
-										}.main`,
-									}}
-									value={taskValues?.currentStatus}
-									label="Task current status"
-									onChange={handleTaskStatusChange}
-								>
-									{statuses.map((taskStatus, index) => {
-										return (
-											<MyMenuItem
-												onMouseOver={() =>
-													setSelectColor(
-														(selectColor) =>
-															(selectColor = `${taskStatus.colorNotification}`)
-													)
-												}
-												sx={{
-													backgroundColor: `${taskStatus.colorNotification}.main`,
-												}}
-												key={index}
-												value={taskStatus._id}
-											>
-												{taskStatus.message}
-											</MyMenuItem>
-										);
-									})}
-								</Select>
-							</FormControl>
+							<Select
+								sx={{
+									backgroundColor: `${
+										getStatusColor(taskValues?.currentStatus)?.colorNotification
+									}.main`,
+								}}
+								name="currentStatus"
+								value={taskValues?.currentStatus}
+								label="Task current status"
+								onChange={handleSelectChange}
+							>
+								{statuses.map((taskStatus, index) => {
+									return (
+										<MyMenuItem
+											onMouseOver={() =>
+												setSelectColor(
+													(selectColor) =>
+														(selectColor = `${taskStatus.colorNotification}`)
+												)
+											}
+											sx={{
+												backgroundColor: `${taskStatus.colorNotification}.main`,
+											}}
+											key={index}
+											value={taskStatus._id}
+										>
+											{taskStatus.message}
+										</MyMenuItem>
+									);
+								})}
+							</Select>
 						</ContentStyle>
 						<ContentStyle>
 							<TextField
@@ -223,13 +230,59 @@ export default function Edit() {
 							/>
 						</ContentStyle>
 						<ContentStyle>
+							<Select
+								required
+								value={taskValues.avatarIcon}
+								name="avatarIcon"
+								onChange={handleSelectChange}
+							>
+								{icons.map((icon, index) => {
+									return (
+										<MenuItem key={index} value={icon.name}>
+											<div
+												style={{
+													display: 'flex',
+													alignItems: 'center',
+													flexWrap: 'wrap',
+												}}
+											>
+												{icon.icon}
+												<div style={{ marginLeft: 20 }}>{icon.name}</div>
+											</div>
+										</MenuItem>
+									);
+								})}
+							</Select>
+						</ContentStyle>
+						<ContentStyle>
+							<Select
+								sx={{ backgroundColor: getAvatarColor(), color: 'white' }}
+								required
+								value={taskValues.avatarColor}
+								name="avatarColor"
+								label="Avatar current color"
+								onChange={handleSelectChange}
+							>
+								{colors.map((color, index) => {
+									return (
+										<MenuItem
+											style={{ backgroundColor: color.hex, color: 'white' }}
+											key={index}
+											value={color.name}
+										>
+											{color.name}
+										</MenuItem>
+									);
+								})}
+							</Select>
+						</ContentStyle>
+						<ContentStyle>
 							<Typography>
 								Last updated on {new Date(taskValues.updatedAt).toDateString()}
 							</Typography>
 						</ContentStyle>
 						<ContentStyle>
 							<Button
-								style={{ minWidth: 300 }}
 								variant="contained"
 								color="primary"
 								type="submit"

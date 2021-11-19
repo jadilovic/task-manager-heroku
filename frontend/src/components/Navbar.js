@@ -10,6 +10,7 @@ import UserMenu from './UserMenu';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import IconButton from '@mui/material/IconButton';
+import Link from '@mui/material/Link';
 
 const Navbar = (props) => {
 	const { setDarkMode, darkMode } = props;
@@ -43,7 +44,9 @@ const Navbar = (props) => {
 						<AddTaskIcon />
 					</Typography>
 					<Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-						MERN Task Manager
+						<Link underline="none" href="/home" color="white">
+							MERN Task Manager
+						</Link>
 					</Typography>
 					<Typography>
 						<IconButton

@@ -38,8 +38,9 @@ const createTask = async (req, res) => {
 };
 
 const updateTask = async (req, res) => {
+	console.log(req.body);
 	const {
-		body: { name, currentStatus, description },
+		body: { name },
 		user: { userId },
 		params: { id: taskId },
 	} = req;
@@ -70,7 +71,14 @@ const getTask = async (req, res) => {
 	} = req;
 	const task = await Task.findOne(
 		{ _id: taskId, createdBy: userId },
-		{ currentStatus: 1, name: 1, description: 1, updatedAt: 1 }
+		{
+			currentStatus: 1,
+			name: 1,
+			description: 1,
+			updatedAt: 1,
+			avatarIcon: 1,
+			avatarColor: 1,
+		}
 	);
 	if (!task) {
 		throw new NotFoundError(`No task found with id ${taskId}`);

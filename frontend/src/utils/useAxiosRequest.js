@@ -73,14 +73,15 @@ const useAxiosRequest = () => {
 	};
 
 	const updateTask = async (editedTask) => {
-		const { _id, name, currentStatus, description } = editedTask;
+		const { _id, name, currentStatus, description, avatarColor, avatarIcon } =
+			editedTask;
 		const headers = {
 			Authorization: `Bearer ${getUserToken()}`,
 		};
 		return axios
 			.patch(
 				`${process.env.REACT_APP_SERVER_URL}/api/v1/tasks/${_id}`,
-				{ name, currentStatus, description },
+				{ name, currentStatus, description, avatarColor, avatarIcon },
 				{
 					headers,
 				}
