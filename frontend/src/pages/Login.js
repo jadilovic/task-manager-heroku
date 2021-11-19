@@ -98,7 +98,7 @@ const Login = () => {
 				<ContentStyle>
 					<Box
 						sx={{
-							marginTop: 2,
+							marginTop: 7,
 							display: 'flex',
 							flexDirection: 'column',
 							alignItems: 'center',

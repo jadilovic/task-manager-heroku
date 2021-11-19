@@ -10,7 +10,7 @@ export default function App() {
 			direction="column"
 			alignItems="center"
 			justifyContent="center"
-			style={{ minHeight: '100vh' }}
+			style={{ minHeight: '80vh' }}
 		>
 			<Grid item xs={12}>
 				<Stack sx={{ color: 'grey.500' }} spacing={2} direction="row">
