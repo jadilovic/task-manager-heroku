@@ -58,7 +58,7 @@ const TaskCard = (props) => {
 
 	let {
 		name,
-		dateCreated,
+		createdAt,
 		currentStatus,
 		description,
 		avatarColor,
@@ -66,7 +66,7 @@ const TaskCard = (props) => {
 		_id,
 		updatedAt,
 	} = task;
-	dateCreated = new Date(dateCreated).toDateString();
+	createdAt = new Date(createdAt).toDateString();
 	currentStatus = taskStatusObjects.find(
 		(statusObject) => statusObject._id === currentStatus
 	);
@@ -122,7 +122,7 @@ const TaskCard = (props) => {
 					</IconButton>
 				}
 				title={name}
-				subheader={dateCreated}
+				subheader={createdAt}
 			/>
 			<CardActions disableSpacing>
 				<IconButton

@@ -107,6 +107,53 @@ const getAllStatuses = async (req, res) => {
 	res.status(StatusCodes.OK).json({ statuses, length: statuses.length });
 };
 
+const filterTasksByAvatarIconAndColor = async (req, res) => {
+	console.log('test', req.body);
+	const {
+		user: { userId },
+	} = req;
+	const filteredTasks = await Task.find(
+		{
+			$and: [
+				{
+					$or: [
+						{
+							avatarIcon: 'Home',
+						},
+						{
+							avatarIcon: 'Business',
+						},
+					],
+				},
+				{
+					$or: [
+						{
+							avatarColor: 'Umber',
+						},
+						{
+							avatarColor: 'Vegas Gold',
+						},
+					],
+				},
+			],
+			createdBy: userId,
+		},
+		{
+			currentStatus: 1,
+			name: 1,
+			description: 1,
+			updatedAt: 1,
+			createdAt: 1,
+			avatarIcon: 1,
+			avatarColor: 1,
+		}
+	);
+	if (!filteredTasks) {
+		throw new NotFoundError(`No task found with given filters`);
+	}
+	res.status(StatusCodes.OK).json({ filteredTasks });
+};
+
 module.exports = {
 	getAllTasks,
 	createTask,
@@ -115,4 +162,5 @@ module.exports = {
 	deleteTask,
 	createTaskStatus,
 	getAllStatuses,
+	filterTasksByAvatarIconAndColor,
 };

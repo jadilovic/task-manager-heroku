@@ -125,6 +125,27 @@ const useAxiosRequest = () => {
 		}
 	};
 
+	const filterTasks = async (filters) => {
+		try {
+			return axios({
+				method: 'POST',
+				url: `${process.env.REACT_APP_SERVER_URL}/api/v1/tasks/filters`,
+				data: {
+					filters,
+				},
+				headers: {
+					authorization: `Bearer ${getUserToken()}`,
+				},
+			}).then((res) => {
+				console.log('task filter results: ', res.data.filteredTasks);
+				return res.data.filteredTasks;
+			});
+		} catch (err) {
+			console.log(err.response);
+			return err.response.data.msg;
+		}
+	};
+
 	return {
 		getTaskStatuses,
 		deleteTask,
@@ -134,6 +155,7 @@ const useAxiosRequest = () => {
 		createUser,
 		userLogin,
 		updateTask,
+		filterTasks,
 	};
 };
 

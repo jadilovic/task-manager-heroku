@@ -8,6 +8,7 @@ import PieChartTasks from '../components/PieChartTasks';
 import SearchTasks from '../components/SearchTasks';
 import Filter from '../components/Filter';
 import Sort from '../components/Sort';
+import IconColorFilter from '../components/IconColorFilter';
 import LoadingPage from '../components/LoadingPage';
 
 const Home = () => {
@@ -38,6 +39,8 @@ const Home = () => {
 		displayTasks();
 	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+	console.log(tasks);
+
 	if (loading) {
 		return <LoadingPage />;
 	}
@@ -59,6 +62,12 @@ const Home = () => {
 						</Grid>
 					</Grid>
 
+					<Grid item xs={12} md={12} lg={12}>
+						<IconColorFilter
+							tasks={tasks}
+							setFilteredTasks={setFilteredTasks}
+						/>
+					</Grid>
 					<Grid item xs={12} md={12} lg={12}>
 						<SearchTasks tasks={tasks} setFilteredTasks={setFilteredTasks} />
 					</Grid>
