@@ -108,32 +108,24 @@ const getAllStatuses = async (req, res) => {
 };
 
 const filterTasksByAvatarIconAndColor = async (req, res) => {
-	console.log('test', req.body);
-	const {
+	let {
 		user: { userId },
+		body: { iconFilters, statusFilters },
 	} = req;
+	iconFilters = iconFilters.map((iconName) => {
+		return { ['avatarIcon']: iconName };
+	});
+	statusFilters = statusFilters.map((statusId) => {
+		return { ['currentStatus']: statusId };
+	});
 	const filteredTasks = await Task.find(
 		{
 			$and: [
 				{
-					$or: [
-						{
-							avatarIcon: 'Home',
-						},
-						{
-							avatarIcon: 'Business',
-						},
-					],
+					$or: iconFilters.length > 0 ? iconFilters : [{}],
 				},
 				{
-					$or: [
-						{
-							avatarColor: 'Umber',
-						},
-						{
-							avatarColor: 'Vegas Gold',
-						},
-					],
+					$or: statusFilters.length > 0 ? statusFilters : [{}],
 				},
 			],
 			createdBy: userId,

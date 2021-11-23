@@ -125,19 +125,19 @@ const useAxiosRequest = () => {
 		}
 	};
 
-	const filterTasks = async (filters) => {
+	const filterTasks = async (iconFilters, statusFilters) => {
 		try {
 			return axios({
 				method: 'POST',
 				url: `${process.env.REACT_APP_SERVER_URL}/api/v1/tasks/filters`,
 				data: {
-					filters,
+					iconFilters,
+					statusFilters,
 				},
 				headers: {
 					authorization: `Bearer ${getUserToken()}`,
 				},
 			}).then((res) => {
-				console.log('task filter results: ', res.data.filteredTasks);
 				return res.data.filteredTasks;
 			});
 		} catch (err) {

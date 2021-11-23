@@ -64,30 +64,38 @@ const IconAndStatusFilter = (props) => {
 	};
 
 	const handleFilter = async () => {
-		// const filteredTasks = await mongoDB.filterTasks(selectedColors);
-		// console.log(filteredTasks);
-		let filteredTasks = [...tasks];
-		if (selectedIcons.length > 0) {
-			let iconFilter = [];
-			selectedIcons.forEach((selectedIcon) => {
-				const filter = filteredTasks.filter(
-					(task) => task.avatarIcon === selectedIcon
-				);
-				iconFilter = iconFilter.concat(filter);
-			});
-			filteredTasks = iconFilter;
+		if (selectedIcons.length > 0 || selectedStatuses.length > 0) {
+			const selectedStatusesIds = selectedStatuses.map((status) =>
+				getStatusId(status)
+			);
+			const filteredTasks = await mongoDB.filterTasks(
+				selectedIcons,
+				selectedStatusesIds
+			);
+			setFilteredTasks(filteredTasks);
 		}
-		if (selectedStatuses.length > 0) {
-			let statusFilter = [];
-			selectedStatuses.forEach((statusMessage) => {
-				const filter = filteredTasks.filter(
-					(task) => task.currentStatus === getStatusId(statusMessage)
-				);
-				statusFilter = statusFilter.concat(filter);
-			});
-			filteredTasks = statusFilter;
-		}
-		setFilteredTasks(filteredTasks);
+		// let filteredTasks = [...tasks];
+		// if (selectedIcons.length > 0) {
+		// 	let iconFilter = [];
+		// 	selectedIcons.forEach((selectedIcon) => {
+		// 		const filter = filteredTasks.filter(
+		// 			(task) => task.avatarIcon === selectedIcon
+		// 		);
+		// 		iconFilter = iconFilter.concat(filter);
+		// 	});
+		// 	filteredTasks = iconFilter;
+		// }
+		// if (selectedStatuses.length > 0) {
+		// 	let statusFilter = [];
+		// 	selectedStatuses.forEach((statusMessage) => {
+		// 		const filter = filteredTasks.filter(
+		// 			(task) => task.currentStatus === getStatusId(statusMessage)
+		// 		);
+		// 		statusFilter = statusFilter.concat(filter);
+		// 	});
+		// 	filteredTasks = statusFilter;
+		// }
+		// setFilteredTasks(filteredTasks);
 	};
 
 	const clearFilter = () => {
