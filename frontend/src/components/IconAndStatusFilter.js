@@ -74,28 +74,6 @@ const IconAndStatusFilter = (props) => {
 			);
 			setFilteredTasks(filteredTasks);
 		}
-		// let filteredTasks = [...tasks];
-		// if (selectedIcons.length > 0) {
-		// 	let iconFilter = [];
-		// 	selectedIcons.forEach((selectedIcon) => {
-		// 		const filter = filteredTasks.filter(
-		// 			(task) => task.avatarIcon === selectedIcon
-		// 		);
-		// 		iconFilter = iconFilter.concat(filter);
-		// 	});
-		// 	filteredTasks = iconFilter;
-		// }
-		// if (selectedStatuses.length > 0) {
-		// 	let statusFilter = [];
-		// 	selectedStatuses.forEach((statusMessage) => {
-		// 		const filter = filteredTasks.filter(
-		// 			(task) => task.currentStatus === getStatusId(statusMessage)
-		// 		);
-		// 		statusFilter = statusFilter.concat(filter);
-		// 	});
-		// 	filteredTasks = statusFilter;
-		// }
-		// setFilteredTasks(filteredTasks);
 	};
 
 	const clearFilter = () => {

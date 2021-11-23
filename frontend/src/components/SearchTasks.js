@@ -1,6 +1,5 @@
 import React from 'react';
-import Paper from '@mui/material/Paper';
-import InputBase from '@mui/material/InputBase';
+import { Paper, TextField } from '@mui/material';
 import Divider from '@mui/material/Divider';
 import { Button } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
@@ -20,7 +19,7 @@ export default function CustomizedInputBase(props) {
 	};
 
 	const handleClear = () => {
-		document.getElementById('searchValue').value = '';
+		document.getElementById('standard-basic').value = '';
 		setFilteredTasks(tasks);
 	};
 
@@ -28,23 +27,24 @@ export default function CustomizedInputBase(props) {
 		<Paper
 			component="form"
 			sx={{
-				p: '2px 4px',
+				paddingTop: 0,
 				display: 'flex',
 				alignItems: 'center',
 				width: '100%',
 			}}
 		>
 			<SearchIcon />
-			<Divider sx={{ height: 40, m: 0.5 }} orientation="vertical" />
-			<InputBase
-				id="searchValue"
-				sx={{ ml: 1, flex: 1, height: 50 }}
-				placeholder="Search tasks by name and description"
+			<Divider sx={{ height: 45, m: 0.5 }} orientation="vertical" />
+			<TextField
+				fullWidth
+				id="standard-basic"
+				variant="standard"
+				placeholder="Search tasks by name or description"
 				onChange={(event) => handleSearch(event)}
 			/>
 			<Divider sx={{ height: 40, m: 0.5 }} orientation="vertical" />
 			<Button variant="contained" onClick={() => handleClear()}>
-				Clear search
+				Clear
 			</Button>
 		</Paper>
 	);

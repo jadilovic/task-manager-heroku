@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import useAxiosRequest from '../utils/useAxiosRequest';
 import Page from '../components/Page';
-import { Grid, Container, Typography, Paper } from '@mui/material';
+import { Grid, Container, Typography, Paper, Stack } from '@mui/material';
 import TaskCard from '../components/TaskCard';
 import CreateTask from '../components/CreateTask';
 import PieChartTasks from '../components/PieChartTasks';
 import SearchTasks from '../components/SearchTasks';
-import Filter from '../components/Filter';
 import Sort from '../components/Sort';
 import IconAndStatusFilter from '../components/IconAndStatusFilter';
 import LoadingPage from '../components/LoadingPage';
+import FiltersSidebar from '../components/FiltersSidebar';
 
 const Home = () => {
 	const mongoDB = useAxiosRequest();
@@ -17,6 +17,7 @@ const Home = () => {
 	const [filteredTasks, setFilteredTasks] = useState([]);
 	const [statuses, setStatuses] = useState([]);
 	const [loading, setLoading] = useState(true);
+	const [openFilter, setOpenFilter] = useState(false);
 
 	const displayTasks = async () => {
 		try {
@@ -39,6 +40,14 @@ const Home = () => {
 		displayTasks();
 	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+	const handleOpenFilter = () => {
+		setOpenFilter(true);
+	};
+
+	const handleCloseFilter = () => {
+		setOpenFilter(false);
+	};
+
 	if (loading) {
 		return <LoadingPage />;
 	}
@@ -52,23 +61,26 @@ const Home = () => {
 					</Grid>
 					<Grid item xs={12} md={6} lg={4}>
 						<PieChartTasks tasks={tasks} />
-
-						<Grid paddingTop={2} item xs={12} md={12} lg={12}>
-							<Sort tasks={tasks} setFilteredTasks={setFilteredTasks} />
-						</Grid>
 					</Grid>
-					<Grid item xs={12} md={12} lg={4}>
-						<IconAndStatusFilter
-							tasks={tasks}
-							setFilteredTasks={setFilteredTasks}
-							statuses={statuses}
-						/>
-					</Grid>
-
-					{/* <Grid paddingTop={2} item xs={12} md={12} lg={12}>
-						<Filter tasks={tasks} setFilteredTasks={setFilteredTasks} />
-					</Grid> */}
-					<Grid item xs={12} md={12} lg={12}>
+					<Grid paddingTop={2} item xs={12} md={12} lg={4}>
+						<Sort tasks={tasks} setFilteredTasks={setFilteredTasks} />
+						<Stack
+							paddingTop={3}
+							direction="row"
+							flexWrap="wrap-reverse"
+							alignItems="center"
+							justifyContent="flex-end"
+							sx={{ mb: 3 }}
+						>
+							<FiltersSidebar
+								tasks={tasks}
+								setFilteredTasks={setFilteredTasks}
+								statuses={statuses}
+								isOpenFilter={openFilter}
+								onOpenFilter={handleOpenFilter}
+								onCloseFilter={handleCloseFilter}
+							/>
+						</Stack>
 						<SearchTasks tasks={tasks} setFilteredTasks={setFilteredTasks} />
 					</Grid>
 

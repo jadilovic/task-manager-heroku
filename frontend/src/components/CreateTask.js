@@ -23,7 +23,6 @@ const SectionStyle = styled(Card)(({ theme }) => ({
 	display: 'flex',
 	flexDirection: 'column',
 	justifyContent: 'center',
-	paddingTop: 3,
 }));
 
 const ContentStyle = styled('div')(({ theme }) => ({
@@ -148,10 +147,11 @@ const CreateTask = (props) => {
 					)}
 					<ContentStyle>
 						<TextField
+							size="small"
 							required
 							value={newTask.name}
 							fullWidth
-							label="New task"
+							label="New task name"
 							id="fullWidth"
 							onChange={handleTaskNameChange}
 							variant="outlined"
@@ -162,6 +162,7 @@ const CreateTask = (props) => {
 						<FormControl fullWidth style={{ minWidth: 300 }}>
 							<InputLabel>Select task status</InputLabel>
 							<Select
+								size="small"
 								sx={{
 									backgroundColor: getStatusColor(),
 								}}
@@ -191,6 +192,7 @@ const CreateTask = (props) => {
 						<FormControl fullWidth style={{ minWidth: 300 }}>
 							<InputLabel>Select task icon</InputLabel>
 							<Select
+								size="small"
 								required
 								sx={{ backgroundColor: getAvatarColor(), color: 'white' }}
 								value={newTask.avatarIcon}
@@ -251,7 +253,7 @@ const CreateTask = (props) => {
 					</ContentStyle> */}
 					<SectionStyle>
 						<Button
-							style={{ margin: 10 }}
+							style={{ margin: 5 }}
 							variant="contained"
 							color="primary"
 							type="submit"
