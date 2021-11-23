@@ -8,7 +8,7 @@ import PieChartTasks from '../components/PieChartTasks';
 import SearchTasks from '../components/SearchTasks';
 import Filter from '../components/Filter';
 import Sort from '../components/Sort';
-import IconColorFilter from '../components/IconColorFilter';
+import IconAndStatusFilter from '../components/IconAndStatusFilter';
 import LoadingPage from '../components/LoadingPage';
 
 const Home = () => {
@@ -39,8 +39,6 @@ const Home = () => {
 		displayTasks();
 	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-	console.log(tasks);
-
 	if (loading) {
 		return <LoadingPage />;
 	}
@@ -49,25 +47,27 @@ const Home = () => {
 		<Page title="Home | Task Manager">
 			<Container maxWidth="xl">
 				<Grid container spacing={3} padding={2}>
-					<Grid item xs={12} md={6}>
+					<Grid item xs={12} md={6} lg={4}>
 						<CreateTask statuses={statuses} refreshTasks={displayTasks} />
 					</Grid>
-					<Grid item xs={12} md={6}>
+					<Grid item xs={12} md={6} lg={4}>
 						<PieChartTasks tasks={tasks} />
-						<Grid paddingTop={2} item xs={12} md={12} lg={12}>
-							<Filter tasks={tasks} setFilteredTasks={setFilteredTasks} />
-						</Grid>
+
 						<Grid paddingTop={2} item xs={12} md={12} lg={12}>
 							<Sort tasks={tasks} setFilteredTasks={setFilteredTasks} />
 						</Grid>
 					</Grid>
-
-					<Grid item xs={12} md={12} lg={12}>
-						<IconColorFilter
+					<Grid item xs={12} md={12} lg={4}>
+						<IconAndStatusFilter
 							tasks={tasks}
 							setFilteredTasks={setFilteredTasks}
+							statuses={statuses}
 						/>
 					</Grid>
+
+					{/* <Grid paddingTop={2} item xs={12} md={12} lg={12}>
+						<Filter tasks={tasks} setFilteredTasks={setFilteredTasks} />
+					</Grid> */}
 					<Grid item xs={12} md={12} lg={12}>
 						<SearchTasks tasks={tasks} setFilteredTasks={setFilteredTasks} />
 					</Grid>

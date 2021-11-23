@@ -52,10 +52,22 @@ const CreateTask = (props) => {
 			...newTask,
 			statusId: statuses[0]._id,
 			avatarIcon: icons[0].name,
-			avatarColor: colors[4].name,
+			avatarColor: colors[0].name,
 		});
 		setLoading(false);
 	}, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+	const getIconColor = (avatarIcon) => {
+		if (avatarIcon === 'Home') {
+			return 'Ming';
+		} else if (avatarIcon === 'Business') {
+			return 'Vegas Gold';
+		} else if (avatarIcon === 'Group') {
+			return 'Dark Cyan';
+		} else {
+			return 'Desert Sand';
+		}
+	};
 
 	const handleTaskNameChange = (event) => {
 		event.preventDefault();
@@ -63,6 +75,9 @@ const CreateTask = (props) => {
 	};
 
 	const handleSelectChange = (event) => {
+		if (event.target.name === 'avatarIcon') {
+			newTask.avatarColor = getIconColor(event.target.value);
+		}
 		setNewTask({
 			...newTask,
 			[event.target.name]: event.target.value,
@@ -76,7 +91,7 @@ const CreateTask = (props) => {
 				name: '',
 				statusId: statuses[0]._id,
 				avatarIcon: icons[0].name,
-				avatarColor: colors[4].name,
+				avatarColor: colors[0].name,
 			});
 			refreshTasks();
 		} catch (err) {
@@ -174,17 +189,25 @@ const CreateTask = (props) => {
 					</ContentStyle>
 					<ContentStyle>
 						<FormControl fullWidth style={{ minWidth: 300 }}>
-							<InputLabel>Select avatar icon</InputLabel>
+							<InputLabel>Select task icon</InputLabel>
 							<Select
 								required
+								sx={{ backgroundColor: getAvatarColor(), color: 'white' }}
 								value={newTask.avatarIcon}
 								name="avatarIcon"
-								label="Avatar current icon"
+								label="Task current icon"
 								onChange={handleSelectChange}
 							>
 								{icons.map((icon, index) => {
 									return (
-										<MenuItem key={index} value={icon.name}>
+										<MenuItem
+											style={{
+												backgroundColor: colors[index].hex,
+												color: 'white',
+											}}
+											key={index}
+											value={icon.name}
+										>
 											<div
 												style={{
 													display: 'flex',
@@ -201,7 +224,7 @@ const CreateTask = (props) => {
 							</Select>
 						</FormControl>
 					</ContentStyle>
-					<ContentStyle>
+					{/* <ContentStyle>
 						<FormControl fullWidth style={{ minWidth: 300 }}>
 							<InputLabel>Select avatar color</InputLabel>
 							<Select
@@ -225,9 +248,14 @@ const CreateTask = (props) => {
 								})}
 							</Select>
 						</FormControl>
-					</ContentStyle>
+					</ContentStyle> */}
 					<SectionStyle>
-						<Button variant="contained" color="primary" type="submit">
+						<Button
+							style={{ margin: 10 }}
+							variant="contained"
+							color="primary"
+							type="submit"
+						>
 							create task
 						</Button>
 					</SectionStyle>

@@ -98,7 +98,22 @@ export default function Edit() {
 		}
 	};
 
+	const getIconColor = (avatarIcon) => {
+		if (avatarIcon === 'Home') {
+			return 'Ming';
+		} else if (avatarIcon === 'Business') {
+			return 'Vegas Gold';
+		} else if (avatarIcon === 'Group') {
+			return 'Dark Cyan';
+		} else {
+			return 'Desert Sand';
+		}
+	};
+
 	const handleSelectChange = (event) => {
+		if (event.target.name === 'avatarIcon') {
+			taskValues.avatarColor = getIconColor(event.target.value);
+		}
 		setTaskValues({
 			...taskValues,
 			[event.target.name]: event.target.value,
@@ -227,13 +242,21 @@ export default function Edit() {
 						<ContentStyle>
 							<Select
 								required
+								sx={{ backgroundColor: getAvatarColor(), color: 'white' }}
 								value={taskValues.avatarIcon}
 								name="avatarIcon"
 								onChange={handleSelectChange}
 							>
 								{icons.map((icon, index) => {
 									return (
-										<MenuItem key={index} value={icon.name}>
+										<MenuItem
+											style={{
+												backgroundColor: colors[index].hex,
+												color: 'white',
+											}}
+											key={index}
+											value={icon.name}
+										>
 											<div
 												style={{
 													display: 'flex',
@@ -249,7 +272,7 @@ export default function Edit() {
 								})}
 							</Select>
 						</ContentStyle>
-						<ContentStyle>
+						{/* <ContentStyle>
 							<Select
 								sx={{ backgroundColor: getAvatarColor(), color: 'white' }}
 								required
@@ -270,7 +293,7 @@ export default function Edit() {
 									);
 								})}
 							</Select>
-						</ContentStyle>
+						</ContentStyle> */}
 						<ContentStyle>
 							<Typography>
 								Last updated on {new Date(taskValues.updatedAt).toDateString()}

@@ -9,7 +9,7 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { login } from '../auth/Authentication';
+import { login, isAuthenticated } from '../auth/Authentication';
 import Page from '../components/Page';
 import { styled } from '@mui/material/styles';
 import { Card } from '@mui/material';
@@ -80,6 +80,10 @@ const Login = () => {
 			}
 		}
 	};
+
+	if (isAuthenticated()) {
+		history.push('/home');
+	}
 
 	return (
 		<RootStyle title="Login | Task Manager Aki Heroku">
