@@ -4,7 +4,44 @@ const { BadRequestError, NotFoundError } = require('../errors');
 const TaskStatus = require('../models/TaskStatus');
 
 const getAllTasks = async (req, res) => {
-	const tasks = await Task.find({ createdBy: req.user.userId }).sort({
+	console.log(req.query);
+	let iconFilters = [];
+	let statusFilters = [];
+	if (req.query.avatarIcon) {
+		iconFilters = req.query.avatarIcon.map((iconName) => {
+			return { ['avatarIcon']: iconName };
+		});
+	}
+	if (req.query.currentStatus) {
+		statusFilters = req.query.currentStatus.map((statusId) => {
+			return { ['currentStatus']: statusId };
+		});
+	}
+
+	console.log(iconFilters);
+	console.log(statusFilters);
+	const tasks = await Task.find(
+		{
+			$and: [
+				{
+					$or: iconFilters.length > 0 ? iconFilters : [{}],
+				},
+				{
+					$or: statusFilters.length > 0 ? statusFilters : [{}],
+				},
+			],
+			createdBy: req.user.userId,
+		},
+		{
+			currentStatus: 1,
+			name: 1,
+			description: 1,
+			updatedAt: 1,
+			createdAt: 1,
+			avatarIcon: 1,
+			avatarColor: 1,
+		}
+	).sort({
 		createdAt: -1,
 	});
 	res.status(StatusCodes.OK).json({ tasks, length: tasks.length });
@@ -112,6 +149,7 @@ const filterTasksByAvatarIconAndColor = async (req, res) => {
 		user: { userId },
 		body: { iconFilters, statusFilters },
 	} = req;
+	// new variables
 	iconFilters = iconFilters.map((iconName) => {
 		return { ['avatarIcon']: iconName };
 	});

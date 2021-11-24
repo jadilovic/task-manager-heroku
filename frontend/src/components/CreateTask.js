@@ -118,6 +118,7 @@ const CreateTask = (props) => {
 		return `${color.hex}`;
 	};
 
+	// have same standard for all colors
 	const getStatusColor = () => {
 		if (newTask.statusId === '6186378bf0d3d3150277b8d3') {
 			return '#ff9800';
@@ -192,9 +193,14 @@ const CreateTask = (props) => {
 						<FormControl fullWidth style={{ minWidth: 300 }}>
 							<InputLabel>Select task icon</InputLabel>
 							<Select
+								labelId="demo-simple-select-error-label"
+								id="demo-simple-select-error"
 								size="small"
 								required
-								sx={{ backgroundColor: getAvatarColor(), color: 'white' }}
+								sx={{
+									backgroundColor: getAvatarColor(),
+									color: 'white',
+								}}
 								value={newTask.avatarIcon}
 								name="avatarIcon"
 								label="Task current icon"
@@ -226,31 +232,6 @@ const CreateTask = (props) => {
 							</Select>
 						</FormControl>
 					</ContentStyle>
-					{/* <ContentStyle>
-						<FormControl fullWidth style={{ minWidth: 300 }}>
-							<InputLabel>Select avatar color</InputLabel>
-							<Select
-								sx={{ backgroundColor: getAvatarColor(), color: 'white' }}
-								required
-								value={newTask.avatarColor}
-								name="avatarColor"
-								label="Avatar current color"
-								onChange={handleSelectChange}
-							>
-								{colors.map((color, index) => {
-									return (
-										<MenuItem
-											style={{ backgroundColor: color.hex, color: 'white' }}
-											key={index}
-											value={color.name}
-										>
-											{color.name}
-										</MenuItem>
-									);
-								})}
-							</Select>
-						</FormControl>
-					</ContentStyle> */}
 					<SectionStyle>
 						<Button
 							style={{ margin: 5 }}

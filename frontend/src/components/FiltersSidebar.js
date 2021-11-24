@@ -52,7 +52,8 @@ export default function FiltersSidebar(props) {
 			const selectedStatusesIds = selectedStatuses.map((status) =>
 				getStatusId(status)
 			);
-			const filteredTasks = await mongoDB.filterTasks(
+			// const filteredTasks = await mongoDB.filterTasks(
+			const filteredTasks = await mongoDB.getAllTasks(
 				selectedIcons,
 				selectedStatusesIds
 			);

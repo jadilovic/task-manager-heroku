@@ -7,9 +7,9 @@ import CreateTask from '../components/CreateTask';
 import PieChartTasks from '../components/PieChartTasks';
 import SearchTasks from '../components/SearchTasks';
 import Sort from '../components/Sort';
-import IconAndStatusFilter from '../components/IconAndStatusFilter';
 import LoadingPage from '../components/LoadingPage';
 import FiltersSidebar from '../components/FiltersSidebar';
+import GroupsCount from '../components/GroupsCount';
 
 const Home = () => {
 	const mongoDB = useAxiosRequest();
@@ -21,7 +21,7 @@ const Home = () => {
 
 	const displayTasks = async () => {
 		try {
-			const dbTasks = await mongoDB.getAllTasks();
+			const dbTasks = await mongoDB.getAllTasks([], []);
 			setTasks(dbTasks);
 			setFilteredTasks(dbTasks);
 			getTaskStatuses();
@@ -82,6 +82,7 @@ const Home = () => {
 							/>
 						</Stack>
 						<SearchTasks tasks={tasks} setFilteredTasks={setFilteredTasks} />
+						<GroupsCount tasks={tasks} />
 					</Grid>
 
 					{filteredTasks.length < 1 && (
