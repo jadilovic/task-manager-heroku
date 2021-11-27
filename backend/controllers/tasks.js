@@ -4,22 +4,27 @@ const { BadRequestError, NotFoundError } = require('../errors');
 const TaskStatus = require('../models/TaskStatus');
 
 const getAllTasks = async (req, res) => {
-	console.log(req.query);
 	let iconFilters = [];
 	let statusFilters = [];
 	if (req.query.avatarIcon) {
-		iconFilters = req.query.avatarIcon.map((iconName) => {
-			return { ['avatarIcon']: iconName };
-		});
+		if (Array.isArray(req.query.avatarIcon)) {
+			iconFilters = req.query.avatarIcon.map((iconName) => {
+				return { ['avatarIcon']: iconName };
+			});
+		} else {
+			iconFilters.push({ ['avatarIcon']: req.query.avatarIcon });
+		}
 	}
 	if (req.query.currentStatus) {
-		statusFilters = req.query.currentStatus.map((statusId) => {
-			return { ['currentStatus']: statusId };
-		});
+		if (Array.isArray(req.query.currentStatus)) {
+			statusFilters = req.query.currentStatus.map((statusId) => {
+				return { ['currentStatus']: statusId };
+			});
+		} else {
+			statusFilters.push({ currentStatus: req.query.currentStatus });
+		}
 	}
 
-	console.log(iconFilters);
-	console.log(statusFilters);
 	const tasks = await Task.find(
 		{
 			$and: [

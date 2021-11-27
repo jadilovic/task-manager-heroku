@@ -27,6 +27,7 @@ export default function CustomizedInputBase(props) {
 		<Paper
 			component="form"
 			sx={{
+				marginTop: 3,
 				paddingTop: 0,
 				display: 'flex',
 				alignItems: 'center',

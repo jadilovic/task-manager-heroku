@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { getUserToken } from '../auth/Authentication';
-const qs = require('qs');
 
 const useAxiosRequest = () => {
 	const createUser = async (userCredentials) => {
@@ -41,7 +40,6 @@ const useAxiosRequest = () => {
 		statusFilters.forEach((status) => {
 			querystring = querystring.concat(`currentStatus=${status}&`);
 		});
-		console.log(querystring);
 		return axios({
 			method: 'GET',
 			url: `${process.env.REACT_APP_SERVER_URL}/api/v1/tasks${querystring}`,

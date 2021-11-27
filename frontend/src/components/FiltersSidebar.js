@@ -34,9 +34,21 @@ export default function FiltersSidebar(props) {
 
 	const handleChange = (name, value) => {
 		if (name === 'status') {
-			setSelectedStatus([...selectedStatuses, value]);
+			if (selectedStatuses.findIndex((i) => i === value) > -1) {
+				const index = selectedStatuses.indexOf(value);
+				selectedStatuses.splice(index, 1);
+				setSelectedStatus([...selectedStatuses]);
+			} else {
+				setSelectedStatus([...selectedStatuses, value]);
+			}
 		} else {
-			setSelectedIcons([...selectedIcons, value]);
+			if (selectedIcons.findIndex((i) => i === value) > -1) {
+				const index = selectedIcons.indexOf(value);
+				selectedIcons.splice(index, 1);
+				setSelectedIcons([...selectedIcons]);
+			} else {
+				setSelectedIcons([...selectedIcons, value]);
+			}
 		}
 	};
 
