@@ -16,10 +16,11 @@ import AppBar from '@mui/material/AppBar';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
+import UserWindow from '../utils/UserWindow';
 
 // TAB ELEMENTS
 function TabPanel(props) {
-	const { children, value, index, ...other } = props;
+	const { value, index, children } = props;
 
 	return (
 		<div
@@ -27,13 +28,8 @@ function TabPanel(props) {
 			hidden={value !== index}
 			id={`full-width-tabpanel-${index}`}
 			aria-labelledby={`full-width-tab-${index}`}
-			{...other}
 		>
-			{value === index && (
-				<Box sx={{ p: 3 }}>
-					<Typography>{children}</Typography>
-				</Box>
-			)}
+			{value === index && <div style={{ paddingTop: 24 }}>{children}</div>}
 		</div>
 	);
 }
@@ -55,6 +51,7 @@ function a11yProps(index) {
 const Home = () => {
 	const theme = useTheme();
 	const mongoDB = useAxiosRequest();
+	const screen = UserWindow();
 	const [tasks, setTasks] = useState([]);
 	const [filteredTasks, setFilteredTasks] = useState([]);
 	const [statuses, setStatuses] = useState([]);
@@ -97,68 +94,102 @@ const Home = () => {
 	};
 	// TAB elements
 
+	console.log(screen.dynamicWidth);
+
 	if (loading) {
 		return <LoadingPage />;
+	}
+
+	if (screen.dynamicWidth < 600) {
+		return (
+			<Grid container spacing={3} padding={2}>
+				<Grid item xs={12} md={12} lg={12}>
+					<Box
+						sx={{
+							display: { xs: 'block', sm: 'none' },
+							bgcolor: 'background.paper',
+							width: '100%',
+						}}
+					>
+						<AppBar position="static">
+							<Tabs
+								value={value}
+								onChange={handleChange}
+								indicatorColor="secondary"
+								textColor="inherit"
+								variant="fullWidth"
+								aria-label="full width tabs example"
+							>
+								<Tab label="Search" {...a11yProps(0)} />
+								<Tab label="Create" {...a11yProps(1)} />
+								<Tab label="Stats" {...a11yProps(2)} />
+							</Tabs>
+						</AppBar>
+						<TabPanel value={value} index={0}>
+							<Stack
+								direction="row"
+								flexWrap="wrap-reverse"
+								alignItems="center"
+								justifyContent="flex-end"
+								sx={{ mb: 3 }}
+							>
+								<FiltersSidebar
+									tasks={tasks}
+									setFilteredTasks={setFilteredTasks}
+									statuses={statuses}
+									isOpenFilter={openFilter}
+									onOpenFilter={handleOpenFilter}
+									onCloseFilter={handleCloseFilter}
+								/>
+							</Stack>
+							<Sort tasks={tasks} setFilteredTasks={setFilteredTasks} />
+							<SearchTasks tasks={tasks} setFilteredTasks={setFilteredTasks} />
+						</TabPanel>
+						<TabPanel value={value} index={1} dir={theme.direction}>
+							<CreateTask statuses={statuses} refreshTasks={displayTasks} />
+						</TabPanel>
+						<TabPanel value={value} index={2} dir={theme.direction}>
+							<PieChartTasks tasks={tasks} />
+							<GroupsCount tasks={tasks} />
+						</TabPanel>
+					</Box>
+				</Grid>
+				{filteredTasks.length < 1 && (
+					<Grid item xs={12} md={12} lg={12}>
+						<Paper
+							component="form"
+							style={{ justifyContent: 'center' }}
+							sx={{
+								p: '2px 4px',
+								display: 'flex',
+								alignItems: 'center',
+								width: '100%',
+								height: 50,
+							}}
+						>
+							<Typography variant="p">No tasks found</Typography>
+						</Paper>
+					</Grid>
+				)}
+				{filteredTasks.map((task, index) => {
+					return (
+						<Grid key={index} item xs={12} md={6} lg={4}>
+							<TaskCard
+								task={task}
+								taskStatusObjects={statuses}
+								refreshTasks={displayTasks}
+							/>
+						</Grid>
+					);
+				})}
+			</Grid>
+		);
 	}
 
 	return (
 		<Page title="Home | Task Manager">
 			<Container maxWidth="xl">
 				<Grid container spacing={3} padding={2}>
-					<Grid item xs={12} md={12} lg={12}>
-						<Box
-							sx={{
-								display: { xs: 'block', sm: 'none' },
-								bgcolor: 'background.paper',
-								width: '100%',
-							}}
-						>
-							<AppBar position="static">
-								<Tabs
-									value={value}
-									onChange={handleChange}
-									indicatorColor="secondary"
-									textColor="inherit"
-									variant="fullWidth"
-									aria-label="full width tabs example"
-								>
-									<Tab label="Search" {...a11yProps(0)} />
-									<Tab label="Create" {...a11yProps(1)} />
-									<Tab label="Stats" {...a11yProps(2)} />
-								</Tabs>
-							</AppBar>
-							<TabPanel value={value} index={0} dir={theme.direction}>
-								<Stack
-									direction="row"
-									flexWrap="wrap-reverse"
-									alignItems="center"
-									justifyContent="flex-end"
-									sx={{ mb: 3 }}
-								>
-									<FiltersSidebar
-										tasks={tasks}
-										setFilteredTasks={setFilteredTasks}
-										statuses={statuses}
-										isOpenFilter={openFilter}
-										onOpenFilter={handleOpenFilter}
-										onCloseFilter={handleCloseFilter}
-									/>
-								</Stack>
-								<Sort tasks={tasks} setFilteredTasks={setFilteredTasks} />
-								<SearchTasks
-									tasks={tasks}
-									setFilteredTasks={setFilteredTasks}
-								/>
-							</TabPanel>
-							<TabPanel value={value} index={1} dir={theme.direction}>
-								<CreateTask statuses={statuses} refreshTasks={displayTasks} />
-							</TabPanel>
-							<TabPanel value={value} index={2} dir={theme.direction}>
-								<PieChartTasks tasks={tasks} />
-								<GroupsCount tasks={tasks} />
-							</TabPanel>
-						</Box>
-					</Grid>
 					<Grid
 						sx={{ display: { xs: 'none', sm: 'block' } }}
 						item
@@ -205,7 +236,6 @@ const Home = () => {
 						<Sort tasks={tasks} setFilteredTasks={setFilteredTasks} />
 						<SearchTasks tasks={tasks} setFilteredTasks={setFilteredTasks} />
 					</Grid>
-
 					{filteredTasks.length < 1 && (
 						<Grid item xs={12} md={12} lg={12}>
 							<Paper
@@ -223,7 +253,6 @@ const Home = () => {
 							</Paper>
 						</Grid>
 					)}
-
 					{filteredTasks.map((task, index) => {
 						return (
 							<Grid key={index} item xs={12} md={6} lg={4}>

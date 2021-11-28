@@ -160,7 +160,7 @@ const CreateTask = (props) => {
 						/>
 					</ContentStyle>
 					<ContentStyle>
-						<FormControl fullWidth style={{ minWidth: 300 }}>
+						<FormControl fullWidth style={{ minWidth: 250 }}>
 							<InputLabel>Select task status</InputLabel>
 							<Select
 								size="small"
@@ -190,7 +190,7 @@ const CreateTask = (props) => {
 						</FormControl>
 					</ContentStyle>
 					<ContentStyle>
-						<FormControl fullWidth style={{ minWidth: 300 }}>
+						<FormControl fullWidth style={{ minWidth: 250 }}>
 							<InputLabel>Select task icon</InputLabel>
 							<Select
 								labelId="demo-simple-select-error-label"
