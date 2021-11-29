@@ -74,9 +74,18 @@ export default function FiltersSidebar(props) {
 				selectedStatusesIds
 			);
 			setFilteredTasks(filteredTasks);
-			setSelectedFilters(
-				selectedIcons.join(', ') + ', ' + selectedStatuses.join(', ')
-			);
+			let filtersMessage = '';
+			if (selectedIcons.join('')) {
+				filtersMessage = filtersMessage.concat(
+					'Group filters: ' + selectedIcons.join(', ') + ' | '
+				);
+			}
+			if (selectedStatuses.join('')) {
+				filtersMessage = filtersMessage.concat(
+					'Status filters: ' + selectedStatuses.join(', ')
+				);
+			}
+			setSelectedFilters(filtersMessage);
 		}
 		onCloseFilter();
 	};

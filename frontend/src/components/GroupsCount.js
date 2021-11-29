@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
-import { Avatar, Typography } from '@mui/material';
+import { Avatar, Typography, Paper } from '@mui/material';
 import icons from '../data/icons';
 import colors from '../data/colors';
 import PropTypes from 'prop-types';
@@ -8,19 +8,26 @@ import PropTypes from 'prop-types';
 function Item(props) {
 	const { sx, ...other } = props;
 	return (
-		<Box
+		<Paper
+			component="form"
 			sx={{
-				bgcolor: 'primary.main',
-				color: 'white',
-				p: 1,
-				borderRadius: 1,
-				textAlign: 'center',
-				fontSize: '1rem',
-				fontWeight: '700',
-				...sx,
+				marginTop: 2,
+				display: 'flex',
 			}}
-			{...other}
-		/>
+		>
+			<Box
+				sx={{
+					color: 'white',
+					p: 1,
+					borderRadius: 1,
+					textAlign: 'center',
+					fontSize: '1rem',
+					fontWeight: '700',
+					...sx,
+				}}
+				{...other}
+			/>
+		</Paper>
 	);
 }
 

@@ -53,7 +53,7 @@ const StyledMenu = styled((props) => (
 }));
 
 export default function Sort(props) {
-	const { tasks, setFilteredTasks } = props;
+	const { tasks, setFilteredTasks, setSelectedFilters } = props;
 	const [anchorEl, setAnchorEl] = useState(null);
 	const open = Boolean(anchorEl);
 
@@ -73,6 +73,7 @@ export default function Sort(props) {
 		} else {
 			setFilteredTasks(tasks);
 		}
+		setSelectedFilters('');
 		setAnchorEl(null);
 	};
 

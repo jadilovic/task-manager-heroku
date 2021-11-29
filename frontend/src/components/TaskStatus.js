@@ -8,9 +8,9 @@ import { Grid } from '@mui/material';
 export default function TaskStatus(props) {
 	const { colorNotification, message } = props.taskStatus;
 	let chipIcon = null;
-	if (colorNotification === 'warning') {
+	if (message === 'Initiated') {
 		chipIcon = <HourglassEmpty />;
-	} else if (colorNotification === 'info') {
+	} else if (colorNotification === 'Ongoing') {
 		chipIcon = <ArrowForward />;
 	} else {
 		chipIcon = <CheckCircleOutline />;
@@ -19,11 +19,10 @@ export default function TaskStatus(props) {
 		<Grid justifyItems="center" item xs={12}>
 			<Stack spacing={1} alignItems="center">
 				<Chip
-					style={{ minWidth: 250 }}
+					style={{ backgroundColor: colorNotification, minWidth: 250 }}
 					size="medium"
 					icon={chipIcon}
 					label={message}
-					color={colorNotification}
 				/>
 			</Stack>
 		</Grid>
