@@ -28,6 +28,7 @@ export default function FiltersSidebar(props) {
 		isOpenFilter,
 		onOpenFilter,
 		onCloseFilter,
+		setSelectedFilters,
 	} = props;
 	const [selectedIcons, setSelectedIcons] = useState([]);
 	const [selectedStatuses, setSelectedStatus] = useState([]);
@@ -60,16 +61,22 @@ export default function FiltersSidebar(props) {
 	};
 
 	const handleFilter = async () => {
+		// console.log(selectedIcons, selectedStatuses);
 		if (selectedIcons.length > 0 || selectedStatuses.length > 0) {
 			const selectedStatusesIds = selectedStatuses.map((status) =>
 				getStatusId(status)
 			);
-			// const filteredTasks = await mongoDB.filterTasks(
+
+			// const filteredTasks = await mongoDB.filterTasks( --- this is post request
 			const filteredTasks = await mongoDB.getAllTasks(
+				// --- this is get request
 				selectedIcons,
 				selectedStatusesIds
 			);
 			setFilteredTasks(filteredTasks);
+			setSelectedFilters(
+				selectedIcons.join(', ') + ', ' + selectedStatuses.join(', ')
+			);
 		}
 		onCloseFilter();
 	};
@@ -78,6 +85,7 @@ export default function FiltersSidebar(props) {
 		setSelectedStatus([]);
 		setSelectedIcons([]);
 		setFilteredTasks(tasks);
+		setSelectedFilters('');
 		onCloseFilter();
 	};
 

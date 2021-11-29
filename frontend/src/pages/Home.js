@@ -10,46 +10,20 @@ import Sort from '../components/Sort';
 import LoadingPage from '../components/LoadingPage';
 import FiltersSidebar from '../components/FiltersSidebar';
 import GroupsCount from '../components/GroupsCount';
-import PropTypes from 'prop-types';
-import { useTheme } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import UserWindow from '../utils/UserWindow';
 
-// TAB ELEMENTS
-function TabPanel(props) {
-	const { value, index, children } = props;
-
-	return (
-		<div
-			role="tabpanel"
-			hidden={value !== index}
-			id={`full-width-tabpanel-${index}`}
-			aria-labelledby={`full-width-tab-${index}`}
-		>
-			{value === index && <div style={{ paddingTop: 24 }}>{children}</div>}
-		</div>
-	);
-}
-
-TabPanel.propTypes = {
-	children: PropTypes.node,
-	index: PropTypes.number.isRequired,
-	value: PropTypes.number.isRequired,
-};
-
-function a11yProps(index) {
+function tabProps(index) {
 	return {
 		id: `full-width-tab-${index}`,
 		'aria-controls': `full-width-tabpanel-${index}`,
 	};
 }
-// TAB ELEMENTS ---------------------------------------------
 
 const Home = () => {
-	const theme = useTheme();
 	const mongoDB = useAxiosRequest();
 	const screen = UserWindow();
 	const [tasks, setTasks] = useState([]);
@@ -58,6 +32,7 @@ const Home = () => {
 	const [loading, setLoading] = useState(true);
 	const [openFilter, setOpenFilter] = useState(false);
 	const [value, setValue] = useState(0);
+	const [selectedFilters, setSelectedFilters] = useState('');
 
 	const displayTasks = async () => {
 		try {
@@ -88,44 +63,95 @@ const Home = () => {
 		setOpenFilter(false);
 	};
 
-	// TAB elements
-	const handleChange = (event, newValue) => {
+	const handleTabChange = (event, newValue) => {
 		setValue(newValue);
 	};
-	// TAB elements
-
-	console.log(screen.dynamicWidth);
 
 	if (loading) {
 		return <LoadingPage />;
 	}
 
-	if (screen.dynamicWidth < 600) {
-		return (
-			<Grid container spacing={3} padding={2}>
-				<Grid item xs={12} md={12} lg={12}>
-					<Box
-						sx={{
-							display: { xs: 'block', sm: 'none' },
-							bgcolor: 'background.paper',
-							width: '100%',
-						}}
-					>
+	return (
+		<Page title="Home | Task Manager">
+			<Container maxWidth="xl">
+				{screen.dynamicWidth < 900 && (
+					<Box paddingTop={2}>
 						<AppBar position="static">
 							<Tabs
 								value={value}
-								onChange={handleChange}
+								onChange={handleTabChange}
 								indicatorColor="secondary"
 								textColor="inherit"
 								variant="fullWidth"
 								aria-label="full width tabs example"
 							>
-								<Tab label="Search" {...a11yProps(0)} />
-								<Tab label="Create" {...a11yProps(1)} />
-								<Tab label="Stats" {...a11yProps(2)} />
+								<Tab label="Search" {...tabProps(0)} />
+								<Tab label="Create" {...tabProps(1)} />
+								<Tab label="Stats" {...tabProps(2)} />
 							</Tabs>
 						</AppBar>
-						<TabPanel value={value} index={0}>
+					</Box>
+				)}
+				{/* CREATE TASK */}
+				<Grid container spacing={3} padding={2}>
+					{screen.dynamicWidth < 900 ? (
+						<Grid
+							sx={{
+								display: {
+									xs: `${value === 1 ? 'block' : 'none'}`, // Hidden on smaller than md
+									md: `${value === 1 ? 'none' : 'block'}`, // Visible on smaller than md
+								},
+							}}
+							item
+							xs={12}
+							md={12}
+							lg={12}
+						>
+							<CreateTask statuses={statuses} refreshTasks={displayTasks} />
+						</Grid>
+					) : (
+						<Grid item xs={12} sm={6} lg={4}>
+							<CreateTask statuses={statuses} refreshTasks={displayTasks} />
+						</Grid>
+					)}
+					{/* TASKS STATS */}
+					{screen.dynamicWidth < 900 ? (
+						<Grid
+							sx={{
+								display: {
+									xs: `${value === 2 ? 'block' : 'none'}`,
+									md: `${value === 2 ? 'none' : 'block'}`,
+								},
+							}}
+							item
+							xs={12}
+							sm={12}
+							lg={4}
+						>
+							<PieChartTasks tasks={tasks} />
+							<Box paddingTop={2}>
+								<GroupsCount tasks={tasks} />
+							</Box>
+						</Grid>
+					) : (
+						<Grid item xs={12} sm={6} lg={4}>
+							<PieChartTasks tasks={tasks} />
+						</Grid>
+					)}
+					{/* SEARCH TASKS */}
+					{screen.dynamicWidth < 900 ? (
+						<Grid
+							sx={{
+								display: {
+									xs: `${value === 0 ? 'block' : 'none'}`,
+									md: `${value === 0 ? 'none' : 'block'}`,
+								},
+							}}
+							item
+							xs={12}
+							sm={12}
+							lg={12}
+						>
 							<Stack
 								direction="row"
 								flexWrap="wrap-reverse"
@@ -140,104 +166,47 @@ const Home = () => {
 									isOpenFilter={openFilter}
 									onOpenFilter={handleOpenFilter}
 									onCloseFilter={handleCloseFilter}
+									setSelectedFilters={setSelectedFilters}
 								/>
 							</Stack>
 							<Sort tasks={tasks} setFilteredTasks={setFilteredTasks} />
-							<SearchTasks tasks={tasks} setFilteredTasks={setFilteredTasks} />
-						</TabPanel>
-						<TabPanel value={value} index={1} dir={theme.direction}>
-							<CreateTask statuses={statuses} refreshTasks={displayTasks} />
-						</TabPanel>
-						<TabPanel value={value} index={2} dir={theme.direction}>
-							<PieChartTasks tasks={tasks} />
-							<GroupsCount tasks={tasks} />
-						</TabPanel>
-					</Box>
-				</Grid>
-				{filteredTasks.length < 1 && (
-					<Grid item xs={12} md={12} lg={12}>
-						<Paper
-							component="form"
-							style={{ justifyContent: 'center' }}
-							sx={{
-								p: '2px 4px',
-								display: 'flex',
-								alignItems: 'center',
-								width: '100%',
-								height: 50,
-							}}
-						>
-							<Typography variant="p">No tasks found</Typography>
-						</Paper>
-					</Grid>
-				)}
-				{filteredTasks.map((task, index) => {
-					return (
-						<Grid key={index} item xs={12} md={6} lg={4}>
-							<TaskCard
-								task={task}
-								taskStatusObjects={statuses}
-								refreshTasks={displayTasks}
-							/>
-						</Grid>
-					);
-				})}
-			</Grid>
-		);
-	}
-
-	return (
-		<Page title="Home | Task Manager">
-			<Container maxWidth="xl">
-				<Grid container spacing={3} padding={2}>
-					<Grid
-						sx={{ display: { xs: 'none', sm: 'block' } }}
-						item
-						xs={12}
-						md={6}
-						lg={4}
-					>
-						<CreateTask statuses={statuses} refreshTasks={displayTasks} />
-					</Grid>
-					<Grid
-						sx={{ display: { xs: 'none', sm: 'block' } }}
-						item
-						xs={12}
-						md={6}
-						lg={4}
-					>
-						<PieChartTasks tasks={tasks} />
-					</Grid>
-					<Grid
-						sx={{ display: { xs: 'none', sm: 'block' } }}
-						item
-						xs={12}
-						md={12}
-						lg={4}
-					>
-						<GroupsCount tasks={tasks} />
-						<Stack
-							paddingTop={3}
-							direction="row"
-							flexWrap="wrap-reverse"
-							alignItems="center"
-							justifyContent="flex-end"
-							sx={{ mb: 3 }}
-						>
-							<FiltersSidebar
+							<SearchTasks
 								tasks={tasks}
 								setFilteredTasks={setFilteredTasks}
-								statuses={statuses}
-								isOpenFilter={openFilter}
-								onOpenFilter={handleOpenFilter}
-								onCloseFilter={handleCloseFilter}
+								setSelectedFilters={setSelectedFilters}
 							/>
-						</Stack>
-						<Sort tasks={tasks} setFilteredTasks={setFilteredTasks} />
-						<SearchTasks tasks={tasks} setFilteredTasks={setFilteredTasks} />
-					</Grid>
+						</Grid>
+					) : (
+						<Grid item xs={12} sm={12} lg={4}>
+							<GroupsCount tasks={tasks} />
+							<Stack
+								paddingTop={3}
+								direction="row"
+								flexWrap="wrap-reverse"
+								alignItems="center"
+								justifyContent="flex-end"
+								sx={{ mb: 3 }}
+							>
+								<FiltersSidebar
+									tasks={tasks}
+									setFilteredTasks={setFilteredTasks}
+									statuses={statuses}
+									isOpenFilter={openFilter}
+									onOpenFilter={handleOpenFilter}
+									onCloseFilter={handleCloseFilter}
+									setSelectedFilters={setSelectedFilters}
+								/>
+							</Stack>
+							<Sort tasks={tasks} setFilteredTasks={setFilteredTasks} />
+							<SearchTasks
+								tasks={tasks}
+								setFilteredTasks={setFilteredTasks}
+								setSelectedFilters={setSelectedFilters}
+							/>
+						</Grid>
+					)}
 					{filteredTasks.length < 1 && (
-						<Grid item xs={12} md={12} lg={12}>
+						<Grid item xs={12} sm={12} lg={12}>
 							<Paper
 								component="form"
 								style={{ justifyContent: 'center' }}
@@ -253,9 +222,26 @@ const Home = () => {
 							</Paper>
 						</Grid>
 					)}
+					{selectedFilters && (
+						<Grid item xs={12} sm={12} lg={12}>
+							<Paper
+								component="form"
+								style={{ justifyContent: 'center' }}
+								sx={{
+									p: '2px 4px',
+									display: 'flex',
+									alignItems: 'center',
+									width: '100%',
+									height: 50,
+								}}
+							>
+								<Typography variant="p">{`Selected filters: ${selectedFilters}`}</Typography>
+							</Paper>
+						</Grid>
+					)}
 					{filteredTasks.map((task, index) => {
 						return (
-							<Grid key={index} item xs={12} md={6} lg={4}>
+							<Grid key={index} item xs={12} sm={6} lg={4}>
 								<TaskCard
 									task={task}
 									taskStatusObjects={statuses}

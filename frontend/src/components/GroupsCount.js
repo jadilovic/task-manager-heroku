@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
-import { Avatar, Card, CardHeader, Typography } from '@mui/material';
+import { Avatar, Typography } from '@mui/material';
 import icons from '../data/icons';
 import colors from '../data/colors';
 import PropTypes from 'prop-types';

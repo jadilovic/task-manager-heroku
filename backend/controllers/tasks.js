@@ -6,6 +6,7 @@ const TaskStatus = require('../models/TaskStatus');
 const getAllTasks = async (req, res) => {
 	let iconFilters = [];
 	let statusFilters = [];
+	// console.log('req.query: ', req.query);
 	if (req.query.avatarIcon) {
 		if (Array.isArray(req.query.avatarIcon)) {
 			iconFilters = req.query.avatarIcon.map((iconName) => {
@@ -149,6 +150,7 @@ const getAllStatuses = async (req, res) => {
 	res.status(StatusCodes.OK).json({ statuses, length: statuses.length });
 };
 
+// POST REQUEST FOR FILTERING
 const filterTasksByAvatarIconAndColor = async (req, res) => {
 	let {
 		user: { userId },

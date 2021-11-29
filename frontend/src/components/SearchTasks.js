@@ -5,7 +5,7 @@ import { Button } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 
 export default function CustomizedInputBase(props) {
-	const { tasks, setFilteredTasks } = props;
+	const { tasks, setFilteredTasks, setSelectedFilters } = props;
 
 	const handleSearch = (event) => {
 		let value = event.target.value.toLowerCase();
@@ -21,6 +21,7 @@ export default function CustomizedInputBase(props) {
 	const handleClear = () => {
 		document.getElementById('standard-basic').value = '';
 		setFilteredTasks(tasks);
+		setSelectedFilters('');
 	};
 
 	return (

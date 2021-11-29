@@ -32,6 +32,7 @@ const useAxiosRequest = () => {
 		});
 	};
 
+	// GET FILTER REQUEST
 	const getAllTasks = async (iconFilters, statusFilters) => {
 		let querystring = '?';
 		iconFilters.forEach((iconName) => {
@@ -40,6 +41,7 @@ const useAxiosRequest = () => {
 		statusFilters.forEach((status) => {
 			querystring = querystring.concat(`currentStatus=${status}&`);
 		});
+		//	console.log('querystring: ', querystring);
 		return axios({
 			method: 'GET',
 			url: `${process.env.REACT_APP_SERVER_URL}/api/v1/tasks${querystring}`,
@@ -132,6 +134,7 @@ const useAxiosRequest = () => {
 		}
 	};
 
+	// FILTER POST REQUEST
 	const filterTasks = async (iconFilters, statusFilters) => {
 		try {
 			return axios({
