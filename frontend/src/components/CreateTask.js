@@ -17,11 +17,13 @@ import colors from '../data/colors';
 import icons from '../data/icons';
 import LoadingPage from '../components/LoadingPage';
 import { makeStyles } from '@mui/styles';
+import UserWindow from '../utils/UserWindow';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
 	root: {
 		'& .MuiFormLabel-root': {
-			color: 'orange', // or black
+			color: '#9AD5CA', // or orange
 		},
 	},
 	inputLabel: {
@@ -63,8 +65,9 @@ const CreateTask = (props) => {
 	const [loading, setLoading] = useState(true);
 	const { statuses, refreshTasks } = props;
 	const classes = useStyles();
+	const screen = UserWindow();
+	const history = useHistory();
 
-	// to explore why is this happening
 	useEffect(() => {
 		setNewTask({
 			...newTask,
@@ -111,7 +114,11 @@ const CreateTask = (props) => {
 				avatarIcon: icons[0].name,
 				avatarColor: colors[0].hex,
 			});
-			refreshTasks();
+			if (screen.dynamicWidth < 900) {
+				history.push('/home');
+			} else {
+				refreshTasks();
+			}
 		} catch (err) {
 			console.log(err.response);
 			setError(err.response.data.msg);

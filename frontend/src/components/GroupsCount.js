@@ -17,10 +17,6 @@ const SectionStyle = styled(Card)(({ theme }) => ({
 	justifyContent: 'center',
 }));
 
-const Demo = styled('div')(({ theme }) => ({
-	backgroundColor: theme.palette.grey[900],
-}));
-
 export default function GroupCount(props) {
 	const { tasks } = props;
 	const [groupsData, setGroupsData] = useState([]);
@@ -51,31 +47,30 @@ export default function GroupCount(props) {
 
 	return (
 		<SectionStyle>
-			<Demo>
-				<List>
-					{icons.map((icon, index) => {
-						return (
-							<div key={index}>
-								<ListItem>
-									<ListItemAvatar>
-										<Avatar
-											style={{
-												backgroundColor: colors[index].hex,
-											}}
-										>
-											{icon.icon}
-										</Avatar>
-									</ListItemAvatar>
-									<ListItemText
-										primary={`Total: ${groupsData[index]}`}
-										secondary={`${icon.name}`}
-									/>
-								</ListItem>
-							</div>
-						);
-					})}
-				</List>
-			</Demo>
+			<List>
+				{icons.map((icon, index) => {
+					return (
+						<div key={index}>
+							<ListItem>
+								<ListItemAvatar>
+									<Avatar
+										style={{
+											backgroundColor: colors[index].hex,
+										}}
+									>
+										{icon.icon}
+									</Avatar>
+								</ListItemAvatar>
+								<ListItemText
+									primary={`Total: ${groupsData[index]}`}
+									secondary={`${icon.name}`}
+								/>
+							</ListItem>
+							{index < 3 && <Divider />}
+						</div>
+					);
+				})}
+			</List>
 		</SectionStyle>
 	);
 }

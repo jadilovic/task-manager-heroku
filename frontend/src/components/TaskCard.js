@@ -20,7 +20,6 @@ import useAxiosRequest from '../utils/useAxiosRequest';
 import Stack from '@mui/material/Stack';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
-import colors from '../data/colors';
 import icons from '../data/icons';
 
 const Alert = forwardRef(function Alert(props, ref) {

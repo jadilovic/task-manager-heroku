@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { styled } from '@mui/material/styles';
-import { Card, Collapse, Divider, Typography } from '@mui/material';
+import { Divider, Typography } from '@mui/material';
 import useAxiosRequest from '../utils/useAxiosRequest';
 import Page from '../components/Page';
 import { Grid, Container, Paper, Stack } from '@mui/material';
@@ -16,22 +15,8 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import UserWindow from '../utils/UserWindow';
-import IconButton from '@mui/material/IconButton';
 import GroupCount from '../components/GroupsCount';
 import PropTypes from 'prop-types';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Group } from '@mui/icons-material';
-
-const ExpandMore = styled((props) => {
-	const { expand, ...other } = props;
-	return <IconButton {...other} />;
-})(({ theme, expand }) => ({
-	transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
-	marginLeft: 'auto',
-	transition: theme.transitions.create('transform', {
-		duration: theme.transitions.duration.shortest,
-	}),
-}));
 
 function Item(props) {
 	const { sx, ...other } = props;

@@ -34,7 +34,6 @@ export default function PieChartTasks(props) {
 	const theme = useTheme();
 	const { tasks, value } = props;
 	const [chartData, setChartData] = useState([]);
-	const [expanded, setExpanded] = useState(false);
 
 	const calculateChartData = () => {
 		let initiatedCount = 0;
@@ -83,10 +82,6 @@ export default function PieChartTasks(props) {
 			pie: { donut: { labels: { show: false } } },
 		},
 	});
-
-	const handleExpandClick = () => {
-		setExpanded(!expanded);
-	};
 
 	return (
 		<Card>

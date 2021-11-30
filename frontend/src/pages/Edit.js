@@ -145,13 +145,6 @@ export default function Edit() {
 		},
 	})(MenuItem);
 
-	// -------------------------------------------------
-
-	// const getAvatarColor = () => {
-	// 	const color = colors.find((color) => color.name === taskValues.avatarColor);
-	// 	return `${color.hex}`;
-	// };
-
 	if (loading) {
 		return <LoadingPage />;
 	}
