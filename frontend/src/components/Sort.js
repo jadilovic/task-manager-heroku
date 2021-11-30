@@ -82,7 +82,7 @@ export default function Sort(props) {
 			component="form"
 			style={{ justifyContent: 'center' }}
 			sx={{
-				p: '2px 4px',
+				marginBottom: 3,
 				display: 'flex',
 				alignItems: 'center',
 				width: '100%',

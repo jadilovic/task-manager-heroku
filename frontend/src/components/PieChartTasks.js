@@ -3,32 +3,11 @@ import { merge } from 'lodash';
 import ReactApexChart from 'react-apexcharts';
 // material
 import { useTheme, styled } from '@mui/material/styles';
-import { Card, Collapse, Typography } from '@mui/material';
+import { Card } from '@mui/material';
 // utils
 import { fNumber } from '../utils/formatNumber';
 //
 import BaseOptionChart from '../utils/BaseOptionChart';
-import GroupsCount from '../components/GroupsCount';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import IconButton from '@mui/material/IconButton';
-
-const SectionStyle = styled(Card)(({ theme }) => ({
-	width: '100%',
-	//	maxWidth: 464,
-	display: 'flex',
-	flexDirection: 'column',
-	justifyContent: 'center',
-}));
-
-const ExpandMore = styled((props) => {
-	const { expand, ...other } = props;
-	return <IconButton {...other} />;
-})(({ theme, expand }) => ({
-	transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
-	transition: theme.transitions.create('transform', {
-		duration: theme.transitions.duration.shortest,
-	}),
-}));
 
 const CHART_HEIGHT = 295;
 const LEGEND_HEIGHT = 50;
@@ -111,30 +90,14 @@ export default function PieChartTasks(props) {
 
 	return (
 		<Card>
-			<Typography align="center" variant="h6">
-				Stat charts
-			</Typography>
-			<SectionStyle>
-				<ExpandMore
-					expand={expanded}
-					onClick={handleExpandClick}
-					aria-expanded={expanded}
-					aria-label="show more"
-				>
-					<ExpandMoreIcon />
-				</ExpandMore>
-			</SectionStyle>
-			<Collapse in={expanded} timeout="auto" unmountOnExit>
-				<ChartWrapperStyle dir="ltr">
-					<ReactApexChart
-						type="pie"
-						series={chartData}
-						options={chartOptions}
-						height={260}
-					/>
-				</ChartWrapperStyle>
-				<GroupsCount tasks={tasks} />
-			</Collapse>
+			<ChartWrapperStyle dir="ltr">
+				<ReactApexChart
+					type="pie"
+					series={chartData}
+					options={chartOptions}
+					height={260}
+				/>
+			</ChartWrapperStyle>
 		</Card>
 	);
 }

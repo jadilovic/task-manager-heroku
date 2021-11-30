@@ -28,15 +28,13 @@ export default function CustomizedInputBase(props) {
 		<Paper
 			component="form"
 			sx={{
-				marginTop: 3,
-				paddingTop: 0,
 				display: 'flex',
 				alignItems: 'center',
 				width: '100%',
 			}}
 		>
 			<SearchIcon />
-			<Divider sx={{ height: 45, m: 0.5 }} orientation="vertical" />
+			<Divider sx={{ height: 40, m: 0.5 }} orientation="vertical" />
 			<TextField
 				fullWidth
 				id="standard-basic"

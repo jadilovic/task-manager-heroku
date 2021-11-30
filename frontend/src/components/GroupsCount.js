@@ -1,43 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import Box from '@mui/material/Box';
-import { Avatar, Typography, Paper } from '@mui/material';
+import { Avatar, Card } from '@mui/material';
 import icons from '../data/icons';
 import colors from '../data/colors';
-import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemText from '@mui/material/ListItemText';
+import { Divider } from '@mui/material';
 
-function Item(props) {
-	const { sx, ...other } = props;
-	return (
-		<Paper
-			component="form"
-			sx={{
-				marginTop: 2,
-				display: 'flex',
-			}}
-		>
-			<Box
-				sx={{
-					color: 'white',
-					p: 1,
-					borderRadius: 1,
-					textAlign: 'center',
-					fontSize: '1rem',
-					fontWeight: '700',
-					...sx,
-				}}
-				{...other}
-			/>
-		</Paper>
-	);
-}
+const SectionStyle = styled(Card)(({ theme }) => ({
+	width: '100%',
+	//	maxWidth: 464,
+	display: 'flex',
+	flexDirection: 'column',
+	justifyContent: 'center',
+}));
 
-Item.propTypes = {
-	sx: PropTypes.oneOfType([
-		PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.func, PropTypes.object])),
-		PropTypes.func,
-		PropTypes.object,
-	]),
-};
+const Demo = styled('div')(({ theme }) => ({
+	backgroundColor: theme.palette.grey[900],
+}));
 
 export default function GroupCount(props) {
 	const { tasks } = props;
@@ -67,30 +49,33 @@ export default function GroupCount(props) {
 		calculateGroupsData();
 	}, [tasks]); // eslint-disable-line react-hooks/exhaustive-deps
 
-	const getColor = (iconIndex) => {
-		const color = colors.find((color, index) => index === iconIndex);
-		return `${color.hex}`;
-	};
 	return (
-		<div style={{ width: '100%' }}>
-			<Box
-				sx={{
-					display: 'flex',
-					justifyContent: 'space-between',
-					bgcolor: 'background.paper',
-				}}
-			>
-				{icons.map((icon, index) => {
-					return (
-						<Item key={index}>
-							<Avatar sx={{ bgcolor: getColor(index) }} aria-label="recipe">
-								{icon.icon}
-							</Avatar>
-							<Typography>{groupsData[index]}</Typography>
-						</Item>
-					);
-				})}
-			</Box>
-		</div>
+		<SectionStyle>
+			<Demo>
+				<List>
+					{icons.map((icon, index) => {
+						return (
+							<div key={index}>
+								<ListItem>
+									<ListItemAvatar>
+										<Avatar
+											style={{
+												backgroundColor: colors[index].hex,
+											}}
+										>
+											{icon.icon}
+										</Avatar>
+									</ListItemAvatar>
+									<ListItemText
+										primary={`Total: ${groupsData[index]}`}
+										secondary={`${icon.name}`}
+									/>
+								</ListItem>
+							</div>
+						);
+					})}
+				</List>
+			</Demo>
+		</SectionStyle>
 	);
 }

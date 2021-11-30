@@ -11,6 +11,7 @@ import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import IconButton from '@mui/material/IconButton';
 import Link from '@mui/material/Link';
+import SearchTasks from '../components/SearchTasks';
 
 const Navbar = (props) => {
 	const { setDarkMode, darkMode } = props;

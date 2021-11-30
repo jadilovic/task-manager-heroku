@@ -10,7 +10,7 @@ export default function TaskStatus(props) {
 	let chipIcon = null;
 	if (message === 'Initiated') {
 		chipIcon = <HourglassEmpty />;
-	} else if (colorNotification === 'Ongoing') {
+	} else if (message === 'Ongoing') {
 		chipIcon = <ArrowForward />;
 	} else {
 		chipIcon = <CheckCircleOutline />;

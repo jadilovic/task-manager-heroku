@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { styled } from '@mui/material/styles';
-import { Card, Collapse, Typography } from '@mui/material';
+import { Card, Collapse, Divider, Typography } from '@mui/material';
 import useAxiosRequest from '../utils/useAxiosRequest';
 import Page from '../components/Page';
 import { Grid, Container, Paper, Stack } from '@mui/material';
@@ -16,26 +16,50 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import UserWindow from '../utils/UserWindow';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import IconButton from '@mui/material/IconButton';
-
-const SectionStyle = styled(Card)(({ theme }) => ({
-	width: '100%',
-	//	maxWidth: 464,
-	display: 'flex',
-	flexDirection: 'column',
-	justifyContent: 'center',
-}));
+import GroupCount from '../components/GroupsCount';
+import PropTypes from 'prop-types';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { Group } from '@mui/icons-material';
 
 const ExpandMore = styled((props) => {
 	const { expand, ...other } = props;
 	return <IconButton {...other} />;
 })(({ theme, expand }) => ({
 	transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
+	marginLeft: 'auto',
 	transition: theme.transitions.create('transform', {
 		duration: theme.transitions.duration.shortest,
 	}),
 }));
+
+function Item(props) {
+	const { sx, ...other } = props;
+	return (
+		<Box
+			sx={{
+				bgcolor: 'primary.main',
+				color: 'white',
+				p: 1,
+				m: 1,
+				borderRadius: 1,
+				textAlign: 'center',
+				fontSize: '1rem',
+				fontWeight: '700',
+				...sx,
+			}}
+			{...other}
+		/>
+	);
+}
+
+Item.propTypes = {
+	sx: PropTypes.oneOfType([
+		PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.func, PropTypes.object])),
+		PropTypes.func,
+		PropTypes.object,
+	]),
+};
 
 function tabProps(index) {
 	return {
@@ -54,7 +78,6 @@ const Home = () => {
 	const [openFilter, setOpenFilter] = useState(false);
 	const [value, setValue] = useState(0);
 	const [selectedFilters, setSelectedFilters] = useState('');
-	const [expanded, setExpanded] = useState(false);
 
 	const displayTasks = async () => {
 		try {
@@ -92,10 +115,6 @@ const Home = () => {
 		setTasks(tasks);
 	};
 
-	const handleExpandClick = () => {
-		setExpanded(!expanded);
-	};
-
 	if (loading) {
 		return <LoadingPage />;
 	}
@@ -122,7 +141,7 @@ const Home = () => {
 					</Box>
 				)}
 				{/* CREATE TASK */}
-				<Grid container spacing={3} padding={2}>
+				<Grid container spacing={2} padding={2}>
 					{screen.dynamicWidth < 900 ? (
 						<Grid
 							sx={{
@@ -139,7 +158,7 @@ const Home = () => {
 							<CreateTask statuses={statuses} refreshTasks={displayTasks} />
 						</Grid>
 					) : (
-						<Grid item xs={12} sm={6} lg={4}>
+						<Grid item xs={12} sm={12} lg={4}>
 							<CreateTask statuses={statuses} refreshTasks={displayTasks} />
 						</Grid>
 					)}
@@ -158,10 +177,12 @@ const Home = () => {
 							lg={4}
 						>
 							<PieChartTasks tasks={tasks} value={value} />
+							<Divider />
+							<GroupCount tasks={tasks} />
 						</Grid>
 					) : (
 						<Grid item xs={12} sm={6} lg={4}>
-							<PieChartTasks tasks={tasks} />
+							<PieChartTasks tasks={tasks} value={value} />
 						</Grid>
 					)}
 					{/* SEARCH TASKS */}
@@ -207,54 +228,48 @@ const Home = () => {
 							/>
 						</Grid>
 					) : (
-						<Grid item xs={12} sm={12} lg={4}>
-							<Paper>
-								<Typography align="center" variant="h6">
-									Filter - Sort - Search
-								</Typography>
-								<SectionStyle>
-									<ExpandMore
-										expand={expanded}
-										onClick={handleExpandClick}
-										aria-expanded={expanded}
-										aria-label="show more"
-									>
-										<ExpandMoreIcon />
-									</ExpandMore>
-								</SectionStyle>
-								<Collapse in={expanded} timeout="auto" unmountOnExit>
-									<Stack
-										paddingTop={3}
-										direction="row"
-										flexWrap="wrap-reverse"
-										alignItems="center"
-										justifyContent="flex-end"
-										sx={{ mb: 3 }}
-									>
-										<FiltersSidebar
-											tasks={tasks}
-											setFilteredTasks={setFilteredTasks}
-											statuses={statuses}
-											isOpenFilter={openFilter}
-											onOpenFilter={handleOpenFilter}
-											onCloseFilter={handleCloseFilter}
-											setSelectedFilters={setSelectedFilters}
-										/>
-									</Stack>
-									<Sort
-										tasks={tasks}
-										setFilteredTasks={setFilteredTasks}
-										setSelectedFilters={setSelectedFilters}
-									/>
-									<SearchTasks
-										tasks={tasks}
-										setFilteredTasks={setFilteredTasks}
-										setSelectedFilters={setSelectedFilters}
-									/>
-								</Collapse>
-							</Paper>
+						<Grid item xs={12} sm={6} lg={4}>
+							<GroupCount tasks={tasks} />
 						</Grid>
 					)}
+					{screen.dynamicWidth > 900 && (
+						<>
+							<Grid item xs={12} sm={12} md={4} lg={4}>
+								<Stack
+									direction="row"
+									flexWrap="wrap-reverse"
+									alignItems="center"
+									justifyContent="flex-end"
+									sx={{ mb: 3 }}
+								>
+									<FiltersSidebar
+										tasks={tasks}
+										setFilteredTasks={setFilteredTasks}
+										statuses={statuses}
+										isOpenFilter={openFilter}
+										onOpenFilter={handleOpenFilter}
+										onCloseFilter={handleCloseFilter}
+										setSelectedFilters={setSelectedFilters}
+									/>
+								</Stack>
+							</Grid>
+							<Grid item xs={12} sm={12} md={4} lg={4}>
+								<Sort
+									tasks={tasks}
+									setFilteredTasks={setFilteredTasks}
+									setSelectedFilters={setSelectedFilters}
+								/>
+							</Grid>
+							<Grid item xs={12} sm={12} md={4} lg={4}>
+								<SearchTasks
+									tasks={tasks}
+									setFilteredTasks={setFilteredTasks}
+									setSelectedFilters={setSelectedFilters}
+								/>
+							</Grid>
+						</>
+					)}
+
 					{filteredTasks.length < 1 && (
 						<Grid item xs={12} sm={12} lg={12}>
 							<Paper
@@ -285,7 +300,7 @@ const Home = () => {
 									alignItems: 'center',
 									width: '100%',
 									height: 50,
-									backgroundColor: 'info.dark',
+									backgroundColor: '#544343',
 									color: 'white',
 								}}
 							>

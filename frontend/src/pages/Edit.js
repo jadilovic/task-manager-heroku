@@ -100,13 +100,13 @@ export default function Edit() {
 
 	const getIconColor = (avatarIcon) => {
 		if (avatarIcon === 'Home') {
-			return 'Ming';
+			return '#5E6D71';
 		} else if (avatarIcon === 'Business') {
-			return 'Vegas Gold';
+			return '#C8AD55';
 		} else if (avatarIcon === 'Group') {
-			return 'Dark Cyan';
+			return '#368F8B';
 		} else {
-			return 'Desert Sand';
+			return '#DDBEA8';
 		}
 	};
 
@@ -121,7 +121,8 @@ export default function Edit() {
 	};
 
 	const getStatusColor = (statusId) => {
-		return statuses.find((status) => status._id === statusId);
+		const status = statuses.find((status) => status._id === statusId);
+		return status.colorNotification;
 	};
 
 	// -----------------------------------------------
@@ -146,10 +147,10 @@ export default function Edit() {
 
 	// -------------------------------------------------
 
-	const getAvatarColor = () => {
-		const color = colors.find((color) => color.name === taskValues.avatarColor);
-		return `${color.hex}`;
-	};
+	// const getAvatarColor = () => {
+	// 	const color = colors.find((color) => color.name === taskValues.avatarColor);
+	// 	return `${color.hex}`;
+	// };
 
 	if (loading) {
 		return <LoadingPage />;
@@ -194,14 +195,14 @@ export default function Edit() {
 						</ContentStyle>
 						<ContentStyle>
 							<Select
+								label="Task current status"
 								sx={{
-									backgroundColor: `${
-										getStatusColor(taskValues?.currentStatus)?.colorNotification
-									}.main`,
+									backgroundColor: `${getStatusColor(
+										taskValues?.currentStatus
+									)}`,
 								}}
 								name="currentStatus"
 								value={taskValues?.currentStatus}
-								label="Task current status"
 								onChange={handleSelectChange}
 							>
 								{statuses.map((taskStatus, index) => {
@@ -214,7 +215,7 @@ export default function Edit() {
 												)
 											}
 											sx={{
-												backgroundColor: `${taskStatus.colorNotification}.main`,
+												backgroundColor: `${taskStatus.colorNotification}`,
 											}}
 											key={index}
 											value={taskStatus._id}
@@ -242,7 +243,7 @@ export default function Edit() {
 						<ContentStyle>
 							<Select
 								required
-								sx={{ backgroundColor: getAvatarColor(), color: 'white' }}
+								sx={{ backgroundColor: taskValues.avatarColor, color: 'white' }}
 								value={taskValues.avatarIcon}
 								name="avatarIcon"
 								onChange={handleSelectChange}

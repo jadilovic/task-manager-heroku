@@ -12,23 +12,27 @@ import {
 	InputLabel,
 	Select,
 	MenuItem,
-	Typography,
 } from '@mui/material';
 import colors from '../data/colors';
 import icons from '../data/icons';
 import LoadingPage from '../components/LoadingPage';
-import Collapse from '@mui/material/Collapse';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import IconButton from '@mui/material/IconButton';
+import { makeStyles } from '@mui/styles';
 
-const ExpandMore = styled((props) => {
-	const { expand, ...other } = props;
-	return <IconButton {...other} />;
-})(({ theme, expand }) => ({
-	transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
-	transition: theme.transitions.create('transform', {
-		duration: theme.transitions.duration.shortest,
-	}),
+const useStyles = makeStyles((theme) => ({
+	root: {
+		'& .MuiFormLabel-root': {
+			color: 'orange', // or black
+		},
+	},
+	inputLabel: {
+		color: '#9AD5CA',
+		'&.Mui-focused': {
+			color: '#9AD5CA',
+		},
+	},
+	select: {
+		color: 'white',
+	},
 }));
 
 const SectionStyle = styled(Card)(({ theme }) => ({
@@ -58,7 +62,7 @@ const CreateTask = (props) => {
 	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(true);
 	const { statuses, refreshTasks } = props;
-	const [expanded, setExpanded] = useState(false);
+	const classes = useStyles();
 
 	// to explore why is this happening
 	useEffect(() => {
@@ -66,20 +70,20 @@ const CreateTask = (props) => {
 			...newTask,
 			statusId: statuses[0]._id,
 			avatarIcon: icons[0].name,
-			avatarColor: colors[0].name,
+			avatarColor: colors[0].hex,
 		});
 		setLoading(false);
 	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 	const getIconColor = (avatarIcon) => {
 		if (avatarIcon === 'Home') {
-			return 'Ming';
+			return colors[0].hex;
 		} else if (avatarIcon === 'Business') {
-			return 'Vegas Gold';
+			return colors[1].hex;
 		} else if (avatarIcon === 'Group') {
-			return 'Dark Cyan';
-		} else {
-			return 'Desert Sand';
+			return colors[2].hex;
+		} else if (avatarIcon === 'Person') {
+			return colors[3].hex;
 		}
 	};
 
@@ -105,7 +109,7 @@ const CreateTask = (props) => {
 				name: '',
 				statusId: statuses[0]._id,
 				avatarIcon: icons[0].name,
-				avatarColor: colors[0].name,
+				avatarColor: colors[0].hex,
 			});
 			refreshTasks();
 		} catch (err) {
@@ -128,20 +132,11 @@ const CreateTask = (props) => {
 		}
 	};
 
-	const getAvatarColor = () => {
-		const color = colors.find((color) => color.name === newTask.avatarColor);
-		return `${color.hex}`;
-	};
-
 	const getStatusColor = () => {
 		const statusObject = statuses.find(
 			(status) => newTask.statusId === status._id
 		);
 		return statusObject.colorNotification;
-	};
-
-	const handleExpandClick = () => {
-		setExpanded(!expanded);
 	};
 
 	if (loading) {
@@ -150,128 +145,122 @@ const CreateTask = (props) => {
 
 	return (
 		<SectionStyle>
-			<Typography align="center" variant="h6">
-				Create new task
-			</Typography>
-			<ExpandMore
-				expand={expanded}
-				onClick={handleExpandClick}
-				aria-expanded={expanded}
-				aria-label="show more"
-			>
-				<ExpandMoreIcon />
-			</ExpandMore>
-			<Collapse in={expanded} timeout="auto" unmountOnExit>
-				<form noValidate autoComplete="off" onSubmit={handleSubmit}>
-					<CardContent>
-						{error && (
-							<Box
+			<form noValidate autoComplete="off" onSubmit={handleSubmit}>
+				<CardContent>
+					{error && (
+						<Box
+							sx={{
+								paddingTop: 2,
+							}}
+						>
+							<Alert severity="error">{error}</Alert>
+						</Box>
+					)}
+					<ContentStyle>
+						<TextField
+							className={classes.root}
+							size="small"
+							required
+							value={newTask.name}
+							fullWidth
+							label="New task name"
+							id="fullWidth"
+							onChange={handleTaskNameChange}
+							variant="outlined"
+							error={!!error}
+						/>
+					</ContentStyle>
+					<ContentStyle>
+						<FormControl fullWidth style={{ minWidth: 250 }}>
+							<InputLabel className={classes.inputLabel}>
+								Select task status
+							</InputLabel>
+							<Select
+								className={classes.select}
+								size="small"
 								sx={{
-									paddingTop: 2,
+									backgroundColor: getStatusColor(),
 								}}
+								required
+								value={newTask.statusId}
+								name="statusId"
+								label="Task current status"
+								onChange={handleSelectChange}
 							>
-								<Alert severity="error">{error}</Alert>
-							</Box>
-						)}
-						<ContentStyle>
-							<TextField
+								{statuses.map((taskStatus, index) => {
+									return (
+										<MenuItem
+											sx={{
+												backgroundColor: `${taskStatus.colorNotification}`,
+											}}
+											key={index}
+											value={taskStatus._id}
+										>
+											{taskStatus.message}
+										</MenuItem>
+									);
+								})}
+							</Select>
+						</FormControl>
+					</ContentStyle>
+					<ContentStyle>
+						<FormControl fullWidth style={{ minWidth: 250 }}>
+							<InputLabel className={classes.inputLabel}>
+								Select task icon
+							</InputLabel>
+							<Select
+								className={classes.select}
+								labelId="demo-simple-select-error-label"
+								id="demo-simple-select-error"
 								size="small"
 								required
-								value={newTask.name}
-								fullWidth
-								label="New task name"
-								id="fullWidth"
-								onChange={handleTaskNameChange}
-								variant="outlined"
-								error={!!error}
-							/>
-						</ContentStyle>
-						<ContentStyle>
-							<FormControl fullWidth style={{ minWidth: 250 }}>
-								<InputLabel>Select task status</InputLabel>
-								<Select
-									size="small"
-									sx={{
-										backgroundColor: getStatusColor(),
-									}}
-									required
-									value={newTask.statusId}
-									name="statusId"
-									label="Task current status"
-									onChange={handleSelectChange}
-								>
-									{statuses.map((taskStatus, index) => {
-										return (
-											<MenuItem
-												sx={{
-													backgroundColor: `${taskStatus.colorNotification}`,
-												}}
-												key={index}
-												value={taskStatus._id}
-											>
-												{taskStatus.message}
-											</MenuItem>
-										);
-									})}
-								</Select>
-							</FormControl>
-						</ContentStyle>
-						<ContentStyle>
-							<FormControl fullWidth style={{ minWidth: 250 }}>
-								<InputLabel>Select task icon</InputLabel>
-								<Select
-									labelId="demo-simple-select-error-label"
-									id="demo-simple-select-error"
-									size="small"
-									required
-									sx={{
-										backgroundColor: getAvatarColor(),
-										color: 'white',
-									}}
-									value={newTask.avatarIcon}
-									name="avatarIcon"
-									label="Task current icon"
-									onChange={handleSelectChange}
-								>
-									{icons.map((icon, index) => {
-										return (
-											<MenuItem
-												style={{
-													backgroundColor: colors[index].hex,
-													color: 'white',
-												}}
-												key={index}
-												value={icon.name}
-											>
-												<div
-													style={{
-														display: 'flex',
-														alignItems: 'center',
-														flexWrap: 'wrap',
-													}}
-												>
-													{icon.icon}
-													<div style={{ marginLeft: 20 }}>{icon.name}</div>
-												</div>
-											</MenuItem>
-										);
-									})}
-								</Select>
-							</FormControl>
-						</ContentStyle>
-						<SectionStyle>
-							<Button
-								style={{ margin: 5 }}
-								variant="contained"
-								color="primary"
-								type="submit"
+								sx={{
+									backgroundColor: newTask.avatarColor,
+									color: 'white',
+								}}
+								value={newTask.avatarIcon}
+								name="avatarIcon"
+								label="Task current icon"
+								onChange={handleSelectChange}
 							>
-								create task
-							</Button>
-						</SectionStyle>
-					</CardContent>
-				</form>
-			</Collapse>
+								{icons.map((icon, index) => {
+									return (
+										<MenuItem
+											style={{
+												backgroundColor: colors[index].hex,
+												color: 'white',
+											}}
+											key={index}
+											value={icon.name}
+										>
+											<div
+												style={{
+													display: 'flex',
+													alignItems: 'center',
+													flexWrap: 'wrap',
+												}}
+											>
+												{icon.icon}
+												<div style={{ marginLeft: 20 }}>{icon.name}</div>
+											</div>
+										</MenuItem>
+									);
+								})}
+							</Select>
+						</FormControl>
+					</ContentStyle>
+					<SectionStyle>
+						<Button
+							style={{ margin: 5 }}
+							variant="contained"
+							color="primary"
+							type="submit"
+						>
+							create task
+						</Button>
+					</SectionStyle>
+				</CardContent>
+			</form>
 		</SectionStyle>
 	);
 };

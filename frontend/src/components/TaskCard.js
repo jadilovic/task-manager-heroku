@@ -94,10 +94,10 @@ const TaskCard = (props) => {
 		setOpenSnackbar(false);
 	};
 
-	const getColor = () => {
-		const color = colors.find((color) => color.name === avatarColor);
-		return `${color.hex}`;
-	};
+	// const getColor = () => {
+	// 	const color = colors.find((color) => color.name === avatarColor);
+	// 	return `${color.hex}`;
+	// };
 
 	const getIcon = () => {
 		const icon = icons.find((icon) => icon.name === avatarIcon);
@@ -108,7 +108,7 @@ const TaskCard = (props) => {
 		<ContentStyle>
 			<CardHeader
 				avatar={
-					<Avatar sx={{ bgcolor: getColor() }} aria-label="recipe">
+					<Avatar sx={{ bgcolor: avatarColor }} aria-label="recipe">
 						{getIcon()}
 					</Avatar>
 				}
