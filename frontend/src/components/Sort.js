@@ -89,7 +89,7 @@ export default function Sort(props) {
 			}}
 		>
 			<SortByAlphaIcon />
-			<Divider sx={{ height: 40, m: 2.5 }} orientation="vertical" />
+			<Divider sx={{ height: 40, m: 1 }} orientation="vertical" />
 			<Button
 				style={{ minWidth: 100 }}
 				id="demo-customized-button"

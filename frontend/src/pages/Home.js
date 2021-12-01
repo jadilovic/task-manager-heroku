@@ -136,8 +136,8 @@ const Home = (props) => {
 							}}
 							item
 							xs={12}
-							md={12}
-							lg={12}
+							sm={12}
+							lg={4}
 						>
 							<CreateTask statuses={statuses} refreshTasks={displayTasks} />
 						</Grid>
@@ -147,26 +147,24 @@ const Home = (props) => {
 						</Grid>
 					)}
 					{/* TASKS STATS */}
-					{/* {screen.dynamicWidth < 900 ? ( */}
-					<Grid
-						sx={{
-							display: {
-								xs: `${value === 1 ? 'block' : 'none'}`,
-								md: `${value === 1 ? 'none' : 'block'}`,
-							},
-						}}
-						item
-						xs={12}
-						sm={12}
-						lg={4}
-					>
-						<PieChartTasks tasks={tasks} value={value} />
-						<Divider />
-						<GroupCount tasks={tasks} />
-					</Grid>
-					{/* ) : (
-						<> */}
-					{screen.dynamicWidth > 900 && (
+					{screen.dynamicWidth < 900 ? (
+						<Grid
+							sx={{
+								display: {
+									xs: `${value === 1 ? 'block' : 'none'}`,
+									md: `${value === 1 ? 'none' : 'block'}`,
+								},
+							}}
+							item
+							xs={12}
+							sm={12}
+							lg={4}
+						>
+							<PieChartTasks tasks={tasks} value={value} />
+							<Divider />
+							<GroupCount tasks={tasks} />
+						</Grid>
+					) : (
 						<>
 							<Grid item xs={12} sm={6} lg={4}>
 								<PieChartTasks tasks={tasks} value={value} />
@@ -176,9 +174,6 @@ const Home = (props) => {
 							</Grid>
 						</>
 					)}
-
-					{/* </>
-					)} */}
 					{
 						// SEARCH FILTER SORT TASKS
 						screen.dynamicWidth < 900 && (
