@@ -14,6 +14,8 @@ import ScrollToTop from './utils/ScrollToTop';
 
 const App = () => {
 	const [darkMode, setDarkMode] = useState(true);
+	const [toggleFilter, setToggleFilter] = useState(false);
+	const [searchValue, setSearchValue] = useState('');
 	const theme = createTheme({
 		palette: {
 			mode: `${darkMode ? 'dark' : 'light'}`,
@@ -31,11 +33,24 @@ const App = () => {
 			<Router>
 				<CssBaseline />
 				<ScrollToTop />
-				<Navbar setDarkMode={setDarkMode} darkMode={darkMode} />
+				<Navbar
+					toggleFilter={toggleFilter}
+					setToggleFilter={setToggleFilter}
+					setSearchValue={setSearchValue}
+					setDarkMode={setDarkMode}
+					darkMode={darkMode}
+				/>
 				<Switch>
 					<Route component={Login} path="/" exact />
 					<Route component={Signup} path="/signup" exact />
-					<PrivateRoute component={Home} path="/home" exact />
+					<PrivateRoute
+						toggleFilter={toggleFilter}
+						setToggleFilter={setToggleFilter}
+						searchValue={searchValue}
+						component={Home}
+						path="/home"
+						exact
+					/>
 					<PrivateRoute component={Edit} path="/edit" exact />
 					<Route component={Error} path="/*" />
 				</Switch>

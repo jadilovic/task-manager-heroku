@@ -53,14 +53,16 @@ function tabProps(index) {
 	};
 }
 
-const Home = () => {
+const Home = (props) => {
+	const { toggleFilter, setToggleFilter, searchValue } = props;
+	console.log('search value : ', searchValue);
 	const mongoDB = useAxiosRequest();
 	const screen = UserWindow();
 	const [tasks, setTasks] = useState([]);
 	const [filteredTasks, setFilteredTasks] = useState([]);
 	const [statuses, setStatuses] = useState([]);
 	const [loading, setLoading] = useState(true);
-	const [openFilter, setOpenFilter] = useState(false);
+	// const [openFilter, setOpenFilter] = useState(false);
 	const [value, setValue] = useState(0);
 	const [selectedFilters, setSelectedFilters] = useState('');
 
@@ -87,11 +89,11 @@ const Home = () => {
 	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 	const handleOpenFilter = () => {
-		setOpenFilter(true);
+		setToggleFilter(true);
 	};
 
 	const handleCloseFilter = () => {
-		setOpenFilter(false);
+		setToggleFilter(false);
 	};
 
 	const handleTabChange = (event, newValue) => {
@@ -195,7 +197,7 @@ const Home = () => {
 									tasks={tasks}
 									setFilteredTasks={setFilteredTasks}
 									statuses={statuses}
-									isOpenFilter={openFilter}
+									isOpenFilter={toggleFilter}
 									onOpenFilter={handleOpenFilter}
 									onCloseFilter={handleCloseFilter}
 									setSelectedFilters={setSelectedFilters}
@@ -207,6 +209,7 @@ const Home = () => {
 								setSelectedFilters={setSelectedFilters}
 							/>
 							<SearchTasks
+								searchValue={searchValue}
 								tasks={tasks}
 								setFilteredTasks={setFilteredTasks}
 								setSelectedFilters={setSelectedFilters}
@@ -231,7 +234,7 @@ const Home = () => {
 										tasks={tasks}
 										setFilteredTasks={setFilteredTasks}
 										statuses={statuses}
-										isOpenFilter={openFilter}
+										isOpenFilter={toggleFilter}
 										onOpenFilter={handleOpenFilter}
 										onCloseFilter={handleCloseFilter}
 										setSelectedFilters={setSelectedFilters}
@@ -247,6 +250,7 @@ const Home = () => {
 							</Grid>
 							<Grid item xs={12} sm={12} md={4} lg={4}>
 								<SearchTasks
+									searchValue={searchValue}
 									tasks={tasks}
 									setFilteredTasks={setFilteredTasks}
 									setSelectedFilters={setSelectedFilters}
