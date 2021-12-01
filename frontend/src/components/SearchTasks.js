@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Paper, TextField } from '@mui/material';
 import Divider from '@mui/material/Divider';
 import { Button } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 
 export default function CustomizedInputBase(props) {
-	const { tasks, setFilteredTasks, setSelectedFilters, searchValue } = props;
+	const { tasks, setFilteredTasks, setSelectedFilters } = props;
 
 	const handleSearch = (event) => {
 		let value = event.target.value.toLowerCase();
@@ -23,22 +23,6 @@ export default function CustomizedInputBase(props) {
 		setFilteredTasks(tasks);
 		setSelectedFilters('');
 	};
-
-	// FROM NAVBAR SEARCH
-	const handleNavbarSearch = () => {
-		let result = [];
-		result = tasks.filter((task) => {
-			return (
-				task.name.search(searchValue) !== -1 ||
-				task.description.search(searchValue) !== -1
-			);
-		});
-		setFilteredTasks(result);
-	};
-
-	useEffect(() => {
-		handleNavbarSearch();
-	}, [searchValue]);
 
 	return (
 		<Paper

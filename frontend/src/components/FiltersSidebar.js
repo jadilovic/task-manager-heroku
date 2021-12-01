@@ -123,10 +123,9 @@ export default function FiltersSidebar(props) {
 				<FilterListIcon />
 				<Divider sx={{ height: 40, m: 2.5 }} orientation="vertical" />
 				<Button
-					style={{ minWidth: 175 }}
+					style={{ minWidth: 100 }}
 					variant="outlined"
 					color="inherit"
-					endIcon={<FilterListIcon />}
 					onClick={onOpenFilter}
 				>
 					Filters&nbsp;

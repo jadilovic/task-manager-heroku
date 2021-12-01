@@ -54,15 +54,13 @@ function tabProps(index) {
 }
 
 const Home = (props) => {
-	const { toggleFilter, setToggleFilter, searchValue } = props;
-	console.log('search value : ', searchValue);
 	const mongoDB = useAxiosRequest();
 	const screen = UserWindow();
 	const [tasks, setTasks] = useState([]);
 	const [filteredTasks, setFilteredTasks] = useState([]);
 	const [statuses, setStatuses] = useState([]);
 	const [loading, setLoading] = useState(true);
-	// const [openFilter, setOpenFilter] = useState(false);
+	const [openFilter, setOpenFilter] = useState(false);
 	const [value, setValue] = useState(0);
 	const [selectedFilters, setSelectedFilters] = useState('');
 
@@ -89,11 +87,11 @@ const Home = (props) => {
 	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 	const handleOpenFilter = () => {
-		setToggleFilter(true);
+		setOpenFilter(true);
 	};
 
 	const handleCloseFilter = () => {
-		setToggleFilter(false);
+		setOpenFilter(false);
 	};
 
 	const handleTabChange = (event, newValue) => {
@@ -120,9 +118,8 @@ const Home = (props) => {
 								variant="fullWidth"
 								aria-label="full width tabs example"
 							>
-								<Tab label="Search" {...tabProps(0)} />
-								<Tab label="Create" {...tabProps(1)} />
-								<Tab label="Stats" {...tabProps(2)} />
+								<Tab label="Create" {...tabProps(0)} />
+								<Tab label="Stats" {...tabProps(1)} />
 							</Tabs>
 						</AppBar>
 					</Box>
@@ -133,8 +130,8 @@ const Home = (props) => {
 						<Grid
 							sx={{
 								display: {
-									xs: `${value === 1 ? 'block' : 'none'}`, // Hidden on smaller than md
-									md: `${value === 1 ? 'none' : 'block'}`, // Visible on smaller than md
+									xs: `${value === 0 ? 'block' : 'none'}`, // Hidden on smaller than md
+									md: `${value === 0 ? 'none' : 'block'}`, // Visible on smaller than md
 								},
 							}}
 							item
@@ -145,81 +142,83 @@ const Home = (props) => {
 							<CreateTask statuses={statuses} refreshTasks={displayTasks} />
 						</Grid>
 					) : (
-						<Grid item xs={12} sm={12} lg={4}>
+						<Grid item sm={12} lg={4}>
 							<CreateTask statuses={statuses} refreshTasks={displayTasks} />
 						</Grid>
 					)}
 					{/* TASKS STATS */}
-					{screen.dynamicWidth < 900 ? (
-						<Grid
-							sx={{
-								display: {
-									xs: `${value === 2 ? 'block' : 'none'}`,
-									md: `${value === 2 ? 'none' : 'block'}`,
-								},
-							}}
-							item
-							xs={12}
-							sm={12}
-							lg={4}
-						>
-							<PieChartTasks tasks={tasks} value={value} />
-							<Divider />
-							<GroupCount tasks={tasks} />
-						</Grid>
-					) : (
-						<Grid item xs={12} sm={6} lg={4}>
-							<PieChartTasks tasks={tasks} value={value} />
-						</Grid>
+					{/* {screen.dynamicWidth < 900 ? ( */}
+					<Grid
+						sx={{
+							display: {
+								xs: `${value === 1 ? 'block' : 'none'}`,
+								md: `${value === 1 ? 'none' : 'block'}`,
+							},
+						}}
+						item
+						xs={12}
+						sm={12}
+						lg={4}
+					>
+						<PieChartTasks tasks={tasks} value={value} />
+						<Divider />
+						<GroupCount tasks={tasks} />
+					</Grid>
+					{/* ) : (
+						<> */}
+					{screen.dynamicWidth > 900 && (
+						<>
+							<Grid item xs={12} sm={6} lg={4}>
+								<PieChartTasks tasks={tasks} value={value} />
+							</Grid>
+							<Grid item xs={12} sm={6} lg={4}>
+								<GroupCount tasks={tasks} />
+							</Grid>
+						</>
 					)}
-					{/* SEARCH TASKS */}
-					{screen.dynamicWidth < 900 ? (
-						<Grid
-							sx={{
-								display: {
-									xs: `${value === 0 ? 'block' : 'none'}`,
-									md: `${value === 0 ? 'none' : 'block'}`,
-								},
-							}}
-							item
-							xs={12}
-							sm={12}
-							lg={12}
-						>
-							<Stack
-								direction="row"
-								flexWrap="wrap-reverse"
-								alignItems="center"
-								justifyContent="flex-end"
-								sx={{ mb: 3 }}
-							>
-								<FiltersSidebar
-									tasks={tasks}
-									setFilteredTasks={setFilteredTasks}
-									statuses={statuses}
-									isOpenFilter={toggleFilter}
-									onOpenFilter={handleOpenFilter}
-									onCloseFilter={handleCloseFilter}
-									setSelectedFilters={setSelectedFilters}
-								/>
-							</Stack>
-							<Sort
-								tasks={tasks}
-								setFilteredTasks={setFilteredTasks}
-								setSelectedFilters={setSelectedFilters}
-							/>
-							<SearchTasks
-								searchValue={searchValue}
-								tasks={tasks}
-								setFilteredTasks={setFilteredTasks}
-								setSelectedFilters={setSelectedFilters}
-							/>
-						</Grid>
-					) : (
-						<Grid item xs={12} sm={6} lg={4}>
-							<GroupCount tasks={tasks} />
-						</Grid>
-					)}
+
+					{/* </>
+					)} */}
+					{
+						// SEARCH FILTER SORT TASKS
+						screen.dynamicWidth < 900 && (
+							<>
+								<Grid item xs={6} sm={6} md={6}>
+									<Stack
+										direction="row"
+										flexWrap="wrap-reverse"
+										alignItems="center"
+										justifyContent="flex-end"
+										sx={{ mb: 3 }}
+									>
+										<FiltersSidebar
+											tasks={tasks}
+											setFilteredTasks={setFilteredTasks}
+											statuses={statuses}
+											isOpenFilter={openFilter}
+											onOpenFilter={handleOpenFilter}
+											onCloseFilter={handleCloseFilter}
+											setSelectedFilters={setSelectedFilters}
+										/>
+									</Stack>
+								</Grid>
+								<Grid item xs={6} sm={6} md={6}>
+									<Sort
+										tasks={tasks}
+										setFilteredTasks={setFilteredTasks}
+										setSelectedFilters={setSelectedFilters}
+									/>
+								</Grid>
+								<Grid item xs={12} sm={12} md={12}>
+									<SearchTasks
+										tasks={tasks}
+										setFilteredTasks={setFilteredTasks}
+										setSelectedFilters={setSelectedFilters}
+									/>
+								</Grid>
+							</>
+						)
+					}
 					{screen.dynamicWidth > 900 && (
 						<>
 							<Grid item xs={12} sm={12} md={4} lg={4}>
@@ -234,7 +233,7 @@ const Home = (props) => {
 										tasks={tasks}
 										setFilteredTasks={setFilteredTasks}
 										statuses={statuses}
-										isOpenFilter={toggleFilter}
+										isOpenFilter={openFilter}
 										onOpenFilter={handleOpenFilter}
 										onCloseFilter={handleCloseFilter}
 										setSelectedFilters={setSelectedFilters}
@@ -250,7 +249,6 @@ const Home = (props) => {
 							</Grid>
 							<Grid item xs={12} sm={12} md={4} lg={4}>
 								<SearchTasks
-									searchValue={searchValue}
 									tasks={tasks}
 									setFilteredTasks={setFilteredTasks}
 									setSelectedFilters={setSelectedFilters}
@@ -258,7 +256,6 @@ const Home = (props) => {
 							</Grid>
 						</>
 					)}
-
 					{filteredTasks.length < 1 && (
 						<Grid item xs={12} sm={12} lg={12}>
 							<Paper

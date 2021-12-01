@@ -82,7 +82,6 @@ export default function Sort(props) {
 			component="form"
 			style={{ justifyContent: 'center' }}
 			sx={{
-				marginBottom: 3,
 				display: 'flex',
 				alignItems: 'center',
 				width: '100%',
@@ -92,7 +91,7 @@ export default function Sort(props) {
 			<SortByAlphaIcon />
 			<Divider sx={{ height: 40, m: 2.5 }} orientation="vertical" />
 			<Button
-				style={{ minWidth: 175 }}
+				style={{ minWidth: 100 }}
 				id="demo-customized-button"
 				aria-controls="demo-customized-menu"
 				aria-haspopup="true"
@@ -102,7 +101,7 @@ export default function Sort(props) {
 				onClick={handleClick}
 				endIcon={<KeyboardArrowDownIcon />}
 			>
-				{` Sort by date`}
+				{`Sort`}
 			</Button>
 			<StyledMenu
 				id="demo-customized-menu"
