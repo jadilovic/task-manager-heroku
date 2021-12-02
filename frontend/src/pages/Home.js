@@ -2,14 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Divider, Typography } from '@mui/material';
 import useAxiosRequest from '../utils/useAxiosRequest';
 import Page from '../components/Page';
-import { Grid, Container, Paper, Stack } from '@mui/material';
+import { Grid, Container, Paper } from '@mui/material';
 import TaskCard from '../components/TaskCard';
 import CreateTask from '../components/CreateTask';
 import PieChartTasks from '../components/PieChartTasks';
-import SearchTasks from '../components/SearchTasks';
-import Sort from '../components/Sort';
 import LoadingPage from '../components/LoadingPage';
-import FiltersSidebar from '../components/FiltersSidebar';
 import AppBar from '@mui/material/AppBar';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -17,6 +14,7 @@ import Box from '@mui/material/Box';
 import UserWindow from '../utils/UserWindow';
 import GroupCount from '../components/GroupsCount';
 import PropTypes from 'prop-types';
+import ResponsiveCard from '../components/ResponsiveCard';
 
 function Item(props) {
 	const { sx, ...other } = props;
@@ -160,21 +158,25 @@ const Home = (props) => {
 							sm={12}
 							lg={4}
 						>
-							<PieChartTasks tasks={tasks} value={value} />
+							<PieChartTasks statuses={statuses} tasks={tasks} value={value} />
 							<Divider />
 							<GroupCount tasks={tasks} />
 						</Grid>
 					) : (
 						<>
 							<Grid item xs={12} sm={6} lg={4}>
-								<PieChartTasks tasks={tasks} value={value} />
+								<PieChartTasks
+									statuses={statuses}
+									tasks={tasks}
+									value={value}
+								/>
 							</Grid>
 							<Grid item xs={12} sm={6} lg={4}>
 								<GroupCount tasks={tasks} />
 							</Grid>
 						</>
 					)}
-					{
+					{/* {
 						// SEARCH FILTER SORT TASKS
 						screen.dynamicWidth < 900 && (
 							<>
@@ -213,44 +215,19 @@ const Home = (props) => {
 								</Grid>
 							</>
 						)
-					}
-					{screen.dynamicWidth > 900 && (
-						<>
-							<Grid item xs={12} sm={12} md={4} lg={4}>
-								<Stack
-									direction="row"
-									flexWrap="wrap-reverse"
-									alignItems="center"
-									justifyContent="flex-end"
-									sx={{ mb: 3 }}
-								>
-									<FiltersSidebar
-										tasks={tasks}
-										setFilteredTasks={setFilteredTasks}
-										statuses={statuses}
-										isOpenFilter={openFilter}
-										onOpenFilter={handleOpenFilter}
-										onCloseFilter={handleCloseFilter}
-										setSelectedFilters={setSelectedFilters}
-									/>
-								</Stack>
-							</Grid>
-							<Grid item xs={12} sm={12} md={4} lg={4}>
-								<Sort
-									tasks={tasks}
-									setFilteredTasks={setFilteredTasks}
-									setSelectedFilters={setSelectedFilters}
-								/>
-							</Grid>
-							<Grid item xs={12} sm={12} md={4} lg={4}>
-								<SearchTasks
-									tasks={tasks}
-									setFilteredTasks={setFilteredTasks}
-									setSelectedFilters={setSelectedFilters}
-								/>
-							</Grid>
-						</>
-					)}
+					} */}
+					<Grid item xs={12} sm={12} md={12} lg={12}>
+						<ResponsiveCard
+							tasks={tasks}
+							setFilteredTasks={setFilteredTasks}
+							statuses={statuses}
+							isOpenFilter={openFilter}
+							onOpenFilter={handleOpenFilter}
+							onCloseFilter={handleCloseFilter}
+							setSelectedFilters={setSelectedFilters}
+						/>
+					</Grid>
+
 					{filteredTasks.length < 1 && (
 						<Grid item xs={12} sm={12} lg={12}>
 							<Paper

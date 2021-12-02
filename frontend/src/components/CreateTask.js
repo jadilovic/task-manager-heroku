@@ -19,6 +19,8 @@ import LoadingPage from '../components/LoadingPage';
 import { makeStyles } from '@mui/styles';
 import UserWindow from '../utils/UserWindow';
 import { useHistory } from 'react-router-dom';
+import HourglassEmpty from '@mui/icons-material/HourglassEmpty';
+import { CheckCircleOutline, ArrowForward } from '@mui/icons-material';
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -146,6 +148,16 @@ const CreateTask = (props) => {
 		return statusObject.colorNotification;
 	};
 
+	const getStatusIcon = (message) => {
+		if (message === 'Initiated') {
+			return <HourglassEmpty />;
+		} else if (message === 'Ongoing') {
+			return <ArrowForward />;
+		} else {
+			return <CheckCircleOutline />;
+		}
+	};
+
 	if (loading) {
 		return <LoadingPage />;
 	}
@@ -178,13 +190,13 @@ const CreateTask = (props) => {
 						/>
 					</ContentStyle>
 					<ContentStyle>
-						<FormControl fullWidth style={{ minWidth: 250 }}>
+						<FormControl fullWidth style={{ minWidth: 250 }} variant="standard">
 							<InputLabel className={classes.inputLabel}>
 								Select task status
 							</InputLabel>
 							<Select
 								className={classes.select}
-								size="small"
+								size="medium"
 								sx={{
 									backgroundColor: getStatusColor(),
 								}}
@@ -203,7 +215,18 @@ const CreateTask = (props) => {
 											key={index}
 											value={taskStatus._id}
 										>
-											{taskStatus.message}
+											<div
+												style={{
+													display: 'flex',
+													alignItems: 'center',
+													flexWrap: 'wrap',
+												}}
+											>
+												{getStatusIcon(taskStatus.message)}
+												<div style={{ marginLeft: 20 }}>
+													{taskStatus.message}
+												</div>
+											</div>
 										</MenuItem>
 									);
 								})}
@@ -211,7 +234,7 @@ const CreateTask = (props) => {
 						</FormControl>
 					</ContentStyle>
 					<ContentStyle>
-						<FormControl fullWidth style={{ minWidth: 250 }}>
+						<FormControl fullWidth style={{ minWidth: 250 }} variant="standard">
 							<InputLabel className={classes.inputLabel}>
 								Select task icon
 							</InputLabel>
@@ -219,7 +242,7 @@ const CreateTask = (props) => {
 								className={classes.select}
 								labelId="demo-simple-select-error-label"
 								id="demo-simple-select-error"
-								size="small"
+								size="medium"
 								required
 								sx={{
 									backgroundColor: newTask.avatarColor,

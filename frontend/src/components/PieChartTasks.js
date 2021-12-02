@@ -1,38 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { merge } from 'lodash';
-import ReactApexChart from 'react-apexcharts';
-// material
 import { useTheme, styled } from '@mui/material/styles';
 import { Card } from '@mui/material';
-// utils
-import { fNumber } from '../utils/formatNumber';
-//
-import BaseOptionChart from '../utils/BaseOptionChart';
+import { Chart } from 'react-google-charts';
 
-const CHART_HEIGHT = 295;
-const LEGEND_HEIGHT = 50;
-
-const ChartWrapperStyle = styled('div')(({ theme }) => ({
-	height: CHART_HEIGHT,
-	marginTop: theme.spacing(1),
-	'& .apexcharts-canvas svg': { height: CHART_HEIGHT },
-	'& .apexcharts-canvas svg,.apexcharts-canvas foreignObject': {
-		overflow: 'visible',
-	},
-	'& .apexcharts-legend': {
-		height: LEGEND_HEIGHT,
-		alignContent: 'center',
-		position: 'relative !important',
-		borderTop: `solid 1px ${theme.palette.divider}`,
-		top: `calc(${CHART_HEIGHT - LEGEND_HEIGHT}px) !important`,
-	},
+const SectionStyle = styled(Card)(({ theme }) => ({
+	width: '100%',
+	display: 'flex',
+	flexDirection: 'column',
+	justifyContent: 'center',
 }));
-
-// ----------------------------------------------------------------------
 
 export default function PieChartTasks(props) {
 	const theme = useTheme();
-	const { tasks, value } = props;
+	const { tasks, value, statuses } = props;
 	const [chartData, setChartData] = useState([]);
 
 	const calculateChartData = () => {
@@ -40,59 +20,56 @@ export default function PieChartTasks(props) {
 		let ongoingCount = 0;
 		let completedCount = 0;
 		tasks.forEach((task) => {
-			if (task.currentStatus === '6186378bf0d3d3150277b8d3') {
+			if (task.currentStatus === statuses[0]._id) {
 				initiatedCount++;
-			} else if (task.currentStatus === '618637ddf0d3d3150277b8d5') {
+			} else if (task.currentStatus === statuses[1]._id) {
 				ongoingCount++;
 			} else {
 				completedCount++;
 			}
 		});
-		setChartData([initiatedCount, ongoingCount, completedCount]);
+		const data = [['Status', 'Total number of tasks with this status']];
+		data.push(['Initiated', initiatedCount]);
+		data.push(['Ongoing', ongoingCount]);
+		data.push(['Completed', completedCount]);
+		setChartData(data);
 	};
 
 	useEffect(() => {
 		calculateChartData();
 	}, [tasks, value]); // eslint-disable-line react-hooks/exhaustive-deps
 
-	const chartOptions = merge(BaseOptionChart(), {
-		colors: [
-			theme.palette.warning.main,
-			theme.palette.info.main,
-			theme.palette.success.main,
-		],
-		labels: ['Initiated', 'Ongoing', 'Completed'],
-		stroke: { colors: [theme.palette.background.paper] },
-		legend: { floating: true, horizontalAlign: 'center' },
-		dataLabels: {
-			position: 'bottom',
-			enabled: true,
-			dropShadow: { enabled: false },
-		},
-		tooltip: {
-			fillSeriesColor: false,
-			y: {
-				formatter: (seriesName) => fNumber(seriesName),
-				title: {
-					formatter: (seriesName) => `#${seriesName}`,
-				},
-			},
-		},
-		plotOptions: {
-			pie: { donut: { labels: { show: false } } },
-		},
-	});
-
 	return (
-		<Card>
-			<ChartWrapperStyle dir="ltr">
-				<ReactApexChart
-					type="pie"
-					series={chartData}
-					options={chartOptions}
-					height={260}
-				/>
-			</ChartWrapperStyle>
-		</Card>
+		<SectionStyle>
+			<Chart
+				width={'auto'}
+				height={'305px'}
+				chartType="PieChart"
+				loader={<div>Loading Chart</div>}
+				data={chartData}
+				options={{
+					legend: {
+						position: 'bottom',
+						textStyle: {
+							color: theme.palette.text.primary,
+							fontSize: 12,
+						},
+					},
+					title: 'Task statuses',
+					colors: [
+						theme.palette.warning.main,
+						theme.palette.info.main,
+						theme.palette.success.main,
+					],
+					titleTextStyle: {
+						color: theme.palette.text.primary,
+						fontSize: 15,
+						bold: false,
+					},
+					is3D: true,
+					backgroundColor: 'none',
+				}}
+			/>
+		</SectionStyle>
 	);
 }

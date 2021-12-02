@@ -34,10 +34,9 @@ export default function CustomizedInputBase(props) {
 			}}
 		>
 			<SearchIcon />
-			<Divider sx={{ height: 40, m: 0.5 }} orientation="vertical" />
+			<Divider sx={{ height: 42, m: 0.5 }} orientation="vertical" />
 			<TextField
 				fullWidth
-				id="standard-basic"
 				variant="standard"
 				placeholder="Search tasks by name or description"
 				onChange={(event) => handleSearch(event)}
