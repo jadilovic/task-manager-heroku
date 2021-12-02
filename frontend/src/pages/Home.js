@@ -14,7 +14,7 @@ import Box from '@mui/material/Box';
 import UserWindow from '../utils/UserWindow';
 import GroupCount from '../components/GroupsCount';
 import PropTypes from 'prop-types';
-import ResponsiveCard from '../components/ResponsiveCard';
+import FilterSortSearchBox from '../components/FilterSortSearchBox';
 
 function Item(props) {
 	const { sx, ...other } = props;
@@ -217,7 +217,7 @@ const Home = (props) => {
 						)
 					} */}
 					<Grid item xs={12} sm={12} md={12} lg={12}>
-						<ResponsiveCard
+						<FilterSortSearchBox
 							tasks={tasks}
 							setFilteredTasks={setFilteredTasks}
 							statuses={statuses}

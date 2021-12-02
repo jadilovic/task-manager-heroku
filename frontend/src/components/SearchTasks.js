@@ -37,6 +37,7 @@ export default function CustomizedInputBase(props) {
 			<Divider sx={{ height: 42, m: 0.5 }} orientation="vertical" />
 			<TextField
 				fullWidth
+				id="standard-basic"
 				variant="standard"
 				placeholder="Search tasks by name or description"
 				onChange={(event) => handleSearch(event)}

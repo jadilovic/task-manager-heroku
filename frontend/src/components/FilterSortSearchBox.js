@@ -12,12 +12,6 @@ function Item(props) {
 	return (
 		<Box
 			sx={{
-				// bgcolor: 'primary.main',
-				// color: 'white',
-				// p: 1,
-				// m: 1,
-				// // borderRadius: 1,
-				// textAlign: 'center',
 				...sx,
 			}}
 			{...other}
@@ -33,7 +27,7 @@ Item.propTypes = {
 	]),
 };
 
-export default function JustifyContent(props) {
+export default function FilterSortSearchBox(props) {
 	const [openSearch, setOpenSearch] = useState(false);
 	const screen = UserWindow();
 	const {
@@ -51,9 +45,6 @@ export default function JustifyContent(props) {
 				sx={{
 					display: 'flex',
 					justifyContent: 'space-between',
-					// // p: 1,
-					// // m: 1,
-					// bgcolor: 'background.paper',
 				}}
 			>
 				<Item sx={{ flexGrow: 1 }}>
@@ -112,10 +103,6 @@ export default function JustifyContent(props) {
 				<Box
 					sx={{
 						display: 'flex',
-						// justifyContent: 'space-around',
-						// p: 1,
-						// m: 1,
-						// bgcolor: 'background.paper',
 					}}
 				>
 					<Item sx={{ flexGrow: 1 }}>

@@ -39,6 +39,7 @@ export default function PieChartTasks(props) {
 		calculateChartData();
 	}, [tasks, value]); // eslint-disable-line react-hooks/exhaustive-deps
 
+	console.log(chartData);
 	return (
 		<SectionStyle>
 			<Chart
@@ -52,8 +53,12 @@ export default function PieChartTasks(props) {
 						position: 'bottom',
 						textStyle: {
 							color: theme.palette.text.primary,
-							fontSize: 12,
+							fontSize: 10,
 						},
+					},
+					chartArea: {
+						height: '80%',
+						width: '80%',
 					},
 					title: 'Task statuses',
 					colors: [
