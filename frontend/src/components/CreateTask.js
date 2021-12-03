@@ -21,6 +21,20 @@ import UserWindow from '../utils/UserWindow';
 import { useHistory } from 'react-router-dom';
 import HourglassEmpty from '@mui/icons-material/HourglassEmpty';
 import { CheckCircleOutline, ArrowForward } from '@mui/icons-material';
+import InputBase from '@mui/material/InputBase';
+
+const BootstrapInput = styled(InputBase)(({ theme }) => ({
+	'label + &': {
+		marginTop: theme.spacing(1),
+	},
+	'& .MuiInputBase-input': {
+		borderRadius: 4,
+		// position: 'relative',
+		border: '1px solid #ced4da',
+		// fontSize: 16,
+		padding: '10px 26px 10px 12px',
+	},
+}));
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -29,6 +43,7 @@ const useStyles = makeStyles((theme) => ({
 		},
 	},
 	inputLabel: {
+		// offset
 		color: '#9AD5CA',
 		'&.Mui-focused': {
 			color: '#9AD5CA',
@@ -52,7 +67,7 @@ const ContentStyle = styled('div')(({ theme }) => ({
 	display: 'flex',
 	flexDirection: 'column',
 	justifyItems: 'center',
-	padding: theme.spacing(2, 0),
+	padding: theme.spacing(1, 0),
 }));
 
 const CreateTask = (props) => {
@@ -177,28 +192,26 @@ const CreateTask = (props) => {
 					)}
 					<ContentStyle>
 						<TextField
-							className={classes.root}
-							size="small"
+							size="medium"
 							required
 							value={newTask.name}
 							fullWidth
 							label="New task name"
 							id="fullWidth"
 							onChange={handleTaskNameChange}
-							variant="outlined"
 							error={!!error}
 						/>
 					</ContentStyle>
 					<ContentStyle>
-						<FormControl fullWidth style={{ minWidth: 250 }} variant="standard">
-							<InputLabel className={classes.inputLabel}>
-								Select task status
-							</InputLabel>
+						<FormControl fullWidth style={{ minWidth: 250 }} variant="outlined">
+							<InputLabel>Select task status</InputLabel>
 							<Select
 								className={classes.select}
-								size="medium"
+								input={<BootstrapInput />}
+								size="small"
 								sx={{
 									backgroundColor: getStatusColor(),
+									borderRadius: 1,
 								}}
 								required
 								value={newTask.statusId}
@@ -211,6 +224,7 @@ const CreateTask = (props) => {
 										<MenuItem
 											sx={{
 												backgroundColor: `${taskStatus.colorNotification}`,
+												borderRadius: 1,
 											}}
 											key={index}
 											value={taskStatus._id}
@@ -234,19 +248,17 @@ const CreateTask = (props) => {
 						</FormControl>
 					</ContentStyle>
 					<ContentStyle>
-						<FormControl fullWidth style={{ minWidth: 250 }} variant="standard">
-							<InputLabel className={classes.inputLabel}>
-								Select task icon
-							</InputLabel>
+						<FormControl fullWidth style={{ minWidth: 250 }} variant="outlined">
+							<InputLabel>Select task icon</InputLabel>
 							<Select
 								className={classes.select}
-								labelId="demo-simple-select-error-label"
-								id="demo-simple-select-error"
-								size="medium"
+								input={<BootstrapInput />}
+								size="small"
 								required
 								sx={{
 									backgroundColor: newTask.avatarColor,
 									color: 'white',
+									borderRadius: 1,
 								}}
 								value={newTask.avatarIcon}
 								name="avatarIcon"
@@ -258,6 +270,7 @@ const CreateTask = (props) => {
 										<MenuItem
 											style={{
 												backgroundColor: colors[index].hex,
+												borderRadius: 1,
 												color: 'white',
 											}}
 											key={index}
@@ -281,7 +294,7 @@ const CreateTask = (props) => {
 					</ContentStyle>
 					<SectionStyle>
 						<Button
-							style={{ margin: 5 }}
+							style={{ marginTop: 20 }}
 							variant="contained"
 							color="primary"
 							type="submit"
