@@ -39,7 +39,7 @@ export default function PieChartTasks(props) {
 			position: 'bottom',
 			textStyle: {
 				color: theme.palette.text.primary,
-				fontSize: 12,
+				fontSize: 11,
 			},
 		},
 		title: 'Task statuses',
