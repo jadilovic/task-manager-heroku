@@ -9,12 +9,28 @@ import PieChartTasks from '../components/PieChartTasks';
 import LoadingPage from '../components/LoadingPage';
 import AppBar from '@mui/material/AppBar';
 import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
+import { Tab } from '@mui/material';
 import Box from '@mui/material/Box';
 import UserWindow from '../utils/UserWindow';
 import GroupCount from '../components/GroupsCount';
 import PropTypes from 'prop-types';
 import FilterSortSearchBox from '../components/FilterSortSearchBox';
+
+function TabPanel(props) {
+	const { children, value, index, ...other } = props;
+
+	return (
+		<div
+			role="tabpanel"
+			hidden={value !== index}
+			id={`simple-tabpanel-${index}`}
+			aria-labelledby={`simple-tab-${index}`}
+			{...other}
+		>
+			{value === index && <>{children}</>}
+		</div>
+	);
+}
 
 function Item(props) {
 	const { sx, ...other } = props;
@@ -106,7 +122,7 @@ const Home = (props) => {
 		<Page title="Home | Task Manager">
 			<Container maxWidth="xl">
 				{screen.dynamicWidth < 900 && (
-					<Box paddingTop={2}>
+					<Box paddingTop={1} paddingBottom={1}>
 						<AppBar position="static">
 							<Tabs
 								value={value}
@@ -120,49 +136,25 @@ const Home = (props) => {
 								<Tab label="Stats" {...tabProps(1)} />
 							</Tabs>
 						</AppBar>
+						<TabPanel value={value} index={0}>
+							<CreateTask statuses={statuses} refreshTasks={displayTasks} />
+						</TabPanel>
+						<TabPanel value={value} index={1}>
+							<PieChartTasks statuses={statuses} tasks={tasks} value={value} />
+							<Divider />
+							<GroupCount tasks={tasks} />
+						</TabPanel>
 					</Box>
 				)}
 				{/* CREATE TASK */}
-				<Grid container spacing={2} padding={2}>
-					{screen.dynamicWidth < 900 ? (
-						<Grid
-							sx={{
-								display: {
-									xs: `${value === 0 ? 'block' : 'none'}`, // Hidden on smaller than md
-									md: `${value === 0 ? 'none' : 'block'}`, // Visible on smaller than md
-								},
-							}}
-							item
-							xs={12}
-							sm={12}
-							lg={4}
-						>
-							<CreateTask statuses={statuses} refreshTasks={displayTasks} />
-						</Grid>
-					) : (
+				<Grid container spacing={1} padding={1}>
+					{screen.dynamicWidth > 900 && (
 						<Grid item sm={12} lg={4}>
 							<CreateTask statuses={statuses} refreshTasks={displayTasks} />
 						</Grid>
 					)}
 					{/* TASKS STATS */}
-					{screen.dynamicWidth < 900 ? (
-						<Grid
-							sx={{
-								display: {
-									xs: `${value === 1 ? 'block' : 'none'}`,
-									md: `${value === 1 ? 'none' : 'block'}`,
-								},
-							}}
-							item
-							xs={12}
-							sm={12}
-							lg={4}
-						>
-							<PieChartTasks statuses={statuses} tasks={tasks} value={value} />
-							<Divider />
-							<GroupCount tasks={tasks} />
-						</Grid>
-					) : (
+					{screen.dynamicWidth > 900 && (
 						<>
 							<Grid item xs={12} sm={6} lg={4}>
 								<PieChartTasks
@@ -176,46 +168,6 @@ const Home = (props) => {
 							</Grid>
 						</>
 					)}
-					{/* {
-						// SEARCH FILTER SORT TASKS
-						screen.dynamicWidth < 900 && (
-							<>
-								<Grid item xs={6} sm={6} md={6}>
-									<Stack
-										direction="row"
-										flexWrap="wrap-reverse"
-										alignItems="center"
-										justifyContent="flex-end"
-										sx={{ mb: 3 }}
-									>
-										<FiltersSidebar
-											tasks={tasks}
-											setFilteredTasks={setFilteredTasks}
-											statuses={statuses}
-											isOpenFilter={openFilter}
-											onOpenFilter={handleOpenFilter}
-											onCloseFilter={handleCloseFilter}
-											setSelectedFilters={setSelectedFilters}
-										/>
-									</Stack>
-								</Grid>
-								<Grid item xs={6} sm={6} md={6}>
-									<Sort
-										tasks={tasks}
-										setFilteredTasks={setFilteredTasks}
-										setSelectedFilters={setSelectedFilters}
-									/>
-								</Grid>
-								<Grid item xs={12} sm={12} md={12}>
-									<SearchTasks
-										tasks={tasks}
-										setFilteredTasks={setFilteredTasks}
-										setSelectedFilters={setSelectedFilters}
-									/>
-								</Grid>
-							</>
-						)
-					} */}
 					<Grid item xs={12} sm={12} md={12} lg={12}>
 						<FilterSortSearchBox
 							tasks={tasks}

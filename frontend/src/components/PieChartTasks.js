@@ -4,7 +4,6 @@ import { Card } from '@mui/material';
 import { Chart } from 'react-google-charts';
 
 const SectionStyle = styled(Card)(({ theme }) => ({
-	// width: '100%',
 	display: 'flex',
 	flexDirection: 'column',
 	justifyContent: 'center',
@@ -43,10 +42,10 @@ export default function PieChartTasks(props) {
 				fontSize: 10,
 			},
 		},
-		chartArea: {
-			height: '70%',
-			width: '70%',
-		},
+		// chartArea: {
+		// 	height: '70%',
+		// 	width: '70%',
+		// },
 		title: 'Task statuses',
 		colors: [
 			theme.palette.warning.main,
