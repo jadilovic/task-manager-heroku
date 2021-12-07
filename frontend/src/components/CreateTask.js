@@ -129,11 +129,7 @@ const CreateTask = (props) => {
 				avatarIcon: icons[0].name,
 				avatarColor: colors[0].hex,
 			});
-			if (screen.dynamicWidth < 900) {
-				history.push('/home');
-			} else {
-				refreshTasks();
-			}
+			refreshTasks();
 		} catch (err) {
 			console.log(err.response);
 			setError(err.response.data.msg);
